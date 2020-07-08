@@ -5,6 +5,7 @@ import axios from "axios";
 import config from "../config/index";
 
 import tournaments from "./modules/tournaments";
+import referees from "./modules/referees";
 
 axios.defaults.baseURL = config.backendUrl;
 Vue.use(Vuex);
@@ -22,7 +23,8 @@ if (config.stage === "dev") {
 
 const store = new Vuex.Store({
   modules: {
-    tournaments
+    tournaments,
+    referees
   }
 });
 
