@@ -1,4 +1,6 @@
-import axios from "axios";
+// import axios from "axios";
+import Tournament from "../models/Tournament";
+
 const state = {
   loading: false,
   tournaments: [],
@@ -25,17 +27,23 @@ const actions = {
   load: async ({ commit }, { year }) => {
     commit(mutationTypes.SET_LOADING, true);
     console.log("Getting tournaments from backend");
-    axios({
-      method: 'get',
-      url: `/tournaments/${year}`
-    })
-      .then(function (response) {
-        console.log(response.data);
-        commit(mutationTypes.SET_TOURNAMENTS, response.data)
-      })
-      .finally(() => {
-        commit(mutationTypes.SET_LOADING, false);
-      });
+    const all = JSON.parse(localStorage.getItem("tournaments"));
+    const result = all[year] || [];
+    console.log(`Found ${result.length} tournaments for ${year}`);
+    commit(mutationTypes.SET_TOURNAMENTS, result);
+    commit(mutationTypes.SET_LOADING, false);
+  },
+  create: ({ commit, dispatch }, { tournament }) => {
+    console.log("creating new tournament", tournament);
+    commit(mutationTypes.SET_LOADING, true);
+    const event = new Tournament(tournament);
+    const year = event.getYear(),
+      all = JSON.parse(localStorage.getItem("tournamets"));
+    all[year] = all[year] || [];
+    all[year].push(event);
+    localStorage.setItem("tournamets", JSON.stringify(all));
+    dispatch("tournaments/load", year);
+    commit(mutationTypes.SET_LOADING, false);
   }
 };
 
