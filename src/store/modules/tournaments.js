@@ -4,11 +4,14 @@ import Tournament from "../models/Tournament";
 const state = {
   loading: false,
   tournaments: [],
+  teams: []
 };
 
 const mutationTypes = {
   SET_LOADING: "set-loading",
   SET_TOURNAMENTS: "set-tournaments",
+  SET_TEAMS: "set-teams",
+  ADD_TEAM: "add-team",
 };
 
 const mutations = {
@@ -17,6 +20,13 @@ const mutations = {
   },
   [mutationTypes.SET_TOURNAMENTS](state, tournaments) {
     state.tournaments = tournaments;
+  },
+  [mutationTypes.SET_TEAMS](state, list) {
+    state.teams = list;
+  },
+  [mutationTypes.ADD_TEAM](state, team) {
+    state.teams.push(team);
+    localStorage.setItem("teams", JSON.stringify(state.teams));
   }
 };
 
@@ -32,6 +42,16 @@ const actions = {
     console.log(`Found ${result.length} tournaments for ${year}`);
     commit(mutationTypes.SET_TOURNAMENTS, result);
     commit(mutationTypes.SET_LOADING, false);
+  },
+  loadTeams: async ({ commit }) => {
+    const result = JSON.parse(localStorage.getItem("teams"));
+    result.sort();
+    console.log(`Got ${result.length} teams`);
+    commit(mutationTypes.SET_TEAMS, result);
+  },
+  addTeam: async ({ commit }, { team }) => {
+    console.log("trying to add ", team);
+    commit(mutationTypes.ADD_TEAM, team);
   },
   create: ({ commit, dispatch }, { tournament }) => {
     console.log("creating new tournament", tournament);
@@ -52,7 +72,8 @@ const tournaments = {
   state,
   getters: {
     loading: state => state.loading,
-    all: state => state.tournaments
+    all: state => state.tournaments,
+    teams: state => state.teams,
   },
   mutations,
   actions,

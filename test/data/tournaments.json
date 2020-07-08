@@ -7,11 +7,20 @@
       "country": "Sweden",
       "date": ["2019-02-03", "2019-02-07"],
       "td": "F56DCB59-3357-44C0-939A-FA0288BBE098",
-      "referees": [
-        "F56DCB59-3357-44C0-939A-FA0288BBE098",
-        "8227835D-F2E4-43BF-83BE-CB62580DB06D",
-        "AD6255A4-3AB5-435E-B391-2E3FF0CA1563"
-      ],
+      "referees": {
+        "F56DCB59-3357-44C0-939A-FA0288BBE098": {
+          "games": 6,
+          "official": 5
+        },
+        "8227835D-F2E4-43BF-83BE-CB62580DB06D": {
+          "games": 6,
+          "official": 5
+        },
+        "AD6255A4-3AB5-435E-B391-2E3FF0CA1563": {
+          "games": 6,
+          "official": 5
+        }
+      },
       "teams": [
         "Sweden", "Finland", "Denmark"
       ]
@@ -26,12 +35,21 @@
       "date": [
         "2020-02-20"
       ],
-      "td": "F56DCB59-3357-44C0-939A-FA0288BBE098",
-      "referees": [
-        "F56DCB59-3357-44C0-939A-FA0288BBE098",
-        "8227835D-F2E4-43BF-83BE-CB62580DB06D",
-        "AD6255A4-3AB5-435E-B391-2E3FF0CA1563"
-      ],
+      "td": "8227835D-F2E4-43BF-83BE-CB62580DB06D",
+      "referees": {
+        "F56DCB59-3357-44C0-939A-FA0288BBE098": {
+          "games": 6,
+          "official": 5
+        },
+        "8227835D-F2E4-43BF-83BE-CB62580DB06D": {
+          "games": 6,
+          "official": 5
+        },
+        "AD6255A4-3AB5-435E-B391-2E3FF0CA1563": {
+          "games": 6,
+          "official": 5
+        }
+      },
       "teams": [
         "Sweden",
         "Finland",

@@ -39,16 +39,48 @@
                             v-bind="endDate">
                         </b-datepicker>
                     </b-field>
-                    <b-field label="Referees" label-position="on-border">
+
+                    <b-field label="Technical Delegate" label-position="on-border" grouped>
+                        <b-autocomplete
+                            v-if="!td"
+                            v-model="tdQuery"
+                            placeholder="Search by name"
+                            :keep-first="true"
+                            :data="filteredTd"
+                            icon="magnify"
+                            @select="option => td = option">
+                        >
+                            <template slot-scope="props">
+                                {{ props.option.firstName }} {{ props.option.lastName }}, {{ props.option.country.toUpperCase() }}
+                            </template>
+                            <template slot="empty">
+                                <a @click="showAddReferee">
+                                    <span> Add TD... </span>
+                                </a>
+                            </template>
+                        </b-autocomplete>
+                        <b-tag 
+                            v-if="td"
+                            size="is-medium" 
+                            closable 
+                            rounded
+                            @close="td=null"
+                        >
+                            {{ td.firstName }} {{ td.lastName }} &lt;{{td.email}}&gt;
+                        </b-tag>
+                    </b-field>
+                    
+                    <b-field label="Add referees" label-position="on-border">
                         <b-autocomplete
                             v-model="ref"
-                            placeholder="e.g. Anne"
+                            placeholder="Search by name"
                             :keep-first="true"
+                            icon="magnify"
                             :data="filteredReferees"
                             @select="selectReferee"
                         >
                             <template slot-scope="props">
-                                {{ props.option.lastName }}, {{ props.option.firstName }}, {{ props.option.country.toUpperCase() }}
+                                {{ props.option.firstName }} {{ props.option.lastName }}, {{ props.option.country.toUpperCase() }}
                             </template>
                             <template slot="empty">
                                 No results for {{ref}}, 
@@ -58,8 +90,33 @@
                             </template>
                         </b-autocomplete>
                     </b-field>
-                    <b-table :data="referees" :columns="refereeTableColumns"></b-table>
-
+                    <div>
+                    <b-tag 
+                            v-for="ref in referees"
+                            v-bind:key="ref.id"
+                            size="is-medium" 
+                            closable 
+                            rounded
+                            @close="removeReferee(ref)"
+                        >
+                            {{ ref.firstName }} {{ ref.lastName }} [{{ ref.country }}]
+                        </b-tag>
+                    </div>
+                    <b-field label="Teams competing (Name / Country)">
+                        <b-taginput
+                            v-model="teams"
+                            :data="filteredTeams"
+                            autocomplete
+                            :keep-first="true"
+                            :allow-new="true"
+                            icon="label"
+                            placeholder="Add new team"
+                            @typing="getFilteredTeams"
+                            @add="newTeam"
+                        >
+                        </b-taginput>
+                    </b-field>
+                    <pre style="max-height: 400px"><b>Pool:</b>{{ existingTeams }}</pre>
                 </form>
             </div>
             <div class="panel-block">
@@ -85,48 +142,69 @@ export default {
           country: "",
           startDate: null,
           endDate: null,
+          tdQuery: "",
           td: null,
+          ref: "",
           referees: [],
-          refereeTableColumns: [
-            {
-                field: 'lastName',
-                label: 'Last Name',
-            },
-            {
-                field: 'firstName',
-                label: 'First Name',
-            },
-            {
-                field: 'country',
-                label: 'Country'
-            },
-            {
-                field: 'level',
-                label: 'Level',
-                centered: true
-            }
-          ],
           teams: [],
-          ref: ''
+          existingTeams: [],
+          filteredTeams: [],
+          noOfGames: 0,
+          noOfTenSeconds: 0
       }
   },
   computed: {
-      allValid: function() {
-          return false;
-      },
-      filteredReferees: function() {
-          return this.$store.getters['referees/search'](this.ref);
-      }
+        allValid: function() {
+            return false;
+        },
+        filteredReferees: function() {
+            return this.$store.getters['referees/search'](this.ref);
+        },
+        filteredTd: function() {
+            return this.$store.getters['referees/search'](this.tdQuery);
+        },
+        allTeams: function() {
+            return this.$store.getters['tournaments/teams'] || [];
+        },
+        
   },
   methods: {
       selectReferee: function(referee) {
           if ( ! this.referees.find( r => r.id === referee.id)) {
-              this.referees.push(referee);
+
+              this.referees.push({ ...referee, games: 0, officials: 0 });
           }
+      },
+      removeReferee: function (referee) {
+          let index = this.referees.findIndex( ref => ref.id === referee.id );
+          if (index) {
+              this.referees.splice(index, 1);
+          }
+      },
+      getFilteredTeams: function(text) {
+        this.filteredTeams = this.existingTeams.filter((option) => {
+                return option
+                    .toString()
+                    .toLowerCase()
+                    .indexOf(text.toLowerCase()) >= 0
+            })
+        },
+      newTeam: function(team) {
+            let existing = this.existingTeams.find( 
+              t => t.toString().toLowerCase() === team.toLowerCase()
+            );
+            if ( ! existing) {
+                this.$store.dispatch("tournaments/addTeam", { team } );
+            }
       },
       showAddReferee: function() {
           alert("Todo: Add referee form as popup/fields");
       }
+  },
+  mounted() {
+      let existingTeams = this.$store.getters['tournaments/teams'] || [];
+      this.existingTeams = existingTeams;
+      this.filteredTeams = existingTeams;
   },
 }
 </script>
