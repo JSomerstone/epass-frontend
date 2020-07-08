@@ -52,12 +52,13 @@ const referees = {
     all: state => state.referees,
     search: (state) => (query) => {
       const all = state.referees;
-      return all.filter(
+      return query == "" ? all : all.filter(
         ref => {
-          return (
-            ref.firstName.toLowerCase().includes(query)
-            || ref.firstName.toLowerCase().includes(query)
+          const { firstName, lastName, country } = ref;
+          const match = [firstName, lastName, country].find(
+            prop => prop.toLowerCase().includes(query)
           )
+          return Boolean(match);
         }
       )
     }

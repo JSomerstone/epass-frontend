@@ -19,6 +19,7 @@ const router = new Router({
           console.log("Dispatching load tournaments");
           const year = new Date().getFullYear();
           store.dispatch("tournaments/load", { year });
+          store.dispatch("referees/load");
         }
         next();
       },

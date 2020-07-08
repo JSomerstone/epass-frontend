@@ -39,6 +39,27 @@
                             v-bind="endDate">
                         </b-datepicker>
                     </b-field>
+                    <b-field label="Referees" label-position="on-border">
+                        <b-autocomplete
+                            v-model="ref"
+                            placeholder="e.g. Anne"
+                            :keep-first="true"
+                            :data="filteredReferees"
+                            @select="selectReferee"
+                        >
+                            <template slot-scope="props">
+                                {{ props.option.lastName }}, {{ props.option.firstName }}, {{ props.option.country.toUpperCase() }}
+                            </template>
+                            <template slot="empty">
+                                No results for {{ref}}, 
+                                <a @click="showAddReferee">
+                                    <span> Add new... </span>
+                                </a>
+                            </template>
+                        </b-autocomplete>
+                    </b-field>
+                    <b-table :data="referees" :columns="refereeTableColumns"></b-table>
+
                 </form>
             </div>
             <div class="panel-block">
@@ -66,13 +87,46 @@ export default {
           endDate: null,
           td: null,
           referees: [],
-          teams: []
+          refereeTableColumns: [
+            {
+                field: 'lastName',
+                label: 'Last Name',
+            },
+            {
+                field: 'firstName',
+                label: 'First Name',
+            },
+            {
+                field: 'country',
+                label: 'Country'
+            },
+            {
+                field: 'level',
+                label: 'Level',
+                centered: true
+            }
+          ],
+          teams: [],
+          ref: ''
       }
   },
   computed: {
       allValid: function() {
           return false;
+      },
+      filteredReferees: function() {
+          return this.$store.getters['referees/search'](this.ref);
       }
-  }
+  },
+  methods: {
+      selectReferee: function(referee) {
+          if ( ! this.referees.find( r => r.id === referee.id)) {
+              this.referees.push(referee);
+          }
+      },
+      showAddReferee: function() {
+          alert("Todo: Add referee form as popup/fields");
+      }
+  },
 }
 </script>
