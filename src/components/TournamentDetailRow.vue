@@ -1,7 +1,9 @@
 <template>
   <div class="columns">
     <div class="column is-one-third">
-      
+      <b-button outline type="is-info" @click="openEditForm" icon-left="file-document-edit-outline">
+        Edit
+      </b-button>
       <div v-if="hasGames">
         <strong>Your statistics:</strong>
         <ul>
@@ -65,6 +67,12 @@ export default {
         return;
       }
       return this.tournament.referees.find( r => r.id == current.id );
+    },
+    openEditForm: function() {
+      this.$buefy.toast.open({
+        message: 'Unimplemented feature',
+        type: 'is-warning'
+      });
     }
   },
 }
