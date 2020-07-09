@@ -8,6 +8,8 @@
       :loading="loading"
       default-sort="dates"
       default-sort-direction="desc"
+      detailed
+      detail-key="id"
     >
       <template slot-scope="props">
         <b-table-column field="name" label="Name" sortable>
@@ -23,11 +25,20 @@
             {{ props.row.teams.length }}
         </b-table-column>
       </template>
+      <template slot="detail" slot-scope="props">
+        <tournament-detail-row :tournament="props.row">
+        </tournament-detail-row>
+      </template>
     </b-table>
   </div>
 </template>
 <script>
+import TournamentDetailRow from "./TournamentDetailRow";
+
 export default {
+  components: {
+    TournamentDetailRow
+  },
   props: {
     loading: {
       type: Boolean,
