@@ -1,30 +1,27 @@
 <template>
-  <div>
+  <div class="tournament-list">
     <b-table
-      :data="isEmpty ? [] : items"
+      :data="items"
       :bordered="false"
       :striped="true"
       :hoverable="true"
       :loading="loading"
+      default-sort="dates"
+      default-sort-direction="desc"
     >
       <template slot-scope="props">
-          <b-table-column field="name" label="Name" >
-              {{ props.row.name }}
-          </b-table-column>
-          <b-table-column field="date" label="Date" >
-            <span v-if="props.row.date.length > 1">
-              {{ props.row.date[0] }} - {{ props.row.date[1] }}
-            </span>
-            <span v-else>
-               {{ props.row.date[0] || "" }}
-            </span>
-          </b-table-column>
-          <b-table-column field="city" label="Location">
-              {{ props.row.city }}, {{ props.row.country }}
-          </b-table-column>
-          <b-table-column field="teams" label="Teams" numeric>
-              {{ props.row.teams.length }}
-          </b-table-column>
+        <b-table-column field="name" label="Name" sortable>
+            {{ props.row.name }}
+        </b-table-column>
+        <b-table-column field="dates" label="Date" sortable>
+          {{ formatDateRange(props.row.dates) }} 
+        </b-table-column>
+        <b-table-column field="city" label="Location" sortable>
+            {{ props.row.city }}, {{ props.row.country }}
+        </b-table-column>
+        <b-table-column field="teams" label="Teams" numeric>
+            {{ props.row.teams.length }}
+        </b-table-column>
       </template>
     </b-table>
   </div>
@@ -45,6 +42,22 @@ export default {
     isEmpty: function() {
       return this.items.length == 0;
     },
+  },
+  methods: {
+    formatDateRange: function(dates) {
+      if (!dates) {
+        return;
+      }
+      const formatted = [
+        new Date(dates[0]).toISOString().split("T").shift(),
+        new Date(dates[1]).toISOString().split("T").shift()
+      ];
+      if (formatted[0] == formatted[1]) {
+        return formatted[0]
+      } else {
+        return formatted.join(" - ");
+      }
+    }
   },
 }
 </script>

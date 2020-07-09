@@ -1,5 +1,5 @@
 <template>
-    <b-collapse :open="true" aria-id="newEntryForm" animation="slide" class="card">
+    <b-collapse :open="false" aria-id="newEntryForm" animation="slide" class="card">
         <div 
             slot="trigger" 
             slot-scope="props"
@@ -21,7 +21,7 @@
                     <div class="column is-half is-full-tablet">
                         <div class="field">
                             <b-field label="Name of tournament" label-position="on-border">
-                                <b-input v-bind="name" :required="true" :expanded="true"></b-input>
+                                <b-input v-model="name" :required="true" :expanded="true"></b-input>
                                 <b-radio-button v-model="type" native-value="international" >
                                     International
                                 </b-radio-button>
@@ -258,11 +258,7 @@ export default {
         this.selectReferee(current);
         tournament.setGames(current.id, this.noOfGames, this.noOfTenSeconds);
       }
-      const result = this.$store.dispatch("tournaments/create", { tournament });
-      this.$buefy.toast.open({
-        message: result.message,
-        type: `is-${result.type}`
-      });
+      this.$store.dispatch("tournaments/create", { tournament });
     },
     reset() {
       this.$forceUpdate();

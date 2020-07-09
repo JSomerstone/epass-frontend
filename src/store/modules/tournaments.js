@@ -1,4 +1,5 @@
 // import axios from "axios";
+import { ToastProgrammatic as Toast } from 'buefy'
 
 const state = {
   loading: false,
@@ -64,17 +65,15 @@ const actions = {
       commit(mutationTypes.SET_LOADING, true);
       commit(mutationTypes.CREATE_TOURNAMENT, tournament);
       commit(mutationTypes.SET_LOADING, false);
-      return {
-        success: true,
-        type: 'success',
-        message: `Tournament ${tournament.name} added to your ePass`
-      };
+      Toast.open({
+        message: `Tournament ${tournament.name} added to your ePass`,
+        type: "is-success"
+      });
     } catch (err) {
-      return {
-        success: false,
-        type: 'error',
-        message: err.message
-      };
+      Toast.open({
+        message: err.message,
+        type: "is-error"
+      });
     }
   }
 };
