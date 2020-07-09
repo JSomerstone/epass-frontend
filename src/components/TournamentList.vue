@@ -15,11 +15,11 @@
         <b-table-column field="name" label="Name" sortable>
             {{ props.row.name }}
         </b-table-column>
-        <b-table-column field="international" label="Type" sortable>
-          {{ props.row.international ? "International" : "National" }}
-        </b-table-column>
         <b-table-column field="dates" label="Date" sortable>
           {{ formatDateRange(props.row.dates) }} 
+        </b-table-column>
+        <b-table-column field="international" label="Type" sortable>
+          {{ props.row.international ? "International" : "National" }}
         </b-table-column>
         <b-table-column field="city" label="Location" sortable>
             {{ props.row.city }}, {{ props.row.country }}
