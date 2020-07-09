@@ -86,7 +86,6 @@ const actions = {
       console.log("Presisting tournament");
       commit(mutationTypes.SET_LOADING, true);
       commit(mutationTypes.CREATE_TOURNAMENT, tournament);
-      commit(mutationTypes.SET_WIP, null);
       commit(mutationTypes.SET_LOADING, false);
       Toast.open({
         message: `Tournament ${tournament.name} added to your ePass`,
