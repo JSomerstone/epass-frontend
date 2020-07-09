@@ -27,9 +27,6 @@
           </b-table-column>
       </template>
     </b-table>
-    <pre>
-      {{ tournaments }}
-    </pre>
   </div>
 </template>
 <script>

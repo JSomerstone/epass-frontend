@@ -21,13 +21,28 @@
                     <div class="column is-half is-full-tablet">
                         <div class="field">
                             <b-field label="Name of tournament" label-position="on-border">
-                                <b-input v-bind="name" :required="true"></b-input>
+                                <b-input v-bind="name" :required="true" :expanded="true"></b-input>
+                                <b-radio-button v-model="type" native-value="international" >
+                                    International
+                                </b-radio-button>
+                                <b-radio-button v-model="type" native-value="national" >
+                                    National
+                                </b-radio-button>
                             </b-field>
                         </div>
                         <div class="field">
                             <b-field label="Place of the tournament" label-position="on-border">
-                                <b-input v-bind="city" :required="true" placeholder="City"></b-input>
-                                <b-input v-bind="country" :required="true" placeholder="Country"></b-input>
+                                <b-input v-bind="city" :required="true" placeholder="City" :expanded="true"></b-input>
+                                <b-autocomplete
+                                    v-model="countryQuery"
+                                    placeholder="Country"
+                                    icon="globe"
+                                    :keep-first="true"
+                                    :data="getCountries(countryQuery)"
+                                    :expanded="true"
+                                    @select="option => country = option"
+                                >
+                                </b-autocomplete>
                             </b-field>
                         </div>
                         <div class="field">
@@ -47,7 +62,7 @@
                             </b-field>
                         </div>
                         <div class="field">
-                            <b-field label="Technical Delegate" label-position="on-border">
+                            <b-field label="Technical Delegate TD" label-position="on-border">
                                 <b-autocomplete
                                     v-if="!td && !showAddTdForm"
                                     v-model="tdQuery"
@@ -73,7 +88,7 @@
                                     rounded
                                     @close="td=null"
                                 >
-                                    {{ td.firstName }} {{ td.lastName }} &lt;{{td.email}}&gt;
+                                    {{ td.firstName }} {{ td.lastName }} &lt;{{td.email || "email-missing" }}&gt;
                                 </b-tag>
                                 
                             </b-field>
@@ -84,13 +99,21 @@
                             :onSave="addTd"
                         >
                         </referee-form>
+                        <div class="field">
+                            <b-field label="# of games as referee" label-position="on-border">
+                                <b-numberinput controls-position="compact" v-model="noOfGames"></b-numberinput>
+                            </b-field>
+                            <b-field label="# of games as table official / 10 sec timer" label-position="on-border">
+                                <b-numberinput controls-position="compact" v-model="noOfTenSeconds"></b-numberinput>
+                            </b-field>
+                        </div>
                     </div>
                     <div class="column is-half is-full-tablet">
                             <div class="field">
-                            
-                                <b-field label="Add referees" label-position="on-border">
+                                <b-field label="Other referees">
                                     <b-autocomplete
                                         v-model="ref"
+                                        v-if="!showAddRefereeForm"
                                         placeholder="Search by name"
                                         :keep-first="true"
                                         icon="magnify"
@@ -102,12 +125,17 @@
                                         </template>
                                         <template slot="empty">
                                             No results for {{ref}}, 
-                                            <a @click="showAddReferee">
+                                            <a @click="showAddRefereeForm = true">
                                                 <span> Add new... </span>
                                             </a>
                                         </template>
                                     </b-autocomplete>
                                 </b-field>
+                                <referee-form
+                                    v-if="showAddRefereeForm"
+                                    :onSave="addReferee"
+                                >
+                                </referee-form>
                                 <div>
                                     <b-tag 
                                         v-for="ref in referees"
@@ -131,7 +159,7 @@
                                         :allow-new="true"
                                         :clear-on-select="true"
                                         icon="label"
-                                        placeholder="Add new team"
+                                        placeholder="Add team"
                                         @typing="getFilteredTeams"
                                         @add="newTeam"
                                         class="tag-list"
@@ -165,8 +193,10 @@ export default {
       const today = new Date()
       return {
           name: "",
+          type: "international",
           city: "",
           country: "",
+          countryQuery: "",
           minDate: new Date(today.getFullYear(), 1, 1),
           maxDate: today,
           dates: [],
@@ -175,6 +205,7 @@ export default {
           showAddTdForm: false,
           ref: "",
           referees: [],
+          showAddRefereeForm: false,
           teams: [],
           existingTeams: [],
           filteredTeams: [],
@@ -230,6 +261,11 @@ export default {
                     .indexOf(text.toLowerCase()) >= 0
             })
         },
+        getCountries: function(name) {
+            return name 
+                ? this.$store.getters['countries/byName'](name)
+                : [];
+        },
       newTeam: function(team) {
             let existing = this.existingTeams.find( 
               t => t.toString().toLowerCase() === team.toLowerCase()
@@ -238,8 +274,15 @@ export default {
                 this.$store.dispatch("tournaments/addTeam", { team } );
             }
       },
-      showAddReferee: function() {
-          alert("Todo: Add referee form as popup/fields");
+      addReferee: function(referee) {
+          this.$store.dispatch("referees/create", { referee });
+          this.selectReferee(referee);
+          this.showAddRefereeForm = false;
+          this.ref = "";
+          this.$buefy.toast.open({
+                message: `${referee.firstName} ${referee.lastName} added as referee`,
+                type: 'is-success'
+            });
       },
       addTd: function(referee) {
           this.$store.dispatch("referees/create", { referee });
