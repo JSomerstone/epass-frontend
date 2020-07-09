@@ -3,6 +3,7 @@
     {
       "id": "3A97612E-5A8F-47FF-A340-0C2C8AFAD4F8",
       "name": "Example Tournament 2019",
+      "international": true,
       "city": "Malmö",
       "country": "Sweden",
       "date": ["2019-02-03", "2019-02-07"],
@@ -30,6 +31,7 @@
     {
       "id": "3A97612E-5A8F-47FF-A340-0C2C8AFAD4F8",
       "name": "Example Tournament 2020",
+      "international": true,
       "city": "Malmö",
       "country": "Sweden",
       "date": [

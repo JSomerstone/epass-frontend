@@ -32,11 +32,17 @@
                         </div>
                         <div class="field">
                             <b-field label="Place of the tournament" label-position="on-border">
-                                <b-input v-bind="city" :required="true" placeholder="City" :expanded="true"></b-input>
+                                <b-input 
+                                    v-bind="city" 
+                                    :required="true" 
+                                    placeholder="City" 
+                                    :expanded="true"
+                                    icon="city"
+                                ></b-input>
                                 <b-autocomplete
                                     v-model="countryQuery"
                                     placeholder="Country"
-                                    icon="globe"
+                                    icon="earth"
                                     :keep-first="true"
                                     :data="getCountries(countryQuery)"
                                     :expanded="true"
@@ -158,7 +164,7 @@
                                         :keep-first="true"
                                         :allow-new="true"
                                         :clear-on-select="true"
-                                        icon="label"
+                                        icon="flag-plus-outline"
                                         placeholder="Add team"
                                         @typing="getFilteredTeams"
                                         @add="newTeam"

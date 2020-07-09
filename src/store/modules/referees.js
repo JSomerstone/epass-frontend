@@ -2,11 +2,14 @@
 const state = {
   loading: false,
   referees: [],
+  current: null,
 };
 
 const mutationTypes = {
   SET_LOADING: "set-loading",
   SET_REFEREES: "set-referees",
+  SET_CURRENT: "set-current",
+  ADD_REFEREE: "add-referee",
 };
 
 const mutations = {
@@ -15,6 +18,15 @@ const mutations = {
   },
   [mutationTypes.SET_REFEREES](state, referees) {
     state.referees = referees;
+    localStorage.setItem("referees", JSON.stringify(referees));
+  },
+  [mutationTypes.ADD_REFEREE](state, referee) {
+    state.referees.push(referee);
+    localStorage.setItem("referees", JSON.stringify(state.referees));
+  },
+  [mutationTypes.SET_CURRENT](state, referee) {
+    state.current = referee;
+    localStorage.setItem("currentReferee", JSON.stringify(referee));
   }
 };
 
@@ -24,18 +36,13 @@ const actions = {
   },
   load: async ({ commit }) => {
     commit(mutationTypes.SET_LOADING, true);
-    console.log("Loading referees from backend");
     const result = JSON.parse(localStorage.getItem("referees"));
-    console.log(`Found ${result.length} referees`);
     commit(mutationTypes.SET_REFEREES, result);
     commit(mutationTypes.SET_LOADING, false);
   },
   create: ({ commit, dispatch }, { referee }) => {
     commit(mutationTypes.SET_LOADING, true);
-    console.log("creating new ref", referee);
-    const all = JSON.parse(localStorage.getItem("referees"));
-    all.push(referee);
-    localStorage.setItem("referees", JSON.stringify(all));
+    commit(mutationTypes.ADD_REFEREE, referee);
     dispatch("load");
     commit(mutationTypes.SET_LOADING, false);
   }
@@ -47,6 +54,7 @@ const referees = {
   getters: {
     loading: state => state.loading,
     all: state => state.referees,
+    current: state => state.current,
     search: (state) => (query) => {
       const all = state.referees;
       return query == "" ? all : all.filter(
@@ -57,7 +65,7 @@ const referees = {
           )
           return Boolean(match);
         }
-      )
+      ).sort( (r0, r1) => r0.firstName > r1.firstName )
     }
   },
   mutations,

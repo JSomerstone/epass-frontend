@@ -5,6 +5,7 @@ export default class Tournament {
     const {
       id = uuidv4(),
       name = "",
+      type = "international",
       city = "",
       country = "",
       date = [],
@@ -14,6 +15,7 @@ export default class Tournament {
     } = rawData;
 
     this.id = id;
+    this.international = type == "international";
     this.name = name;
     this.city = city;
     this.country = country;

@@ -2,18 +2,39 @@
   <div class="referee-form">
     <div class="field">
       <b-field>
-        <b-input v-model="firstName" :required="true" placeholder="Given name"></b-input>
-        <b-input v-model="lastName" :required="true" placeholder="Family name"></b-input>
+        <b-input 
+          v-model="firstName" 
+          :required="true" 
+          placeholder="Given name" 
+          :expanded="true"
+        ></b-input>
+        <b-input 
+          v-model="lastName" 
+          :required="true" 
+          placeholder="Family name" 
+          :expanded="true"
+        ></b-input>
       </b-field>
     </div>
     <div class="field">
       <b-field label="Email" label-position="on-border">
-        <b-input v-model="email" placeholder="@" :required="emailRequired"></b-input>
+        <b-input type="email" v-model="email" placeholder="@" :required="emailRequired"></b-input>
       </b-field>
     </div>
     <div class="field">
       <b-field label="Nationality" label-position="on-border">
         <b-input v-model="country" placeholder="As in passport" :required="countryRequired"></b-input>
+        <b-autocomplete
+            v-model="countryQuery"
+            placeholder="As in passport"
+            icon="earth"
+            :keep-first="true"
+            :required="countryRequired"
+            :data="getCountries(countryQuery)"
+            :expanded="true"
+            @select="option => country = option"
+        >
+        </b-autocomplete>
       </b-field>
     </div>
     <div class="field">
@@ -76,6 +97,7 @@ export default {
       lastName: "",
       email: "",
       country: "",
+      countryQuery: "",
       level: 1
     }
   },
@@ -101,6 +123,11 @@ export default {
       this.email = "";
       this.country = "";
       this.level = 1;
+    },
+    getCountries: function(name) {
+      return name
+        ? this.$store.getters['countries/byName'](name)
+        : [];
     }
   },
 }
