@@ -117,7 +117,7 @@
                     </div>
                     <div class="column is-half is-full-tablet">
                             <div class="field">
-                                <b-field label="Other referees">
+                                <b-field label="Referees">
                                     <b-autocomplete
                                         v-model="ref"
                                         v-if="!showAddRefereeForm"
@@ -255,7 +255,6 @@ export default {
       const tournament = new Tournament(this.$data);
       if (this.noOfGames > 0 || this.noOfGames > 0) {
         const current = this.$store.getters["referees/current"];
-        this.selectReferee(current);
         tournament.setGames(current.id, this.noOfGames, this.noOfTenSeconds);
       }
       this.$store.dispatch("tournaments/create", { tournament });
@@ -320,6 +319,11 @@ export default {
       let existingTeams = this.$store.getters['tournaments/teams'] || [];
       this.existingTeams = existingTeams;
       this.filteredTeams = existingTeams;
+
+      const current = this.$store.getters['referees/current'];
+      if (current) {
+        this.selectReferee(current);
+      }
   },
 }
 </script>
