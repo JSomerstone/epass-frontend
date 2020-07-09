@@ -69,10 +69,7 @@ export default {
       return this.tournament.referees.find( r => r.id == current.id );
     },
     openEditForm: function() {
-      this.$buefy.toast.open({
-        message: 'Unimplemented feature',
-        type: 'is-warning'
-      });
+      this.$store.dispatch("tournaments/openForEdit", { tournament: this.tournament });
     }
   },
 }

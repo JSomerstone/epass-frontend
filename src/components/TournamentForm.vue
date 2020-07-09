@@ -1,5 +1,12 @@
 <template>
-    <b-collapse :open="false" aria-id="newEntryForm" animation="slide" class="card">
+    <b-collapse 
+      v-bind:open="showForm" 
+      aria-id="newEntryForm" 
+      animation="slide" 
+      class="card"
+      @open="setShow(true)"
+      @close="setShow(false)"
+    >
         <div 
             slot="trigger" 
             slot-scope="props"
@@ -7,7 +14,8 @@
             role="button"
         >
             <span class="card-header-title">
-                Add tournament to your ePass
+                <span v-if="id">Edit tournament: {{ name }}</span>
+                <span v-else>Add tournament to your ePass</span>
             </span>
             <a class="card-header-icon">
                 <b-icon
@@ -61,8 +69,6 @@
                                     placeholder="Pick tournament dates"
                                     :date-formatter="formatDate"
                                     :required="true"
-                                    :min-date="minDate"
-                                    :max-date="maxDate"
                                 >
                                 </b-datepicker>
                             </b-field>
@@ -180,9 +186,12 @@
             </form>
         </div>
         <div class="card-footer">
-            <button @click="handleSave" class="button is-primary is-outlined card-footer-item">
+            <b-button @click="handleSave" icon-left="check-circle-outline" type="is-primary" class="card-footer-item" outlined>
                 Save
-            </button>
+            </b-button>
+            <b-button @click="reset" type="is-light" icon-left="cancel" class="card-footer-item" >
+                Reset
+            </b-button>
         </div>
     </b-collapse>
 </template>
@@ -194,39 +203,50 @@
 <script>
 import RefereeForm from "./RefereeForm";
 import Tournament from "../store/models/Tournament";
-
+const defaults = {
+  id: "",
+  name: "",
+  type: "international",
+  city: "",
+  country: "",
+  countryQuery: "",
+  dates: [],
+  td: null,
+  tdQuery: "",
+  referees: [],
+  ref: "",
+  teams: [],
+  noOfGames: 0,
+  noOfTenSeconds: 0
+};
 export default {
     components: {
         RefereeForm,
     },
   data: () => {
-      const today = new Date()
+      const today = new Date();
       return {
-          name: "",
-          type: "international",
-          city: "",
-          country: "",
-          countryQuery: "",
-          minDate: new Date(today.getFullYear(), 1, 1),
-          maxDate: today,
-          dates: [],
-          tdQuery: "",
-          td: null,
-          showAddTdForm: false,
-          ref: "",
-          referees: [],
-          showAddRefereeForm: false,
-          teams: [],
-          existingTeams: [],
-          filteredTeams: [],
-          noOfGames: 0,
-          noOfTenSeconds: 0,
+        ...defaults,
+        minDate: new Date(today.getFullYear(), 1, 1),
+        maxDate: today,
+        showAddTdForm: false,
+        showAddRefereeForm: false,
+        existingTeams: [],
+        filteredTeams: [],
       }
   },
   computed: {
-        allValid: function() {
-            return false;
-        },
+    showForm: function() {
+      return this.$store.getters['tournaments/showForm'];
+    },
+    wipId: function() {
+      if (this.$store.getters['tournaments/hasWip']){
+        const { id = null } = this.$store.getters['tournaments/wip'];
+        return id;
+      } else {
+        return null;
+      }
+    },
         filteredReferees: function() {
             return this.$store.getters['referees/search'](this.ref);
         },
@@ -251,16 +271,57 @@ export default {
         }
   },
   methods: {
+    setShow(show) {
+      this.$store.dispatch("tournaments/setShowForm", { show });
+    },
+    loadWip() {
+      const wip = this.$store.getters['tournaments/wip'];
+      if (! wip) {
+        return;
+      }
+      this.id = wip.id;
+      this.name = wip.name;
+      this.type = wip.international ? "international" : "national";
+      this.city = wip.city;
+      this.country = wip.country;
+      this.countryQuery = wip.country;
+      this.dates = wip.dates.map( d => new Date(d));
+      this.td = this.getRefereeById(wip.td);
+      this.referees = wip.referees.map(
+        r => {
+          const referee = this.getRefereeById(r.id)
+          return { ...referee, ...r }
+        }
+      );
+      this.teams = wip.teams;
+      const current = this.$store.getters["referees/current"];
+      const { games = 0, tenSeconds = 0 } = wip.referees.find( r => r.id == current.id);
+      this.noOfGames = games;
+      this.noOfTenSeconds = tenSeconds;
+    },
+    getRefereeById(id) {
+      return this.$store.getters['referees/byId'](id);
+    },
     handleSave() {
       const tournament = new Tournament(this.$data);
       if (this.noOfGames > 0 || this.noOfGames > 0) {
         const current = this.$store.getters["referees/current"];
         tournament.setGames(current.id, this.noOfGames, this.noOfTenSeconds);
       }
-      this.$store.dispatch("tournaments/create", { tournament });
+      if (this.id) {
+        this.$store.dispatch("tournaments/update", { tournament });
+      } else {
+        this.$store.dispatch("tournaments/create", { tournament });
+      }
     },
     reset() {
-      this.$forceUpdate();
+      Object.assign(this, defaults);
+      this.$store.dispatch('tournaments/openForEdit', { tournament: null });
+      this.setShow(false);
+      this.$buefy.toast.open({
+        message: "Cancelled",
+        type: "is-warning"
+      });
     },
       selectReferee: function(referee) {
           if ( ! this.referees.find( r => r.id === referee.id)) {
@@ -314,6 +375,14 @@ export default {
             type: 'is-success'
           })
       }
+  },
+  watch: {
+    wipId: function(wip) {
+      console.log('hasWip changed', wip);
+      if (wip) {
+        this.loadWip();
+      }
+    }
   },
   mounted() {
       let existingTeams = this.$store.getters['tournaments/teams'] || [];
