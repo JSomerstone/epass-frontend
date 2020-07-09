@@ -59,9 +59,9 @@ const referees = {
       const all = state.referees;
       return query == "" ? all : all.filter(
         ref => {
-          const { firstName, lastName, country } = ref;
-          const match = [firstName, lastName, country].find(
-            prop => prop.toLowerCase().includes(query)
+          const { firstName, lastName, country, email = "" } = ref;
+          const match = [firstName, lastName, country, email].find(
+            prop => prop.toLowerCase().includes(query.toString().toLowerCase())
           )
           return Boolean(match);
         }

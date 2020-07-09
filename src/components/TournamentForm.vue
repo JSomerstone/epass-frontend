@@ -82,8 +82,9 @@
                                         {{ props.option.firstName }} {{ props.option.lastName }}, {{ props.option.country.toUpperCase() }}
                                     </template>
                                     <template slot="empty">
-                                        <a @click="showAddTdForm = true">
-                                            <span>Add TD... </span>
+                                        <a @click="showAddTdForm = true" title="">
+                                            <b-icon icon="account-plus"></b-icon>
+                                            Add TD...
                                         </a>
                                     </template>
                                 </b-autocomplete>
