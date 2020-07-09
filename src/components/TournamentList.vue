@@ -21,8 +21,8 @@
         <b-table-column field="city" label="Location" sortable>
             {{ props.row.city }}, {{ props.row.country }}
         </b-table-column>
-        <b-table-column field="teams" label="Teams" numeric>
-            {{ props.row.teams.length }}
+        <b-table-column label="Statistics" title="Games / official duties">
+            {{ getStatistics(props.row) }}
         </b-table-column>
       </template>
       <template slot="detail" slot-scope="props">
@@ -68,6 +68,15 @@ export default {
       } else {
         return formatted.join(" - ");
       }
+    },
+    getStatistics: function(tournament) {
+      const current = this.$store.getters['referees/current'];
+      if (! current) {
+        return;
+      }
+      const referee = tournament.referees.find( r => r.id == current.id );
+      const { games= "-", tenSeconds= "-"} = referee || {};
+      return `${games} / ${tenSeconds}`;
     }
   },
 }
