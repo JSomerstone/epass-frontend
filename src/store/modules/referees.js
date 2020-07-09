@@ -70,6 +70,11 @@ const referees = {
           return Boolean(match);
         }
       ).sort( (r0, r1) => r0.firstName > r1.firstName )
+    },
+    byId: (state) => (id) => {
+      return state.referees.find(
+        r => r.id === id
+      )
     }
   },
   mutations,
