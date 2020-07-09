@@ -33,7 +33,7 @@
                         <div class="field">
                             <b-field label="Place of the tournament" label-position="on-border">
                                 <b-input 
-                                    v-bind="city" 
+                                    v-model="city"
                                     :required="true" 
                                     placeholder="City" 
                                     :expanded="true"
@@ -72,7 +72,7 @@
                                 <b-autocomplete
                                     v-if="!td && !showAddTdForm"
                                     v-model="tdQuery"
-                                    placeholder="Search by name"
+                                    placeholder="Search by name or email"
                                     :keep-first="true"
                                     :data="filteredTd"
                                     icon="magnify"
@@ -107,10 +107,10 @@
                         >
                         </referee-form>
                         <div class="field">
-                            <b-field label="# of games as referee" label-position="on-border">
+                            <b-field label="Games as referee" label-position="on-border">
                                 <b-numberinput controls-position="compact" v-model="noOfGames"></b-numberinput>
                             </b-field>
-                            <b-field label="# of games as table official / 10 sec timer" label-position="on-border">
+                            <b-field label="Games as table official / 10 sec timer" label-position="on-border">
                                 <b-numberinput controls-position="compact" v-model="noOfTenSeconds"></b-numberinput>
                             </b-field>
                         </div>
@@ -121,11 +121,12 @@
                                     <b-autocomplete
                                         v-model="ref"
                                         v-if="!showAddRefereeForm"
-                                        placeholder="Search by name"
+                                        placeholder="Search by name, email or nationality"
                                         :keep-first="true"
                                         icon="magnify"
                                         :data="filteredReferees"
                                         @select="selectReferee"
+                                        :clear-on-select="true"
                                     >
                                         <template slot-scope="props">
                                             {{ props.option.firstName }} {{ props.option.lastName }}, {{ props.option.country.toUpperCase() }}
@@ -179,7 +180,7 @@
             </form>
         </div>
         <div class="card-footer">
-            <button class="button is-primary is-outlined card-footer-item">
+            <button @click="handleSave" class="button is-primary is-outlined card-footer-item">
                 Save
             </button>
         </div>
@@ -192,6 +193,8 @@
 </style>
 <script>
 import RefereeForm from "./RefereeForm";
+import Tournament from "../store/models/Tournament";
+
 export default {
     components: {
         RefereeForm,
@@ -248,10 +251,25 @@ export default {
         }
   },
   methods: {
+    handleSave() {
+      const tournament = new Tournament(this.$data);
+      if (this.noOfGames > 0 || this.noOfGames > 0) {
+        const current = this.$store.getters["referees/current"];
+        this.selectReferee(current);
+        tournament.setGames(current.id, this.noOfGames, this.noOfTenSeconds);
+      }
+      const result = this.$store.dispatch("tournaments/create", { tournament });
+      this.$buefy.toast.open({
+        message: result.message,
+        type: `is-${result.type}`
+      });
+    },
+    reset() {
+      this.$forceUpdate();
+    },
       selectReferee: function(referee) {
           if ( ! this.referees.find( r => r.id === referee.id)) {
-
-              this.referees.push({ ...referee, games: 0, officials: 0 });
+              this.referees.push({ ...referee, games: 0, tenSeconds: 0 });
           }
       },
       removeReferee: function (referee) {
@@ -287,18 +305,19 @@ export default {
           this.showAddRefereeForm = false;
           this.ref = "";
           this.$buefy.toast.open({
-                message: `${referee.firstName} ${referee.lastName} added as referee`,
-                type: 'is-success'
-            });
+            message: `${referee.firstName} ${referee.lastName} added as referee`,
+            type: 'is-success'
+          });
       },
       addTd: function(referee) {
           this.$store.dispatch("referees/create", { referee });
           this.td = referee;
           this.showAddTdForm = false;
+          this.tdQuery = "";
           this.$buefy.toast.open({
-                message: `${referee.firstName} ${referee.lastName} added as TD`,
-                type: 'is-success'
-            })
+            message: `${referee.firstName} ${referee.lastName} added as TD`,
+            type: 'is-success'
+          })
       }
   },
   mounted() {

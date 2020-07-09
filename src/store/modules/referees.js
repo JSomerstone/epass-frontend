@@ -1,4 +1,6 @@
 // import axios from "axios";
+import Referee from "../models/RefereeClass";
+
 const state = {
   loading: false,
   referees: [],
@@ -38,6 +40,8 @@ const actions = {
     commit(mutationTypes.SET_LOADING, true);
     const result = JSON.parse(localStorage.getItem("referees"));
     commit(mutationTypes.SET_REFEREES, result);
+    // Remove when authentication is implemented
+    commit(mutationTypes.SET_CURRENT, new Referee(result[282]));
     commit(mutationTypes.SET_LOADING, false);
   },
   create: ({ commit, dispatch }, { referee }) => {

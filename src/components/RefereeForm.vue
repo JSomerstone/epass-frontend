@@ -23,11 +23,10 @@
     </div>
     <div class="field">
       <b-field label="Nationality" label-position="on-border">
-        <b-input v-model="country" placeholder="As in passport" :required="countryRequired"></b-input>
         <b-autocomplete
             v-model="countryQuery"
             placeholder="As in passport"
-            icon="earth"
+            icon="passport"
             :keep-first="true"
             :required="countryRequired"
             :data="getCountries(countryQuery)"
@@ -48,10 +47,14 @@
         <b-radio-button v-model="level" :native-value="3" >
             3
         </b-radio-button>
+        <b-radio-button v-model="level" :native-value="0" >
+            National
+        </b-radio-button>
       </b-field>
     </div>
     <div class="field">
-      <button class="button is-success" @click="handleSave" outlined>Add</button>
+      <b-button type="is-info" outlined @click="handleSave" icon-left="account-plus">
+        Add</b-button>
       <button class="button is-text" @click="handleCancel">Cancel</button>
     </div>
   </div>

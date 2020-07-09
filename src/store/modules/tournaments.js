@@ -1,5 +1,4 @@
 // import axios from "axios";
-import Tournament from "../models/Tournament";
 
 const state = {
   loading: false,
@@ -9,6 +8,7 @@ const state = {
 
 const mutationTypes = {
   SET_LOADING: "set-loading",
+  CREATE_TOURNAMENT: "create-tournament",
   SET_TOURNAMENTS: "set-tournaments",
   SET_TEAMS: "set-teams",
   ADD_TEAM: "add-team",
@@ -17,6 +17,14 @@ const mutationTypes = {
 const mutations = {
   [mutationTypes.SET_LOADING](state, loading) {
     state.loading = loading;
+  },
+  [mutationTypes.CREATE_TOURNAMENT](state, tournament) {
+    state.tournaments.push(tournament);
+    const all = JSON.parse(localStorage.getItem("tournaments"));
+    const year = tournament.getYear();
+    all[year] = all[year] || [];
+    all[year].push(tournament);
+    localStorage.setItem("tournaments", JSON.stringify(all));
   },
   [mutationTypes.SET_TOURNAMENTS](state, tournaments) {
     state.tournaments = tournaments;
@@ -36,7 +44,6 @@ const actions = {
   },
   load: async ({ commit }, { year }) => {
     commit(mutationTypes.SET_LOADING, true);
-    console.log("Getting tournaments from backend");
     const all = JSON.parse(localStorage.getItem("tournaments"));
     const result = all[year] || [];
     console.log(`Found ${result.length} tournaments for ${year}`);
@@ -46,24 +53,29 @@ const actions = {
   loadTeams: async ({ commit }) => {
     const result = JSON.parse(localStorage.getItem("teams"));
     result.sort();
-    console.log(`Got ${result.length} teams`);
     commit(mutationTypes.SET_TEAMS, result);
   },
   addTeam: async ({ commit }, { team }) => {
-    console.log("trying to add ", team);
     commit(mutationTypes.ADD_TEAM, team);
   },
-  create: ({ commit, dispatch }, { tournament }) => {
-    console.log("creating new tournament", tournament);
-    commit(mutationTypes.SET_LOADING, true);
-    const event = new Tournament(tournament);
-    const year = event.getYear(),
-      all = JSON.parse(localStorage.getItem("tournamets"));
-    all[year] = all[year] || [];
-    all[year].push(event);
-    localStorage.setItem("tournamets", JSON.stringify(all));
-    dispatch("tournaments/load", year);
-    commit(mutationTypes.SET_LOADING, false);
+  create: ({ commit }, { tournament }) => {
+    try {
+      console.log("Presisting tournament");
+      commit(mutationTypes.SET_LOADING, true);
+      commit(mutationTypes.CREATE_TOURNAMENT, tournament);
+      commit(mutationTypes.SET_LOADING, false);
+      return {
+        success: true,
+        type: 'success',
+        message: `Tournament ${tournament.name} added to your ePass`
+      };
+    } catch (err) {
+      return {
+        success: false,
+        type: 'error',
+        message: err.message
+      };
+    }
   }
 };
 

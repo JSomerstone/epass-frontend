@@ -8,7 +8,7 @@ export default class Tournament {
       type = "international",
       city = "",
       country = "",
-      date = [],
+      dates = [],
       td = "",
       referees = [],
       teams = [],
@@ -19,9 +19,14 @@ export default class Tournament {
     this.name = name;
     this.city = city;
     this.country = country;
-    this.date = date;
-    this.td = td;
-    this.referees = referees;
+    this.dates = dates;
+    this.td = td.id ? td.id : td;
+    this.referees = referees.map(
+      r => {
+        const { id, games, tenSeconds } = r;
+        return { id, games, tenSeconds }
+      }
+    );
     this.teams = teams;
   }
   getYear() {
@@ -29,5 +34,17 @@ export default class Tournament {
       return new Date(this.date[0]).getFullYear();
     }
     return new Date().getFullYear();
+  }
+  setGames(refereeId, games, tenSeconds) {
+    const index = this.referees.findIndex(
+      r => r.id === refereeId
+    )
+    if (index < 0) {
+      return;
+    }
+    Object.assign(
+      this.referees[index],
+      { games, tenSeconds }
+    );
   }
 }
