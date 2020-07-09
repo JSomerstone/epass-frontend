@@ -49,7 +49,7 @@
                         <div class="field">
                             <b-field label="Technical Delegate" label-position="on-border">
                                 <b-autocomplete
-                                    v-if="!td"
+                                    v-if="!td && !showAddTdForm"
                                     v-model="tdQuery"
                                     placeholder="Search by name"
                                     :keep-first="true"
@@ -61,8 +61,8 @@
                                         {{ props.option.firstName }} {{ props.option.lastName }}, {{ props.option.country.toUpperCase() }}
                                     </template>
                                     <template slot="empty">
-                                        <a @click="showAddReferee">
-                                            <span> Add TD... </span>
+                                        <a @click="showAddTdForm = true">
+                                            <span>Add TD... </span>
                                         </a>
                                     </template>
                                 </b-autocomplete>
@@ -75,8 +75,15 @@
                                 >
                                     {{ td.firstName }} {{ td.lastName }} &lt;{{td.email}}&gt;
                                 </b-tag>
+                                
                             </b-field>
+
                         </div>
+                        <referee-form
+                            v-if="showAddTdForm"
+                            :onSave="addTd"
+                        >
+                        </referee-form>
                     </div>
                     <div class="column is-half is-full-tablet">
                             <div class="field">
@@ -149,8 +156,11 @@
 }
 </style>
 <script>
+import RefereeForm from "./RefereeForm";
 export default {
-  props: [""],
+    components: {
+        RefereeForm,
+    },
   data: () => {
       const today = new Date()
       return {
@@ -162,13 +172,14 @@ export default {
           dates: [],
           tdQuery: "",
           td: null,
+          showAddTdForm: false,
           ref: "",
           referees: [],
           teams: [],
           existingTeams: [],
           filteredTeams: [],
           noOfGames: 0,
-          noOfTenSeconds: 0
+          noOfTenSeconds: 0,
       }
   },
   computed: {
@@ -229,6 +240,15 @@ export default {
       },
       showAddReferee: function() {
           alert("Todo: Add referee form as popup/fields");
+      },
+      addTd: function(referee) {
+          this.$store.dispatch("referees/create", { referee });
+          this.td = referee;
+          this.showAddTdForm = false;
+          this.$buefy.toast.open({
+                message: `${referee.firstName} ${referee.lastName} added as TD`,
+                type: 'is-success'
+            })
       }
   },
   mounted() {

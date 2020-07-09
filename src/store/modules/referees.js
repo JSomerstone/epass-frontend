@@ -1,6 +1,4 @@
 // import axios from "axios";
-import Referee from "../models/RefereeClass";
-
 const state = {
   loading: false,
   referees: [],
@@ -34,12 +32,11 @@ const actions = {
   },
   create: ({ commit, dispatch }, { referee }) => {
     commit(mutationTypes.SET_LOADING, true);
-    const ref = new Referee(referee);
-    console.log("creating new ref", ref);
+    console.log("creating new ref", referee);
     const all = JSON.parse(localStorage.getItem("referees"));
-    all.push(ref);
+    all.push(referee);
     localStorage.setItem("referees", JSON.stringify(all));
-    dispatch("referees/load");
+    dispatch("load");
     commit(mutationTypes.SET_LOADING, false);
   }
 };
