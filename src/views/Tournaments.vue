@@ -1,12 +1,14 @@
 <template>
   <layout>
     <template v-slot:title>Tournaments {{ year }}</template>
-    <tournament-form></tournament-form>
+    <tournament-form class="tournament-form"></tournament-form>
     <tournament-list :loading="isLoading" :items="tournaments" />
   </layout>
 </template>
-<style lang="scss">
-
+<style lang="css">
+  .tournament-form {
+    margin-bottom: 3rem;
+  }
 </style>
 <script>
 import Layout from "../components/Layout"
