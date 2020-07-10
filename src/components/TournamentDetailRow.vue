@@ -14,7 +14,7 @@
     </div>
     <div class="column is-one-third">
       <div>
-        <strong>TD:</strong> {{ getRefereeName(tournament.td) }}
+        <strong>TD:</strong> {{ getRefereeName(tournament.td.id) }}
       </div>
       <div>
         <strong>Referees:</strong>
