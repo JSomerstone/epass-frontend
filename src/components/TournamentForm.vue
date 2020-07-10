@@ -133,12 +133,28 @@
                         >
                         </referee-form>
                         <div class="field">
-                            <b-field label="Games as referee" label-position="on-border">
-                                <b-numberinput controls-position="compact" v-model="noOfGames"></b-numberinput>
+                          <b-field label="Your Games">
+                            <b-field grouped :expanded="true">
+                              <b-field label="As referee" label-position="on-border">
+                                  <b-numberinput 
+                                    controls-position="compact"
+                                    :controls-rounded="true"
+                                    v-model="noOfGames"
+                                    :min="0"
+                                    :max="20"
+                                  ></b-numberinput>
+                              </b-field>
+                              <b-field label="As table official / 10 sec timer" label-position="on-border">
+                                  <b-numberinput 
+                                    controls-position="compact"
+                                    :controls-rounded="true"
+                                    v-model="noOfTenSeconds"
+                                    :min="0"
+                                    :max="20"
+                                  ></b-numberinput>
+                              </b-field>
                             </b-field>
-                            <b-field label="Games as table official / 10 sec timer" label-position="on-border">
-                                <b-numberinput controls-position="compact" v-model="noOfTenSeconds"></b-numberinput>
-                            </b-field>
+                          </b-field>
                         </div>
                             <div class="field">
                                 <b-field label="Referees">
