@@ -5,7 +5,7 @@
       :bordered="false"
       :striped="true"
       :hoverable="true"
-      :loading="loading"
+      :loading="isLoading"
       default-sort="dates"
       default-sort-direction="desc"
       detailed
@@ -56,16 +56,18 @@ export default {
     isEmpty: function() {
       return this.items.length == 0;
     },
+    isLoading: function() {
+      return this.$store.getters['tournaments/loading'];
+    }
   },
   methods: {
     formatDateRange: function(dates) {
       if (!dates) {
         return;
       }
-      const formatted = [
-        new Date(dates[0]).toISOString().split("T").shift(),
-        new Date(dates[1]).toISOString().split("T").shift()
-      ];
+      const formatted = dates.map(
+        d => new Date(d).toLocaleDateString()
+      );
       if (formatted[0] == formatted[1]) {
         return formatted[0]
       } else {

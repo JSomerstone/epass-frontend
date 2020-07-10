@@ -19,7 +19,7 @@ export default class Tournament {
     this.name = name;
     this.city = city;
     this.country = country;
-    this.dates = dates;
+    this.dates = dates.map(d => d.toUTCString());
     this.td = td.id ? td.id : td;
     this.referees = referees.map(
       r => {

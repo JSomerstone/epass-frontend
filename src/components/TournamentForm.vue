@@ -65,15 +65,20 @@
                                     icon="calendar-today"
                                     trap-focus
                                     range
+                                    inline
                                     v-model="dates"
                                     placeholder="Pick tournament dates"
-                                    :date-formatter="formatDate"
                                     :required="true"
+                                    :min-date="minDate"
+                                    :max-date="maxDate"
+                                    :first-day-of-week="1"
                                 >
                                 </b-datepicker>
                             </b-field>
                         </div>
-                        <div class="field">
+                    </div>
+                    <div class="column is-half is-full-tablet">
+                       <div class="field">
                             <b-field label="Technical Delegate TD" label-position="on-border">
                                 <b-autocomplete
                                     v-if="!td && !showAddTdForm"
@@ -120,8 +125,6 @@
                                 <b-numberinput controls-position="compact" v-model="noOfTenSeconds"></b-numberinput>
                             </b-field>
                         </div>
-                    </div>
-                    <div class="column is-half is-full-tablet">
                             <div class="field">
                                 <b-field label="Referees">
                                   <b-field>
@@ -191,8 +194,15 @@
             </form>
         </div>
         <div class="card-footer">
-            <b-button @click="handleSave" icon-left="check-circle-outline" type="is-primary" class="card-footer-item" outlined>
-                Save
+            <b-button 
+              @click="handleSave" 
+              v-bind:disabled="isLoading" 
+              icon-left="check-circle-outline" 
+              type="is-primary" 
+              class="card-footer-item" 
+              outlined
+            >
+                {{ id ? "Update" : "Save" }}
             </b-button>
             <b-button @click="reset" type="is-light" icon-left="cancel" class="card-footer-item" >
                 Reset
@@ -232,7 +242,7 @@ export default {
       const today = new Date();
       return {
         ...defaults,
-        minDate: new Date(today.getFullYear(), 1, 1),
+        minDate: new Date(`${today.getFullYear()-1}-12-31`),
         maxDate: today,
         showAddTdForm: false,
         showAddRefereeForm: false,
@@ -241,6 +251,10 @@ export default {
       }
   },
   computed: {
+    isLoading() {
+      return (this.$store.getters['tournaments/loading'] 
+        || this.$store.getters['referees/loading']);
+    },
     showForm: function() {
       return this.$store.getters['tournaments/showForm'];
     },
@@ -260,19 +274,6 @@ export default {
         },
         allTeams: function() {
             return this.$store.getters['tournaments/teams'] || [];
-        },
-        formatDate: () => dates => {
-            if (dates.length == 2) {
-                let formatted = [
-                    dates[0].toISOString().split("T").shift()
-                ];
-                if (dates[0] !== dates[1]) {
-                    formatted.push(
-                        dates[1].toISOString().split("T").shift()
-                    )
-                }
-                return formatted.join(" - ");
-            }
         }
   },
   methods: {
@@ -314,10 +315,14 @@ export default {
         tournament.setGames(current.id, this.noOfGames, this.noOfTenSeconds);
       }
       if (this.id) {
+        this.$buefy.toast.open({ message: "Updating... "});
         this.$store.dispatch("tournaments/update", { tournament });
       } else {
+        this.$buefy.toast.open({ message: "Saving new tournament... "});
         this.$store.dispatch("tournaments/create", { tournament });
       }
+      Object.assign(this, defaults);
+      this.setShow(false);
     },
     reset() {
       Object.assign(this, defaults);
@@ -341,7 +346,7 @@ export default {
       },
     addCurrent() {
       const current = this.getCurrent();
-      current && this.addReferee(current);
+      current && this.selectReferee(current);
     },
     getCurrent() {
       return this.$store.getters["referees/current"];

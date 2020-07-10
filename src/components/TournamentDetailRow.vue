@@ -8,7 +8,7 @@
         <strong>Your statistics:</strong>
         <ul>
             <li>{{ statistics.games }} Game(s) as referee</li>
-            <li>{{ statistics.games }} Game(s) as table official / 10 sec timer</li>
+            <li>{{ statistics.tenSeconds }} Game(s) as table official / 10 sec timer</li>
         </ul>
       </div>
     </div>

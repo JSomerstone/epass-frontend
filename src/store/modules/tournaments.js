@@ -1,5 +1,6 @@
 // import axios from "axios";
 import { ToastProgrammatic as Toast } from 'buefy'
+import { v4 as uuidv4 } from "uuid";
 
 const state = {
   loading: false,
@@ -25,6 +26,8 @@ const mutations = {
     state.loading = Boolean(loading);
   },
   [mutationTypes.CREATE_TOURNAMENT](state, tournament) {
+    tournament.id = uuidv4();
+    console.log("Saving", { name: tournament.name, id: tournament.id });
     state.tournaments.push(tournament);
     const all = JSON.parse(localStorage.getItem("tournaments"));
     const year = tournament.getYear();
@@ -81,12 +84,11 @@ const actions = {
   addTeam: async ({ commit }, { team }) => {
     commit(mutationTypes.ADD_TEAM, team);
   },
-  create: ({ commit }, { tournament }) => {
+  create: ({ commit, dispatch }, { tournament }) => {
     try {
-      console.log("Presisting tournament");
       commit(mutationTypes.SET_LOADING, true);
       commit(mutationTypes.CREATE_TOURNAMENT, tournament);
-      commit(mutationTypes.SET_LOADING, false);
+      dispatch("load", { year: tournament.getYear() });
       Toast.open({
         message: `Tournament ${tournament.name} added to your ePass`,
         type: "is-success"
@@ -98,13 +100,12 @@ const actions = {
       });
     }
   },
-  update: ({ commit }, { tournament }) => {
+  update: ({ commit, dispatch }, { tournament }) => {
     try {
-      console.log("Presisting tournament");
       commit(mutationTypes.SET_LOADING, true);
       commit(mutationTypes.UPDATE_TOURNAMENT, tournament);
       commit(mutationTypes.SET_WIP, null);
-      commit(mutationTypes.SET_LOADING, false);
+      dispatch("load", { year: tournament.getYear() });
       Toast.open({
         message: `Tournament ${tournament.name} updated`,
         type: "is-success"
