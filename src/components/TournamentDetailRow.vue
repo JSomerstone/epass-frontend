@@ -1,7 +1,7 @@
 <template>
   <div class="columns">
     <div class="column is-one-third">
-      <b-button outline type="is-info" @click="openEditForm" icon-left="file-document-edit-outline">
+      <b-button v-if="isEditable" outline type="is-info" @click="openEditForm" icon-left="file-document-edit-outline">
         Edit
       </b-button>
       <div v-if="hasGames">
@@ -54,6 +54,9 @@ export default {
       return ref 
         ? ref.games || ref.tenSeconds
         : false;
+    },
+    isEditable: function() {
+      return this.tournament.getYear() == new Date().getFullYear();
     }
   },
   methods: {

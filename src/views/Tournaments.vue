@@ -23,7 +23,7 @@ export default {
   },
   data() {
     return {
-      year: new Date().getFullYear(),
+      year:  this.$route.params.year || new Date().getFullYear(),
     }
   },
   computed: {
@@ -35,6 +35,20 @@ export default {
     }
   },
   methods: {
+    fetchData: function() {
+      this.$store.dispatch("tournaments/load", { year: this.year });
+      this.$store.dispatch("tournaments/loadTeams");
+      this.$store.dispatch("referees/load");
+    }
+  },
+  created () {
+    // fetch the data when the view is created and the data is
+    // already being observed
+    this.fetchData()
+  },
+  watch: {
+    // call again the method if the route changes
+    '$route': 'fetchData'
   },
 }
 </script>
