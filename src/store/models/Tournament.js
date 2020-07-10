@@ -1,33 +1,35 @@
 import { v4 as uuidv4 } from "uuid";
 
 export default class Tournament {
-  constructor(rawData = {}) {
+  constructor(rawData = {}, refereeList = []) {
     const {
       id = uuidv4(),
       name = "",
-      type = "international",
+      international = true,
       city = "",
       country = "",
       dates = [],
-      td = "",
+      td = {},
       referees = [],
       teams = [],
     } = rawData;
 
     this.id = id;
-    this.international = type == "international";
+    this.international = international;
     this.name = name;
     this.city = city;
     this.country = country;
-    this.dates = dates.map(d => d.toUTCString());
-    this.td = td.id ? td.id : td;
+    this.dates = dates.map(d => new Date(d));
+    this.td = td.id ? td : this.getRef(td, refereeList);
     this.referees = referees.map(
-      r => {
-        const { id, games, tenSeconds } = r;
-        return { id, games, tenSeconds }
-      }
+      r => r.id ? r : this.getRef(r, refereeList)
     );
     this.teams = teams;
+  }
+  getRef(id, refereeList) {
+    return refereeList.find(
+      r => r.id == id
+    ) || {};
   }
   getYear() {
     if (this.date) {
@@ -46,5 +48,26 @@ export default class Tournament {
       this.referees[index],
       { games, tenSeconds }
     );
+  }
+  toJson() {
+    return {
+      id: this.id,
+      international: this.international,
+      name: this.name,
+      city: this.city,
+      country: this.country,
+      dates: this.dates.map(d => d.toUTCString()),
+      td: this.td.id,
+      referees: this.referees.map(
+        r => {
+          return {
+            id: r.id,
+            games: r.games,
+            tenSeconds: r.tenSeconds
+          }
+        }
+      ),
+      teams: this.teams,
+    };
   }
 }

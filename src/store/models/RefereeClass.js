@@ -9,6 +9,8 @@ export default class Referee {
       country = "",
       email = "",
       level = 1,
+      games = 0,
+      tenSeconds = 0,
     } = rawData;
 
     this.id = id;
@@ -17,5 +19,7 @@ export default class Referee {
     this.country = country;
     this.email = email;
     this.level = level;
+    this.games = games;
+    this.tenSeconds = tenSeconds;
   }
 }

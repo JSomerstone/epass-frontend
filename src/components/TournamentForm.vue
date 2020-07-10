@@ -30,15 +30,15 @@
                     <div class="columns">
                       <div class="column is-half is-full-tablet">
                         <b-field label="Name of tournament" label-position="on-border">
-                          <b-input v-model="name" :required="true" :expanded="true"></b-input>
+                          <b-input v-model="tournament.name" :required="true" :expanded="true"></b-input>
                         </b-field>
                       </div>
                       <div class="column is-half is-full-tablet">
                         <b-field>
-                         <b-radio-button v-model="type" native-value="international" expanded>
+                         <b-radio-button v-model="tournament.international" :native-value="true" expanded>
                               International
                           </b-radio-button>
-                          <b-radio-button v-model="type" native-value="national" expanded>
+                          <b-radio-button v-model="tournament.international" :native-value="false" expanded>
                               National
                           </b-radio-button>
                         </b-field>
@@ -48,7 +48,7 @@
                   <div class="field">
                       <b-field label="Place of the tournament" label-position="on-border">
                           <b-input 
-                              v-model="city"
+                              v-model="tournament.city"
                               :required="true" 
                               placeholder="City" 
                               :expanded="true"
@@ -61,7 +61,7 @@
                               :keep-first="true"
                               :data="getCountries(countryQuery)"
                               :expanded="true"
-                              @select="option => country = option"
+                              @select="option => tournament.country = option"
                           >
                           </b-autocomplete>
                       </b-field>
@@ -73,7 +73,7 @@
                               trap-focus
                               range
                               inline
-                              v-model="dates"
+                              v-model="tournament.dates"
                               placeholder="Pick tournament dates"
                               :required="true"
                               :min-date="minDate"
@@ -88,7 +88,7 @@
                   <div class="field">
                       <b-field label="Technical Delegate TD" label-position="on-border">
                         <div class="columns">
-                          <div class="column is-full" v-if="!td.id && !showAddTdForm">
+                          <div class="column is-full" v-if="!tournament.td.id && !showAddTdForm">
                             <b-field>
                               <b-autocomplete
                                   v-model="tdQuery"
@@ -97,7 +97,7 @@
                                   :data="filteredTd"
                                   icon="magnify"
                                   expanded
-                                  @select="option => td = option">
+                                  @select="option => tournament.td = option">
                               >
                                   <template slot-scope="props">
                                       {{ props.option.firstName }} {{ props.option.lastName }} [{{ props.option.country }}]
@@ -110,25 +110,26 @@
                                   </template>
                               </b-autocomplete>
                               <b-button 
-                                @click="td = getCurrent()" 
+                                @click="tournament.td = getCurrent()" 
                                 type="is-info" 
                                 icon-left="account-plus" 
                                 title="Set yourself as TD">
                               </b-button>
                             </b-field>
                           </div>
-                          <div class="column is-half" v-if="td.id">
+                          <div class="column is-half" v-if="tournament.td.id">
                               <b-tag 
                                 size="is-medium" 
                                 closable 
                                 rounded
-                                :key="td.email"
-                                @close="td={}"
+                                :key="tournament.td.id"
+                                @close="tournament.td={}"
                             >
-                                {{ td.firstName }} {{ td.lastName }} &lt;{{td.email || "email-missing" }}&gt;
+                                {{ tournament.td.firstName }} {{ tournament.td.lastName }}
+                                &lt;{{tournament.td.email || "email-missing" }}&gt;
                             </b-tag>
                           </div>
-                          <div  class="column is-half" v-if="td.id && !td.email">
+                          <div  class="column is-half" v-if="tournament.td.id && !tournament.td.email">
                             <b-field >
                               <b-input 
                                 v-model="tdEmail"
@@ -230,7 +231,7 @@
                       <div class="field">
                           <b-field label="Teams competing (Name / Country)">
                               <b-taginput
-                                  v-model="teams"
+                                  v-model="tournament.teams"
                                   :data="filteredTeams"
                                   autocomplete
                                   :keep-first="true"
@@ -248,6 +249,9 @@
               </div>
           </div>
         </div>
+        <pre>
+          {{ tournament }}
+        </pre>
         <div class="card-footer">
             <b-button 
               @click="handleSave" 
@@ -298,6 +302,7 @@ export default {
       const today = new Date();
       return {
         ...defaults,
+        tournament: new Tournament({ id: null }),
         minDate: new Date(`${today.getFullYear()-1}-12-31`),
         maxDate: today,
         showAddTdForm: false,
@@ -341,43 +346,24 @@ export default {
       if (! wip) {
         return;
       }
-      this.id = wip.id;
-      this.name = wip.name;
-      this.type = wip.international ? "international" : "national";
-      this.city = wip.city;
-      this.country = wip.country;
-      this.countryQuery = wip.country;
-      this.dates = wip.dates.map( d => new Date(d));
-      this.td = this.getRefereeById(wip.td);
-      this.referees = wip.referees.map(
-        r => {
-          const referee = this.getRefereeById(r.id)
-          return { ...referee, ...r }
-        }
-      );
-      this.teams = wip.teams;
-      const current = this.$store.getters["referees/current"];
-      const { games = 0, tenSeconds = 0 } = wip.referees.find( r => r.id == current.id);
-      this.noOfGames = games;
-      this.noOfTenSeconds = tenSeconds;
+      this.tournament = wip;
     },
     getRefereeById(id) {
       return this.$store.getters['referees/byId'](id);
     },
     handleSave() {
-      const tournament = new Tournament(this.$data);
       if (this.noOfGames > 0 || this.noOfGames > 0) {
         const current = this.$store.getters["referees/current"];
-        tournament.setGames(current.id, this.noOfGames, this.noOfTenSeconds);
+        this.tournament.setGames(current.id, this.noOfGames, this.noOfTenSeconds);
       }
-      if (this.id) {
+      if (this.tournament.id) {
         this.$buefy.toast.open({ message: "Updating... "});
-        this.$store.dispatch("tournaments/update", { tournament });
+        this.$store.dispatch("tournaments/update", { tournament: this.tournament });
       } else {
         this.$buefy.toast.open({ message: "Saving new tournament... "});
-        this.$store.dispatch("tournaments/create", { tournament });
+        this.$store.dispatch("tournaments/create", { tournament: this.tournament });
       }
-      Object.assign(this, defaults);
+      this.tournament = new Tournament({ id: null })
       this.setShow(false);
     },
     reset() {
@@ -390,14 +376,14 @@ export default {
       });
     },
       selectReferee: function(referee) {
-          if ( ! this.referees.find( r => r.id === referee.id)) {
-              this.referees.push({ ...referee, games: 0, tenSeconds: 0 });
-          }
+        if ( ! this.tournament.referees.find( r => r.id === referee.id)) {
+          this.tournament.referees.push(referee);
+        }
       },
       removeReferee: function (referee) {
-          let index = this.referees.findIndex( ref => ref.id === referee.id );
+          let index = this.tournament.referees.findIndex( ref => ref.id === referee.id );
           if (index >= 0) {
-              this.referees.splice(index, 1);
+              this.tournament.referees.splice(index, 1);
           }
       },
     addCurrent() {
@@ -440,7 +426,7 @@ export default {
       },
       addTd: function(referee) {
           this.$store.dispatch("referees/create", { referee });
-          this.td = referee;
+          this.tournament.td = referee;
           this.showAddTdForm = false;
           this.tdQuery = "";
           this.$buefy.toast.open({
@@ -449,9 +435,9 @@ export default {
           })
       },
       handleSaveTdEmail() {
-        this.td.email = this.tdEmail;
+        this.tournament.td.email = this.tdEmail;
         this.$buefy.toast.open({ message: "Updating..." });
-        this.$store.dispatch("referees/update", { referee: this.td });
+        this.$store.dispatch("referees/update", { referee: this.tournament.td });
         this.tdEmail = "";
       }
   },

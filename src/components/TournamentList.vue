@@ -6,8 +6,8 @@
       :striped="true"
       :hoverable="true"
       :loading="isLoading"
-      default-sort="dates"
-      default-sort-direction="desc"
+      default-sort="name"
+      default-sort-direction="asc"
       detailed
       detail-key="id"
       ref="table"
@@ -18,7 +18,7 @@
             {{ props.row.name }}
           </a>
         </b-table-column>
-        <b-table-column field="dates" label="Date" sortable>
+        <b-table-column field="dates" label="Date" sortable :custom-sort="sortDates">
           {{ formatDateRange(props.row.dates) }} 
         </b-table-column>
         <b-table-column field="international" label="Type" sortable>
@@ -64,6 +64,11 @@ export default {
     }
   },
   methods: {
+    sortDates(rowA, rowB, isAsc) {
+      const dateA = new Date(rowA.dates[0]).getTime();
+      const dateB = new Date(rowB.dates[0]).getTime();
+      return (dateA > dateB) || !isAsc;
+    },
     toggle(row) {
         this.$refs.table.toggleDetails(row)
     },
