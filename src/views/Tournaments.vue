@@ -1,7 +1,7 @@
 <template>
   <layout>
     <template v-slot:title>Tournaments {{ year }}</template>
-    <tournament-form class="tournament-form"></tournament-form>
+    <tournament-form class="tournament-form" v-if="isEditable"></tournament-form>
     <tournament-list :loading="isLoading" :items="tournaments" />
   </layout>
 </template>
@@ -27,6 +27,9 @@ export default {
     }
   },
   computed: {
+    isEditable: function() {
+      return this.year == new Date().getFullYear();
+    },
     tournaments: function() {
       return this.$store.getters['tournaments/all'] || [];
     },

@@ -22,7 +22,7 @@
     </div>
   </section>
   <section class="footer">
-    <slot name="footer">Title</slot>
+    <slot name="footer"></slot>
   </section>
   </div>
 </template>
