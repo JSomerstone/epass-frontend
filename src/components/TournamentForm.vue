@@ -81,7 +81,7 @@
                        <div class="field">
                             <b-field label="Technical Delegate TD" label-position="on-border">
                                 <b-autocomplete
-                                    v-if="!td && !showAddTdForm"
+                                    v-if="!td.id && !showAddTdForm"
                                     v-model="tdQuery"
                                     placeholder="Search by name or email"
                                     :keep-first="true"
@@ -90,7 +90,7 @@
                                     @select="option => td = option">
                                 >
                                     <template slot-scope="props">
-                                        {{ props.option.firstName }} {{ props.option.lastName }}, {{ props.option.country.toUpperCase() }}
+                                        {{ props.option.firstName }} {{ props.option.lastName }} [{{ props.option.country }}]
                                     </template>
                                     <template slot="empty">
                                         <a @click="showAddTdForm = true" title="">
@@ -100,21 +100,36 @@
                                     </template>
                                 </b-autocomplete>
                                 <b-tag 
-                                    v-if="td"
+                                    v-if="td.id"
                                     size="is-medium" 
                                     closable 
                                     rounded
-                                    @close="td=null"
+                                    :key="td.email"
+                                    @close="td={}"
                                 >
                                     {{ td.firstName }} {{ td.lastName }} &lt;{{td.email || "email-missing" }}&gt;
                                 </b-tag>
-                                
+                                <b-field v-if="td.id && !td.email">
+                                  <b-input 
+                                    v-model="tdEmail"
+                                    type="email"
+                                    placeholder="Add missing email"
+                                    :expanded="true"
+                                  ></b-input>
+                                  <b-button 
+                                    type="is-info"
+                                    icon-left="email-check-outline"
+                                    title="Save email"
+                                    @click="handleSaveTdEmail"
+                                  ></b-button>
+                                </b-field>
                             </b-field>
 
                         </div>
                         <referee-form
                             v-if="showAddTdForm"
                             :onSave="addTd"
+                            :onCancel="() => { showAddTdForm = false }"
                         >
                         </referee-form>
                         <div class="field">
@@ -226,7 +241,8 @@ const defaults = {
   country: "",
   countryQuery: "",
   dates: [],
-  td: null,
+  td: {},
+  tdEmail: "",
   tdQuery: "",
   referees: [],
   ref: "",
@@ -391,6 +407,12 @@ export default {
             message: `${referee.firstName} ${referee.lastName} added as TD`,
             type: 'is-success'
           })
+      },
+      handleSaveTdEmail() {
+        this.td.email = this.tdEmail;
+        this.$buefy.toast.open({ message: "Updating..." });
+        this.$store.dispatch("referees/update", { referee: this.td });
+        this.tdEmail = "";
       }
   },
   watch: {
@@ -402,7 +424,7 @@ export default {
     }
   },
   mounted() {
-    if(!this.existingTeams) {
+    if(this.existingTeams.length == 0) {
       let existingTeams = this.$store.getters['tournaments/teams'] || [];
       this.existingTeams = existingTeams;
       this.filteredTeams = existingTeams;

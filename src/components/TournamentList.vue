@@ -10,10 +10,13 @@
       default-sort-direction="desc"
       detailed
       detail-key="id"
+      ref="table"
     >
       <template slot-scope="props">
         <b-table-column field="name" label="Name" sortable>
+          <a @click="toggle(props.row)">
             {{ props.row.name }}
+          </a>
         </b-table-column>
         <b-table-column field="dates" label="Date" sortable>
           {{ formatDateRange(props.row.dates) }} 
@@ -61,7 +64,10 @@ export default {
     }
   },
   methods: {
-    formatDateRange: function(dates) {
+    toggle(row) {
+        this.$refs.table.toggleDetails(row)
+    },
+    formatDateRange(dates) {
       if (!dates) {
         return;
       }
@@ -74,7 +80,7 @@ export default {
         return formatted.join(" - ");
       }
     },
-    getStatistics: function(tournament) {
+    getStatistics(tournament) {
       const current = this.$store.getters['referees/current'];
       if (! current) {
         return;

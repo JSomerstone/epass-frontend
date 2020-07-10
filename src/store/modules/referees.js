@@ -1,5 +1,6 @@
 // import axios from "axios";
 import Referee from "../models/RefereeClass";
+import { ToastProgrammatic as Toast } from 'buefy'
 
 const state = {
   loading: false,
@@ -12,6 +13,7 @@ const mutationTypes = {
   SET_REFEREES: "set-referees",
   SET_CURRENT: "set-current",
   ADD_REFEREE: "add-referee",
+  UPDATE_REFEREE: "update-referee",
 };
 
 const mutations = {
@@ -24,6 +26,11 @@ const mutations = {
   },
   [mutationTypes.ADD_REFEREE](state, referee) {
     state.referees.push(referee);
+    localStorage.setItem("referees", JSON.stringify(state.referees));
+  },
+  [mutationTypes.UPDATE_REFEREE](state, referee) {
+    const index = state.referees.find(r => r.id == referee.id);
+    state.referees[index] = referee;
     localStorage.setItem("referees", JSON.stringify(state.referees));
   },
   [mutationTypes.SET_CURRENT](state, referee) {
@@ -45,10 +52,36 @@ const actions = {
     commit(mutationTypes.SET_LOADING, false);
   },
   create: ({ commit, dispatch }, { referee }) => {
-    commit(mutationTypes.SET_LOADING, true);
-    commit(mutationTypes.ADD_REFEREE, referee);
-    dispatch("load");
-    commit(mutationTypes.SET_LOADING, false);
+    try {
+      commit(mutationTypes.SET_LOADING, true);
+      commit(mutationTypes.ADD_REFEREE, referee);
+      Toast.open({
+        message: `Referee added to system`,
+        type: "is-success"
+      });
+      dispatch("load");
+      commit(mutationTypes.SET_LOADING, false);
+    } catch (err) {
+      Toast.open({
+        message: `Saving failed: "${err.message}"`,
+        type: "is-error"
+      });
+    }
+  },
+  update({ commit, dispatch }, { referee }) {
+    try {
+      commit(mutationTypes.UPDATE_REFEREE, referee);
+      Toast.open({
+        message: `Referee updated`,
+        type: "is-success"
+      });
+      dispatch("load");
+    } catch (err) {
+      Toast.open({
+        message: `Saving failed: "${err.message}"`,
+        type: "is-error"
+      });
+    }
   }
 };
 
