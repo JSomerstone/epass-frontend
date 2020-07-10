@@ -1,5 +1,8 @@
 <template>
   <div>
+    <section class="header">
+      <navbar></navbar>
+    </section>
     <section class="hero">
     <div class="hero-body">
       <div class="container">
@@ -23,3 +26,11 @@
   </section>
   </div>
 </template>
+<script>
+import Navbar from "./Navbar"
+export default {
+  components: {
+    Navbar
+  }
+}
+</script>
