@@ -27,15 +27,23 @@
           <div class="columns">
               <div class="column is-half is-full-tablet">
                   <div class="field">
-                      <b-field label="Name of tournament" label-position="on-border">
+                    <div class="columns">
+                      <div class="column is-half is-full-tablet">
+                        <b-field label="Name of tournament" label-position="on-border">
                           <b-input v-model="name" :required="true" :expanded="true"></b-input>
-                          <b-radio-button v-model="type" native-value="international" >
+                        </b-field>
+                      </div>
+                      <div class="column is-half is-full-tablet">
+                        <b-field>
+                         <b-radio-button v-model="type" native-value="international" expanded>
                               International
                           </b-radio-button>
-                          <b-radio-button v-model="type" native-value="national" >
+                          <b-radio-button v-model="type" native-value="national" expanded>
                               National
                           </b-radio-button>
-                      </b-field>
+                        </b-field>
+                      </div>
+                    </div>
                   </div>
                   <div class="field">
                       <b-field label="Place of the tournament" label-position="on-border">
@@ -79,37 +87,38 @@
               <div class="column is-half is-full-tablet">
                   <div class="field">
                       <b-field label="Technical Delegate TD" label-position="on-border">
-                        <b-field v-if="!td.id && !showAddTdForm">
-                          <b-autocomplete
-                              v-model="tdQuery"
-                              placeholder="Search by name or email"
-                              :keep-first="true"
-                              :data="filteredTd"
-                              icon="magnify"
-                              :expanded="true"
-                              @select="option => td = option">
-                          >
-                              <template slot-scope="props">
-                                  {{ props.option.firstName }} {{ props.option.lastName }} [{{ props.option.country }}]
-                              </template>
-                              <template slot="empty">
-                                  <a @click="showAddTdForm = true" title="">
-                                      <b-icon icon="account-plus"></b-icon>
-                                      Add TD...
-                                  </a>
-                              </template>
-                          </b-autocomplete>
-                          <b-button 
-                            @click="td = getCurrent()" 
-                            type="is-info" 
-                            icon-left="account-plus" 
-                            title="Set yourself as TD">
-                          </b-button>
-                        </b-field>
                         <div class="columns">
-                          <div  class="column is-half">
+                          <div class="column is-full" v-if="!td.id && !showAddTdForm">
+                            <b-field>
+                              <b-autocomplete
+                                  v-model="tdQuery"
+                                  placeholder="Search by name or email"
+                                  :keep-first="true"
+                                  :data="filteredTd"
+                                  icon="magnify"
+                                  expanded
+                                  @select="option => td = option">
+                              >
+                                  <template slot-scope="props">
+                                      {{ props.option.firstName }} {{ props.option.lastName }} [{{ props.option.country }}]
+                                  </template>
+                                  <template slot="empty">
+                                      <a @click="showAddTdForm = true" title="">
+                                          <b-icon icon="account-plus"></b-icon>
+                                          Add TD...
+                                      </a>
+                                  </template>
+                              </b-autocomplete>
+                              <b-button 
+                                @click="td = getCurrent()" 
+                                type="is-info" 
+                                icon-left="account-plus" 
+                                title="Set yourself as TD">
+                              </b-button>
+                            </b-field>
+                          </div>
+                          <div class="column is-half" v-if="td.id">
                               <b-tag 
-                                v-if="td.id"
                                 size="is-medium" 
                                 closable 
                                 rounded
@@ -119,8 +128,8 @@
                                 {{ td.firstName }} {{ td.lastName }} &lt;{{td.email || "email-missing" }}&gt;
                             </b-tag>
                           </div>
-                          <div  class="column is-half">
-                            <b-field v-if="td.id && !td.email">
+                          <div  class="column is-half" v-if="td.id && !td.email">
+                            <b-field >
                               <b-input 
                                 v-model="tdEmail"
                                 type="email"
