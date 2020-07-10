@@ -85,7 +85,7 @@
                   </div>
               </div>
               <div class="column is-half is-full-tablet">
-                  <div class="field">
+                  <div class="field" id="td-field">
                       <b-field label="Technical Delegate TD" label-position="on-border">
                         <div class="columns">
                           <div class="column is-full" v-if="!tournament.td.id && !showAddTdForm">
@@ -147,14 +147,15 @@
                           </div>
                         </div>
                       </b-field>
-                  </div>
-                  <referee-form
-                      v-if="showAddTdForm"
-                      :onSave="addTd"
-                      :onCancel="() => { showAddTdForm = false }"
-                  >
-                  </referee-form>
-                  <div class="field">
+                    <referee-form
+                        v-if="showAddTdForm"
+                        :onSave="addTd"
+                        :onCancel="() => { showAddTdForm = false }"
+                    >
+                    </referee-form>
+                  </div><!-- /td-field -->
+                  
+                  <div class="field" id="your-games">
                     <b-field label="Your Games">
                       <div class="columns">
                         <div class="column is-half">
@@ -181,71 +182,71 @@
                         </div>
                       </div>
                     </b-field>
-                  </div>
-                      <div class="field">
-                          <b-field label="Referees">
-                            <b-field>
-                              <b-autocomplete
-                                  v-model="ref"
-                                  v-if="!showAddRefereeForm"
-                                  placeholder="Search by name, email or nationality"
-                                  :keep-first="true"
-                                  icon="magnify"
-                                  :data="filteredReferees"
-                                  @select="selectReferee"
-                                  :clear-on-select="true"
-                                  :expanded="true"
-                              >
-                                  <template slot-scope="props">
-                                      {{ props.option.firstName }} {{ props.option.lastName }}, {{ props.option.country.toUpperCase() }}
-                                  </template>
-                                  <template slot="empty">
-                                      No results for {{ref}}, 
-                                      <a @click="showAddRefereeForm = true">
-                                          <span> Add new... </span>
-                                      </a>
-                                  </template>
-                              </b-autocomplete>
-                              <b-button @click="addCurrent" type="is-info" icon-left="account-plus" title="Add yourself">
-                              </b-button>
-                            </b-field>
-                          </b-field>
-                          <referee-form
-                              v-if="showAddRefereeForm"
-                              :onSave="addReferee"
+                  </div><!-- /your-games -->
+                  <div class="field" id="referees-field">
+                      <b-field label="Referees">
+                        <b-field>
+                          <b-autocomplete
+                              v-model="ref"
+                              v-if="!showAddRefereeForm"
+                              placeholder="Search by name, email or nationality"
+                              :keep-first="true"
+                              icon="magnify"
+                              :data="filteredReferees"
+                              @select="selectReferee"
+                              :clear-on-select="true"
+                              :expanded="true"
                           >
-                          </referee-form>
-                          <div>
-                              <b-tag 
-                                  v-for="ref in referees"
-                                  v-bind:key="ref.id"
-                                  size="is-medium" 
-                                  closable 
-                                  rounded
-                                  @close="removeReferee(ref)"
-                              >
-                                  {{ ref.firstName }} {{ ref.lastName }} [{{ ref.country }}]
-                              </b-tag>
-                          </div>
+                              <template slot-scope="props">
+                                  {{ props.option.firstName }} {{ props.option.lastName }}, {{ props.option.country.toUpperCase() }}
+                              </template>
+                              <template slot="empty">
+                                  No results for {{ref}}, 
+                                  <a @click="showAddRefereeForm = true">
+                                      <span> Add new... </span>
+                                  </a>
+                              </template>
+                          </b-autocomplete>
+                          <b-button @click="addCurrent" type="is-info" icon-left="account-plus" title="Add yourself">
+                          </b-button>
+                        </b-field>
+                      </b-field>
+                      <referee-form
+                          v-if="showAddRefereeForm"
+                          :onSave="addReferee"
+                      >
+                      </referee-form>
+                      <div>
+                          <b-tag 
+                              v-for="ref in tournament.referees"
+                              v-bind:key="ref.id"
+                              size="is-medium" 
+                              closable 
+                              rounded
+                              @close="removeReferee(ref)"
+                          >
+                              {{ ref.firstName }} {{ ref.lastName }} [{{ ref.country }}]
+                          </b-tag>
                       </div>
-                      <div class="field">
-                          <b-field label="Teams competing (Name / Country)">
-                              <b-taginput
-                                  v-model="tournament.teams"
-                                  :data="filteredTeams"
-                                  autocomplete
-                                  :keep-first="true"
-                                  :allow-new="true"
-                                  :clear-on-select="true"
-                                  icon="flag-plus-outline"
-                                  placeholder="Add team"
-                                  @typing="getFilteredTeams"
-                                  @add="newTeam"
-                                  class="tag-list"
-                              >
-                              </b-taginput>
-                          </b-field>
-                      </div>
+                  </div><!-- /referees-field -->
+                  <div class="field">
+                      <b-field label="Teams competing (Name / Country)">
+                          <b-taginput
+                              v-model="tournament.teams"
+                              :data="filteredTeams"
+                              autocomplete
+                              :keep-first="true"
+                              :allow-new="true"
+                              :clear-on-select="true"
+                              icon="flag-plus-outline"
+                              placeholder="Add team"
+                              @typing="getFilteredTeams"
+                              @add="newTeam"
+                              class="tag-list"
+                          >
+                          </b-taginput>
+                      </b-field>
+                  </div>
               </div>
           </div>
         </div>
@@ -377,7 +378,7 @@ export default {
     },
       selectReferee: function(referee) {
         if ( ! this.tournament.referees.find( r => r.id === referee.id)) {
-          this.tournament.referees.push(referee);
+          this.tournament.referees.push({ ...referee, games: 0, tenSeconds: 0 });
         }
       },
       removeReferee: function (referee) {
