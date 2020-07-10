@@ -124,6 +124,7 @@
                     <div class="column is-half is-full-tablet">
                             <div class="field">
                                 <b-field label="Referees">
+                                  <b-field>
                                     <b-autocomplete
                                         v-model="ref"
                                         v-if="!showAddRefereeForm"
@@ -133,6 +134,7 @@
                                         :data="filteredReferees"
                                         @select="selectReferee"
                                         :clear-on-select="true"
+                                        :expanded="true"
                                     >
                                         <template slot-scope="props">
                                             {{ props.option.firstName }} {{ props.option.lastName }}, {{ props.option.country.toUpperCase() }}
@@ -144,6 +146,9 @@
                                             </a>
                                         </template>
                                     </b-autocomplete>
+                                    <b-button @click="addCurrent" type="is-info" icon-left="account-plus" title="Add yourself">
+                                    </b-button>
+                                  </b-field>
                                 </b-field>
                                 <referee-form
                                     v-if="showAddRefereeForm"
@@ -330,10 +335,17 @@ export default {
       },
       removeReferee: function (referee) {
           let index = this.referees.findIndex( ref => ref.id === referee.id );
-          if (index) {
+          if (index >= 0) {
               this.referees.splice(index, 1);
           }
       },
+    addCurrent() {
+      const current = this.getCurrent();
+      current && this.addReferee(current);
+    },
+    getCurrent() {
+      return this.$store.getters["referees/current"];
+    },
       getFilteredTeams: function(text) {
         this.filteredTeams = this.existingTeams.filter((option) => {
                 return option
@@ -385,14 +397,11 @@ export default {
     }
   },
   mounted() {
+    if(!this.existingTeams) {
       let existingTeams = this.$store.getters['tournaments/teams'] || [];
       this.existingTeams = existingTeams;
       this.filteredTeams = existingTeams;
-
-      const current = this.$store.getters['referees/current'];
-      if (current) {
-        this.selectReferee(current);
-      }
+    }
   },
 }
 </script>
