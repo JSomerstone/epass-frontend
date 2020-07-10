@@ -14,7 +14,7 @@
             role="button"
         >
             <span class="card-header-title">
-                <span v-if="id">Edit tournament: {{ name }}</span>
+                <span v-if="tournament.id">Edit tournament: {{ tournament.name }}</span>
                 <span v-else>Add tournament to your ePass</span>
             </span>
             <a class="card-header-icon">
@@ -250,9 +250,6 @@
               </div>
           </div>
         </div>
-        <pre>
-          {{ tournament }}
-        </pre>
         <div class="card-footer">
             <b-button 
               @click="handleSave" 
@@ -262,7 +259,7 @@
               class="card-footer-item" 
               outlined
             >
-                {{ id ? "Update" : "Save" }}
+                {{ tournament.id ? "Update" : "Save" }}
             </b-button>
             <b-button @click="reset" type="is-light" icon-left="cancel" class="card-footer-item" >
                 Reset
@@ -278,20 +275,13 @@
 <script>
 import RefereeForm from "./RefereeForm";
 import Tournament from "../store/models/Tournament";
+
 const defaults = {
-  id: "",
-  name: "",
-  type: "international",
-  city: "",
-  country: "",
+  tournament: new Tournament({ id: null }),
   countryQuery: "",
-  dates: [],
-  td: {},
   tdEmail: "",
   tdQuery: "",
-  referees: [],
   ref: "",
-  teams: [],
   noOfGames: 0,
   noOfTenSeconds: 0
 };
@@ -347,7 +337,14 @@ export default {
       if (! wip) {
         return;
       }
-      this.tournament = wip;
+      this.tournament = new Tournament(wip, this.$store.getters['referees/all']);
+      this.countryQuery = wip.country;
+      const current = this.getCurrent();
+      const { games = 0, tenSeconds = 0 } = wip.referees.find(
+        r => r.id == current.id
+      ) || {};
+      this.noOfGames = games;
+      this.noOfTenSeconds = tenSeconds;
     },
     getRefereeById(id) {
       return this.$store.getters['referees/byId'](id);
@@ -364,7 +361,7 @@ export default {
         this.$buefy.toast.open({ message: "Saving new tournament... "});
         this.$store.dispatch("tournaments/create", { tournament: this.tournament });
       }
-      this.tournament = new Tournament({ id: null })
+      Object.assign(this, defaults);
       this.setShow(false);
     },
     reset() {
@@ -444,7 +441,6 @@ export default {
   },
   watch: {
     wipId: function(wip) {
-      console.log('hasWip changed', wip);
       if (wip) {
         this.loadWip();
       }

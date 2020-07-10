@@ -20,11 +20,13 @@ export default class Tournament {
     this.city = city;
     this.country = country;
     this.dates = dates.map(d => new Date(d));
+    //this.dates = dates;
     this.td = td.id ? td : this.getRef(td, refereeList);
     this.referees = referees.map(
       r => r.id ? r : this.getRef(r, refereeList)
     );
     this.teams = teams;
+    this.type = "Tournament Class"
   }
   getRef(id, refereeList) {
     return refereeList.find(

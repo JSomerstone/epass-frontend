@@ -56,9 +56,7 @@ export default {
         : false;
     },
     isEditable: function() {
-      //console.log(this.tournament);
       return true;
-      //return this.tournament.getYear() == new Date().getFullYear();
     }
   },
   methods: {
@@ -76,9 +74,6 @@ export default {
     openEditForm: function() {
       this.$store.dispatch("tournaments/openForEdit", { tournament: this.tournament });
     }
-  },
-  mounted() {
-      console.log(this.tournament);
   }
 }
 </script>
