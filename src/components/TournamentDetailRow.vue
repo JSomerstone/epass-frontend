@@ -1,9 +1,11 @@
 <template>
   <div class="columns">
     <div class="column is-one-third">
-      <b-button v-if="isEditable" outline type="is-info" @click="openEditForm" icon-left="file-document-edit-outline">
-        Edit
-      </b-button>
+      <router-link :to="{ path: `/tournaments/${year}/${tournament.id}` }">
+        <b-button v-if="isEditable" outline type="is-info" icon-left="file-document-edit-outline">
+          Edit
+        </b-button>
+      </router-link>
       <div v-if="hasGames">
         <strong>Your statistics:</strong>
         <ul>
@@ -42,6 +44,10 @@ export default {
     tournament: {
       type: Object,
       default: () => new Tournament()
+    },
+    year: {
+      type: [Number, String],
+      required: true
     }
   },
   computed: {
@@ -70,9 +76,6 @@ export default {
         return;
       }
       return this.tournament.referees.find( r => r.id == current.id );
-    },
-    openEditForm: function() {
-      this.$store.dispatch("tournaments/openForEdit", { tournament: this.tournament });
     }
   }
 }

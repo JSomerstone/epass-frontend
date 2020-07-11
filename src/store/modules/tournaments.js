@@ -65,9 +65,6 @@ const actions = {
   setLoading({ commit }, { loading }) {
     commit(mutationTypes.SET_LOADING, loading);
   },
-  setShowForm({ commit }, { show }) {
-    commit(mutationTypes.SET_SHOW_FORM, show);
-  },
   load: async ({ commit }, { year }) => {
     commit(mutationTypes.SET_LOADING, true);
     const all = JSON.parse(localStorage.getItem("tournaments"));
@@ -116,11 +113,7 @@ const actions = {
         type: "is-error"
       });
     }
-  },
-  openForEdit: ({ commit }, { tournament }) => {
-    commit(mutationTypes.SET_WIP, tournament);
-    commit(mutationTypes.SET_SHOW_FORM, Boolean(tournament));
-  },
+  }
 };
 
 const tournaments = {
@@ -129,6 +122,7 @@ const tournaments = {
   getters: {
     loading: state => state.loading,
     all: state => state.tournaments,
+    byId: state => id => state.tournaments.find( t => t.id == id ),
     teams: state => state.teams,
     showForm: state => state.showTournamentForm,
     wip: state => state.wip,

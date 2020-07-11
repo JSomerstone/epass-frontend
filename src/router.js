@@ -15,7 +15,12 @@ const router = new Router({
     },
     {
       path: "/tournaments/:year",
-      name: "tournaments-per-year",
+      name: "tournaments-of-year",
+      component: Tournaments,
+    },
+    {
+      path: "/tournaments/:year/:tournament",
+      name: "tournament-selected",
       component: Tournaments,
     },
     {

@@ -7,17 +7,17 @@
     <div class="hero-body">
       <div class="container">
         <h1 class="title">
-          ePass
+          <slot name="hero-title"></slot>
         </h1>
         <h2 class="subtitle">
-          for goalball referees
+          <slot name="hero-subtitle"></slot>
         </h2>
       </div>
     </div>
   </section>
   <section class="content">
     <div class="container">
-      <h1><slot name="title">Title</slot></h1>
+      <h1><slot name="title"></slot></h1>
       <slot></slot>
     </div>
   </section>

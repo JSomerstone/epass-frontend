@@ -48,7 +48,7 @@
 export default {
   data() {
     return {
-      years: [2019, 2020]
+      years: [2020, 2019]
     }
   },
   computed: {

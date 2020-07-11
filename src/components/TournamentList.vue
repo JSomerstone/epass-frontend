@@ -32,7 +32,7 @@
         </b-table-column>
       </template>
       <template slot="detail" slot-scope="props">
-        <tournament-detail-row :tournament="props.row">
+        <tournament-detail-row :tournament="props.row" :year="year">
         </tournament-detail-row>
       </template>
     </b-table>
@@ -53,6 +53,10 @@ export default {
     items: {
       type: Array,
       default: () => []
+    },
+    year: {
+      type: [Number, String],
+      required: true
     }
   },
   computed: {

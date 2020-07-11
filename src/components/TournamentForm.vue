@@ -1,11 +1,9 @@
 <template>
     <b-collapse 
-      v-bind:open="showForm" 
+      v-bind:open="open"
       aria-id="newEntryForm" 
       animation="slide" 
       class="card"
-      @open="setShow(true)"
-      @close="setShow(false)"
     >
         <div 
             slot="trigger" 
@@ -14,8 +12,8 @@
             role="button"
         >
             <span class="card-header-title">
-                <span v-if="tournament.id">Edit tournament: {{ tournament.name }}</span>
-                <span v-else>Add tournament to your ePass</span>
+                <span v-if="tournament.id">Edit tournament</span>
+                <span v-else>Add new tournament</span>
             </span>
             <a class="card-header-icon">
                 <b-icon
@@ -86,7 +84,7 @@
               </div>
               <div class="column is-half is-full-tablet">
                   <div class="field" id="td-field">
-                      <b-field label="Technical Delegate TD" label-position="on-border">
+                      <b-field label="Technical Delegate TD">
                         <div class="columns">
                           <div class="column is-full" v-if="!tournament.td.id && !showAddTdForm">
                             <b-field>
@@ -185,10 +183,9 @@
                   </div><!-- /your-games -->
                   <div class="field" id="referees-field">
                       <b-field label="Referees">
-                        <b-field>
+                        <b-field v-if="!showAddRefereeForm">
                           <b-autocomplete
                               v-model="ref"
-                              v-if="!showAddRefereeForm"
                               placeholder="Search by name, email or nationality"
                               :keep-first="true"
                               icon="magnify"
@@ -211,11 +208,9 @@
                           </b-button>
                         </b-field>
                       </b-field>
-                      <referee-form
-                          v-if="showAddRefereeForm"
-                          :onSave="addReferee"
-                      >
-                      </referee-form>
+                      <b-field label="Add referee"  v-if="showAddRefereeForm" label-position="on-border">
+                        <referee-form :onSave="addReferee" :onCancel="() => showAddRefereeForm = false" />
+                      </b-field>
                       <div>
                           <b-tag 
                               v-for="ref in tournament.referees"
@@ -261,8 +256,8 @@
             >
                 {{ tournament.id ? "Update" : "Save" }}
             </b-button>
-            <b-button @click="reset" type="is-light" icon-left="cancel" class="card-footer-item" >
-                Reset
+            <b-button @click="handleCancel" type="is-light" icon-left="cancel" class="card-footer-item" >
+                Cancel
             </b-button>
         </div>
     </b-collapse>
@@ -289,6 +284,20 @@ export default {
     components: {
         RefereeForm,
     },
+  props: {
+    editable: {
+      type: Boolean,
+      default: true
+    },
+    selected: {
+      type: String,
+      default: null
+    },
+    open: {
+      type: Boolean,
+      default: false
+    }
+  },
   data: () => {
       const today = new Date();
       return {
@@ -306,9 +315,6 @@ export default {
     isLoading() {
       return (this.$store.getters['tournaments/loading'] 
         || this.$store.getters['referees/loading']);
-    },
-    showForm: function() {
-      return this.$store.getters['tournaments/showForm'];
     },
     wipId: function() {
       if (this.$store.getters['tournaments/hasWip']){
@@ -329,18 +335,25 @@ export default {
         }
   },
   methods: {
-    setShow(show) {
-      this.$store.dispatch("tournaments/setShowForm", { show });
-    },
     loadWip() {
       const wip = this.$store.getters['tournaments/wip'];
       if (! wip) {
         return;
       }
-      this.tournament = new Tournament(wip, this.$store.getters['referees/all']);
-      this.countryQuery = wip.country;
+      this.loadTournament(wip);
+    },
+    loadTournamentById(tournamentId) {
+      const wip = this.$store.getters['tournaments/byId'](tournamentId);
+      if (! wip) {
+        return;
+      }
+      this.loadTournament(wip);
+    },
+    loadTournament(tournament) {
+      this.tournament = new Tournament(tournament, this.$store.getters['referees/all']);
+      this.countryQuery = tournament.country;
       const current = this.getCurrent();
-      const { games = 0, tenSeconds = 0 } = wip.referees.find(
+      const { games = 0, tenSeconds = 0 } = tournament.referees.find(
         r => r.id == current.id
       ) || {};
       this.noOfGames = games;
@@ -361,17 +374,14 @@ export default {
         this.$buefy.toast.open({ message: "Saving new tournament... "});
         this.$store.dispatch("tournaments/create", { tournament: this.tournament });
       }
-      Object.assign(this, defaults);
-      this.setShow(false);
+      this.$router.push({ path: `/tournaments/${this.$route.params.year}` });
     },
-    reset() {
-      Object.assign(this, defaults);
-      this.$store.dispatch('tournaments/openForEdit', { tournament: null });
-      this.setShow(false);
+    handleCancel() {
       this.$buefy.toast.open({
         message: "Cancelled",
         type: "is-warning"
       });
+      this.$router.push({ path: `/tournaments/${this.$route.params.year}` });
     },
       selectReferee: function(referee) {
         if ( ! this.tournament.referees.find( r => r.id === referee.id)) {
@@ -451,6 +461,9 @@ export default {
       let existingTeams = this.$store.getters['tournaments/teams'] || [];
       this.existingTeams = existingTeams;
       this.filteredTeams = existingTeams;
+    }
+    if (this.selected) {
+      this.loadTournamentById(this.selected);
     }
   },
 }
