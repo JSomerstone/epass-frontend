@@ -316,23 +316,15 @@ export default {
       return (this.$store.getters['tournaments/loading'] 
         || this.$store.getters['referees/loading']);
     },
-    wipId: function() {
-      if (this.$store.getters['tournaments/hasWip']){
-        const { id = null } = this.$store.getters['tournaments/wip'];
-        return id;
-      } else {
-        return null;
-      }
+    filteredReferees: function() {
+        return this.$store.getters['referees/search'](this.ref);
     },
-        filteredReferees: function() {
-            return this.$store.getters['referees/search'](this.ref);
-        },
-        filteredTd: function() {
-            return this.$store.getters['referees/search'](this.tdQuery);
-        },
-        allTeams: function() {
-            return this.$store.getters['tournaments/teams'] || [];
-        }
+    filteredTd: function() {
+        return this.$store.getters['referees/search'](this.tdQuery);
+    },
+    allTeams: function() {
+        return this.$store.getters['tournaments/teams'] || [];
+    }
   },
   methods: {
     loadWip() {
@@ -450,9 +442,14 @@ export default {
       }
   },
   watch: {
-    wipId: function(wip) {
-      if (wip) {
-        this.loadWip();
+    noOfGames: function() {
+      if (this.noOfGames > 0 || this.noOfTenSeconds > 0) {
+        this.addCurrent();
+      }
+    },
+    noOfTenSeconds: function() {
+      if (this.noOfGames > 0 || this.noOfTenSeconds > 0) {
+        this.addCurrent();
       }
     }
   },
