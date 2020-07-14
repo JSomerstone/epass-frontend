@@ -74,7 +74,7 @@ const actions = {
     commit(mutationTypes.SET_LOADING, false);
   },
   loadTeams: async ({ commit }) => {
-    const result = JSON.parse(localStorage.getItem("teams"));
+    const result = JSON.parse(localStorage.getItem("teams") || "[]");
     result.sort();
     commit(mutationTypes.SET_TEAMS, result);
   },

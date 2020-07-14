@@ -1,0 +1,19 @@
+type Tournament @model {
+  id: ID!
+  name: String!
+  international: Boolean!
+  city: String!
+  country: String!
+  dates: [String!]
+  td: Referee!
+  referees: [Referee]!
+}
+
+type Referee @model {
+  id: ID!
+  firstName: String!
+  lastName: String!
+  country: String!
+  email: String
+  level: Int!
+}

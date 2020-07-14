@@ -1,0 +1,29 @@
+{
+    "dev": {
+        "awscloudformation": {
+            "AuthRoleName": "amplify-epass-dev-130844-authRole",
+            "UnauthRoleArn": "arn:aws:iam::083422017470:role/amplify-epass-dev-130844-unauthRole",
+            "AuthRoleArn": "arn:aws:iam::083422017470:role/amplify-epass-dev-130844-authRole",
+            "Region": "eu-west-1",
+            "DeploymentBucketName": "amplify-epass-dev-130844-deployment",
+            "UnauthRoleName": "amplify-epass-dev-130844-unauthRole",
+            "StackName": "amplify-epass-dev-130844",
+            "StackId": "arn:aws:cloudformation:eu-west-1:083422017470:stack/amplify-epass-dev-130844/d7ba08f0-c4f0-11ea-be2e-0a698fadb4d4",
+            "AmplifyAppId": "d3auztqemhgjpw"
+        },
+        "categories": {
+            "auth": {
+                "epassf9a83560": {
+                    "hostedUIProviderCreds": "[]"
+                }
+            },
+            "function": {
+                "epassf9a83560CustomMessage": {
+                    "REDIRECTURL": "http://localhost:8080/welcome",
+                    "EMAILSUBJECT": "Goalball ePass, please confirm your address",
+                    "EMAILMESSAGE": "Please use this link to confirm your address"
+                }
+            }
+        }
+    }
+}

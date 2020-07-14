@@ -1,0 +1,68 @@
+{
+    "AWSTemplateFormatVersion": "2010-09-09",
+    "Parameters": {
+        "authepassf9a83560UserPoolId": {
+            "Type": "String",
+            "Default": "authepassf9a83560UserPoolId"
+        },
+        
+        "authepassf9a83560AppClientID": {
+            "Type": "String",
+            "Default": "authepassf9a83560AppClientID"
+        },
+        "authepassf9a83560AppClientIDWeb": {
+            "Type": "String",
+            "Default": "authepassf9a83560AppClientIDWeb"
+        },
+        "AuthRoleArn": {
+            "Type": "String"
+        },
+        "UnauthRoleArn": {
+            "Type": "String"
+        },
+        "env": {
+            "Type": "String"
+        }
+    },
+    "Conditions": {
+        "ShouldNotCreateEnvResources": {
+            "Fn::Equals": [
+                {
+                    "Ref": "env"
+                },
+                "NONE"
+            ]
+        }
+    },
+    "Resources": {
+    
+        "refereesGroup": {
+          "Type" : "AWS::Cognito::UserPoolGroup",
+          "Properties" : {
+              "GroupName" : "referees",
+              "Precedence" : 1,
+              
+              "UserPoolId" : {
+                "Ref": "authepassf9a83560UserPoolId"
+              } 
+            }
+        },
+        
+    
+        "adminsGroup": {
+          "Type" : "AWS::Cognito::UserPoolGroup",
+          "Properties" : {
+              "GroupName" : "admins",
+              "Precedence" : 2,
+              
+              "UserPoolId" : {
+                "Ref": "authepassf9a83560UserPoolId"
+              } 
+            }
+        },
+        
+    
+    
+    },
+    
+}

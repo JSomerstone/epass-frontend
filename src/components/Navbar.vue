@@ -22,12 +22,12 @@
         <template slot="end">
             <b-navbar-item tag="div">
                 <div class="buttons" v-if="!isLoggedIn">
-                    <a class="button is-primary">
-                        <strong>Sign up</strong>
-                    </a>
-                    <a class="button is-light">
-                        Log in
-                    </a>
+                  <router-link :to="{ path: '/login'}" class="button is-primary">
+                    <strong>Login</strong>
+                  </router-link>
+                  <router-link :to="{ path: '/signup'}" class="button is-light">
+                    Sign up
+                  </router-link>
                 </div>
                 <div class="buttons" v-else>
                     <b-button icon-left="account">

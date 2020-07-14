@@ -18,4 +18,7 @@ export default class Referee {
     this.email = email;
     this.level = level;
   }
+  isValid() {
+    return this.firstName && this.lastName && this.email && this.country;
+  }
 }
