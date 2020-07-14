@@ -13,8 +13,8 @@ const signupSteps = {
 
 const state = {
   loading: false,
-  loggedIn: false,
   user: null,
+  userInfo: { email: "", username: ""},
   signupStep: signupSteps.auth
 };
 
@@ -30,7 +30,12 @@ const mutations = {
   },
 
   [mutationTypes.SET_USER](state, user) {
-    state.loading = user;
+    state.user = user;
+    const {
+      attributes: { email= "" },
+      username = "",
+    } = user;
+    state.userInfo = { email, username };
   },
 
   [mutationTypes.SIGNUP_STEP](state, step) {
@@ -62,7 +67,7 @@ const actions = {
       console.log("error signing up:", error);
       Toast.open({
         message: error.message,
-        type: "is-error",
+        type: "is-danger",
       });
     }
     dispatch("setLoading", { loading: false });
@@ -79,11 +84,55 @@ const actions = {
       console.log("error verifying up:", error);
       Toast.open({
         message: error.message,
-        type: "is-error",
+        type: "is-danger",
       });
     }
     dispatch("setLoading", { loading: false });
   },
+
+  async login({ commit, dispatch }, { username, password }) {
+    dispatch("setLoading", { loading: true });
+
+    Auth.signIn(username, password)
+      .then((user) => {
+        console.log(user);
+        commit(mutationTypes.SET_USER, user);
+        Toast.open({
+          message: `Welcome ${user.attributes.email}`,
+          type: "is-success",
+        });
+      })
+      .catch((error) => {
+        console.log("error signIn up:", error);
+        Toast.open({
+          duration: 10000,
+          message: error.message,
+          type: "is-danger",
+        });
+      })
+      .finally(() => {
+        dispatch("setLoading", { loading: false });
+      });
+  },
+
+  async logout({ commit, dispatch }) {
+    dispatch("setLoading", { loading: true });
+    Auth.signOut()
+      .then(() => {
+        commit(mutationTypes.SET_USER, null);
+      })
+      .catch((error) => {
+        console.log("error in Auth.signOut():", error);
+        Toast.open({
+          duration: 10000,
+          message: error.message,
+          type: "is-danger",
+        });
+      })
+      .finally(() => {
+        dispatch("setLoading", { loading: false });
+      });
+  }
 };
 
 const auth = {
@@ -91,7 +140,9 @@ const auth = {
   state,
   getters: {
     loading: (state) => state.loading,
-    signupStep: state => state.signupStep
+    signupStep: state => state.signupStep,
+    loggedIn: state => Boolean(state.user),
+    user: state => state.userInfo
   },
   mutations,
   actions,

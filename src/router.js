@@ -1,5 +1,7 @@
 import Vue from "vue";
 import Router from "vue-router";
+import store from "./store/index";
+
 import ErrorPage from "./views/ErrorPage.vue";
 import Tournaments from "./views/Tournaments.vue";
 import Signup from "./views/Signup.vue";
@@ -11,7 +13,7 @@ const router = new Router({
   routes: [
     {
       path: "/",
-      name: "tournaments",
+      name: "frontpage",
       component: Tournaments,
     },
     {
@@ -43,6 +45,18 @@ const router = new Router({
       component: ErrorPage,
     },
   ],
+});
+
+router.beforeEach((to, from, next) => {
+  const isAuthenticated = store.getters["auth/loggedIn"];
+  const allowed = ["error", "login", "signup"];
+  if (isAuthenticated || allowed.indexOf(to.name) >= 0 ) {
+     next();
+  }
+  else {
+    console.log({ from, next: "login" });
+    next({ name: "login" });
+  }
 });
 
 export default router;

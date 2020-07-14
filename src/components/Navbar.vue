@@ -31,8 +31,7 @@
                 </div>
                 <div class="buttons" v-else>
                     <b-button icon-left="account">
-                      {{ getCurrent.firstName }}
-                      {{ getCurrent.lastName }}
+                      {{ getCurrent.email }}
                     </b-button>
                 </div>
             </b-navbar-item>
@@ -53,10 +52,10 @@ export default {
   },
   computed: {
     isLoggedIn() {
-      return Boolean(this.$store.getters['referees/current']);
+      return this.$store.getters['auth/loggedIn'];
     },
     getCurrent() {
-      return this.$store.getters['referees/current'];
+      return this.$store.getters['auth/user'];
     }
   },
 }

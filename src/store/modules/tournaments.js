@@ -93,7 +93,7 @@ const actions = {
     } catch (err) {
       Toast.open({
         message: err.message,
-        type: "is-error"
+        type: "is-danger"
       });
     }
   },
@@ -110,7 +110,7 @@ const actions = {
     } catch (err) {
       Toast.open({
         message: err.message,
-        type: "is-error"
+        type: "is-danger"
       });
     }
   }

@@ -64,7 +64,7 @@ const actions = {
     } catch (err) {
       Toast.open({
         message: `Saving failed: "${err.message}"`,
-        type: "is-error"
+        type: "is-danger"
       });
     }
   },
@@ -79,7 +79,7 @@ const actions = {
     } catch (err) {
       Toast.open({
         message: `Saving failed: "${err.message}"`,
-        type: "is-error"
+        type: "is-danger"
       });
     }
   }
