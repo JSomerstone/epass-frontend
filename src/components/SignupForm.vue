@@ -2,7 +2,7 @@
   <div class="columns">
     <div class="column"></div>
     <div class="column is-half">
-      <b-steps v-model="activeStep" animated :has-navigation="false">
+      <b-steps v-model="step" animated :has-navigation="false">
         <b-step-item label="Authentication" step="1">
           <b-field label="Email" label-position="on-border">
             <b-input type="email" v-model="referee.email" placeholder="@" required></b-input>
@@ -107,7 +107,6 @@ import Referee from "../store/models/RefereeClass"
   export default {
     data() {
       return {
-        activeStep: 0,
         signupButton: "is-primary",
         verifyButton: "is-primary",
         profileButton: "is-primary",
@@ -118,38 +117,11 @@ import Referee from "../store/models/RefereeClass"
       }
     },
     methods: {
-      checkForm: function() {
-        this.errors=[];
-        let required = {
-          "Given name": this.referee.firstName,
-          "Family name": this.referee.lastName,
-          "Email": this.referee.email,
-          "Password": this.password,
-          "Country": this.referee.country,
-        }
-        for (const [field, value] of Object.entries(required)) {
-          console.log(field, value, Boolean(value));
-          if (!value) {
-            this.errors.push(`${field} is required`);
-          }
-        }
-        console.log(this.errors);
-        let result = Boolean(this.errors);
-        if ( ! result ) {
-           this.$buefy.toast.open({
-            message: "Pleace check form",
-            type: "is-warning"
-          });
-        }
-        return result;
-      },
       handleSignup: function() {
-        this.$store.dispatch('auth/setLoading', { loading: true });
-        setTimeout(() => {  
-          this.$store.dispatch('auth/setLoading', { loading: false });
-          this.signupButton = "is-success"; 
-        }, 1000);
-        setTimeout(() => { this.activeStep += 1; }, 2000);
+        this.$store.dispatch('auth/signUp', { 
+          username: this.referee.email,
+          password: this.password
+        });
       },
 
       handleVerification: function() {
@@ -177,6 +149,9 @@ import Referee from "../store/models/RefereeClass"
       }
     },
     computed: {
+      step: function() {
+        return this.$store.getters['auth/signupStep']
+      },
       isLoading: function() {
         return this.$store.getters['auth/loading']
       },

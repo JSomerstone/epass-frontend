@@ -10,20 +10,6 @@
             "StackName": "amplify-epass-dev-130844",
             "StackId": "arn:aws:cloudformation:eu-west-1:083422017470:stack/amplify-epass-dev-130844/d7ba08f0-c4f0-11ea-be2e-0a698fadb4d4",
             "AmplifyAppId": "d3auztqemhgjpw"
-        },
-        "categories": {
-            "auth": {
-                "epassf9a83560": {
-                    "hostedUIProviderCreds": "[]"
-                }
-            },
-            "function": {
-                "epassf9a83560CustomMessage": {
-                    "REDIRECTURL": "http://localhost:8080/welcome",
-                    "EMAILSUBJECT": "Goalball ePass, please confirm your address",
-                    "EMAILMESSAGE": "Please use this link to confirm your address"
-                }
-            }
         }
     }
 }
