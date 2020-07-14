@@ -1,11 +1,7 @@
 <template>
-  <amplify-authenticator>
-    <!-- The rest of your app code -->
-    <div id="app">
-      <router-view :key="$route.fullPath"></router-view>
-    </div>
-    <amplify-sign-out></amplify-sign-out>
-  </amplify-authenticator>
+  <div id="app">
+    <router-view :key="$route.fullPath"></router-view>
+  </div>
 </template>
 
 <style>
