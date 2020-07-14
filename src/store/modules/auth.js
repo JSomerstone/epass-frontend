@@ -55,11 +55,28 @@ const actions = {
         attributes,
       });
       console.log({ result });
-      commit(mutationTypes.SET_USER, result);
+      commit(mutationTypes.SET_USER, result.result.user);
       commit(mutationTypes.SIGNUP_STEP, signupSteps.verify);
     } catch (error) {
       commit(mutationTypes.SIGNUP_STEP, signupSteps.auth);
       console.log("error signing up:", error);
+      Toast.open({
+        message: error.message,
+        type: "is-error",
+      });
+    }
+    dispatch("setLoading", { loading: false });
+  },
+
+  async verifyAddress({ commit, dispatch }, { username, code }) {
+    dispatch("setLoading", { loading: true });
+    console.log({ action: "Verify", code });
+    try {
+      await Auth.confirmSignUp(username, code);
+      commit(mutationTypes.SIGNUP_STEP, signupSteps.profile);
+    } catch (error) {
+      commit(mutationTypes.SIGNUP_STEP, signupSteps.verify);
+      console.log("error verifying up:", error);
       Toast.open({
         message: error.message,
         type: "is-error",

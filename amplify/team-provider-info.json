@@ -10,6 +10,11 @@
             "StackName": "amplify-epass-dev-130844",
             "StackId": "arn:aws:cloudformation:eu-west-1:083422017470:stack/amplify-epass-dev-130844/d7ba08f0-c4f0-11ea-be2e-0a698fadb4d4",
             "AmplifyAppId": "d3auztqemhgjpw"
+        },
+        "categories": {
+            "auth": {
+                "epass2d7486d7": {}
+            }
         }
     }
 }

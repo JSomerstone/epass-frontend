@@ -125,12 +125,10 @@ import Referee from "../store/models/RefereeClass"
       },
 
       handleVerification: function() {
-        this.$store.dispatch('auth/setLoading', { loading: true });
-        setTimeout(() => {  
-          this.$store.dispatch('auth/setLoading', { loading: false });
-          this.verifyButton = "is-success"; 
-        }, 1000);
-        setTimeout(() => { this.activeStep += 1; }, 2000);
+        this.$store.dispatch('auth/verifyAddress', { 
+          username: this.referee.email,
+          code: this.verification
+        });
       },
 
       handleSaveProfile: function() {

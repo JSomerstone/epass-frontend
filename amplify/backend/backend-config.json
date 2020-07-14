@@ -17,6 +17,12 @@
 			}
 		}
 	},
-	"auth": {},
+	"auth": {
+		"epass2d7486d7": {
+			"service": "Cognito",
+			"providerPlugin": "awscloudformation",
+			"dependsOn": []
+		}
+	},
 	"function": {}
 }
