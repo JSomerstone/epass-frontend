@@ -29,11 +29,14 @@
                     Sign up
                   </router-link>
                 </div>
-                <div class="buttons" v-else>
-                    <b-button icon-left="account">
-                      {{ getCurrent.email }}
-                    </b-button>
-                </div>
+                <b-navbar-dropdown  v-else :label="getCurrent.email">
+                  <b-navbar-item to="/settings" tag="router-link">
+                      <b-icon icon="account-cog-outline"></b-icon> Settings
+                  </b-navbar-item>
+                  <b-navbar-item @click="handleLogout">
+                      <b-icon icon="logout-variant"></b-icon> Logout
+                  </b-navbar-item>
+              </b-navbar-dropdown>
             </b-navbar-item>
         </template>
     </b-navbar>
@@ -41,6 +44,9 @@
 <style>
 .navbar-brand {
   font-size: x-large;
+}
+.navbar-item > .icon {
+  padding-right: 1em;
 }
 </style>
 <script>
@@ -56,6 +62,11 @@ export default {
     },
     getCurrent() {
       return this.$store.getters['auth/user'];
+    }
+  },
+  methods: {
+    handleLogout: function() {
+      this.$store.dispatch("auth/logout");
     }
   },
 }

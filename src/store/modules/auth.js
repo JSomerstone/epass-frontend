@@ -31,11 +31,15 @@ const mutations = {
 
   [mutationTypes.SET_USER](state, user) {
     state.user = user;
-    const {
-      attributes: { email= "" },
-      username = "",
-    } = user;
-    state.userInfo = { email, username };
+    if (user == null) {
+      state.userInfo = { username: "", email: "" }
+    } else {
+      const {
+        attributes: { email = "" },
+        username = "",
+      } = user;
+      state.userInfo = { email, username };
+    }
   },
 
   [mutationTypes.SIGNUP_STEP](state, step) {
@@ -120,6 +124,10 @@ const actions = {
     Auth.signOut()
       .then(() => {
         commit(mutationTypes.SET_USER, null);
+        Toast.open({
+          message: "Logged out, bye! 👋",
+          type: "is-success",
+        });
       })
       .catch((error) => {
         console.log("error in Auth.signOut():", error);
