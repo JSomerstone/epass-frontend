@@ -15,13 +15,17 @@ const state = {
   loading: false,
   user: null,
   userInfo: { email: "", username: ""},
-  signupStep: signupSteps.auth
+  signupStep: signupSteps.auth,
+  signupEmail: "",
+  signupUserId: "",
 };
 
 const mutationTypes = {
   SET_LOADING: "set-loading",
   SET_USER: "set-user",
   SIGNUP_STEP: "set-signup-step",
+  SET_SIGNUP_EMAIL: "set-signup-email",
+  SET_SIGNUP_USERID: "set-signup-userid",
 };
 
 const mutations = {
@@ -32,7 +36,7 @@ const mutations = {
   [mutationTypes.SET_USER](state, user) {
     state.user = user;
     if (user == null) {
-      state.userInfo = { username: "", email: "" }
+      state.userInfo = { username: "", email: "" };
     } else {
       const {
         attributes: { email = "" },
@@ -45,6 +49,14 @@ const mutations = {
   [mutationTypes.SIGNUP_STEP](state, step) {
     state.signupStep = step;
   },
+
+  [mutationTypes.SET_SIGNUP_EMAIL](state, email) {
+    state.signupEmail = email;
+  },
+
+  [mutationTypes.SET_SIGNUP_USERID](state, userId) {
+    state.signupUserId = userId;
+  },
 };
 
 const actions = {
@@ -56,35 +68,36 @@ const actions = {
   },
   async signUp({ commit, dispatch }, { username, password, attributes = {} }) {
     dispatch("setLoading", { loading: true });
-    console.log({ action: "Signup", username, attributes });
     try {
+      commit(mutationTypes.SET_SIGNUP_EMAIL, username);
       const result = await Auth.signUp({
         username,
         password,
         attributes,
       });
-      console.log({ result });
-      commit(mutationTypes.SET_USER, result.result.user);
+      console.log("signup", { ...result });
+      commit(mutationTypes.SET_SIGNUP_USERID, result.userSub);
       commit(mutationTypes.SIGNUP_STEP, signupSteps.verify);
     } catch (error) {
-      commit(mutationTypes.SIGNUP_STEP, signupSteps.auth);
       console.log("error signing up:", error);
       Toast.open({
         message: error.message,
         type: "is-danger",
       });
+      if (error.code == "UsernameExistsException") {
+        commit(mutationTypes.SIGNUP_STEP, signupSteps.verify);
+      }
     }
     dispatch("setLoading", { loading: false });
   },
 
-  async verifyAddress({ commit, dispatch }, { username, code }) {
+  async verifyAddress({ commit, dispatch, state }, { code }) {
     dispatch("setLoading", { loading: true });
     console.log({ action: "Verify", code });
     try {
-      await Auth.confirmSignUp(username, code);
+      await Auth.confirmSignUp(state.signupEmail, code);
       commit(mutationTypes.SIGNUP_STEP, signupSteps.profile);
     } catch (error) {
-      commit(mutationTypes.SIGNUP_STEP, signupSteps.verify);
       console.log("error verifying up:", error);
       Toast.open({
         message: error.message,
@@ -93,7 +106,23 @@ const actions = {
     }
     dispatch("setLoading", { loading: false });
   },
-
+  async resendVerification({ dispatch, state }) {
+    dispatch("setLoading", { loading: true });
+    Auth.resendSignUp(state.signupEmail)
+      .then(() => {
+        Toast.open({ message: "Verification code sent" });
+      })
+      .catch((error) => {
+        console.log("error in resendVerification:", error);
+        Toast.open({
+          message: error.message,
+          type: "is-danger",
+        });
+      })
+      .finally(() => {
+        dispatch("setLoading", { loading: false });
+      });
+  },
   async login({ commit, dispatch }, { username, password }) {
     dispatch("setLoading", { loading: true });
 
@@ -113,6 +142,15 @@ const actions = {
           message: error.message,
           type: "is-danger",
         });
+        if (error.code == "UserNotConfirmedException") {
+          commit(mutationTypes.SIGNUP_STEP, signupSteps.verify);
+          commit(mutationTypes.SET_SIGNUP_EMAIL, username);
+          dispatch(
+            "navigation/redirect",
+            { target: { name: "signup" } },
+            { root: true }
+          );
+        }
       })
       .finally(() => {
         dispatch("setLoading", { loading: false });
@@ -149,8 +187,10 @@ const auth = {
   getters: {
     loading: (state) => state.loading,
     signupStep: state => state.signupStep,
+    signupEmail: state => state.signupEmail,
+    signupUserId: state => state.signupUserId,
     loggedIn: state => Boolean(state.user),
-    user: state => state.userInfo
+    user: state => state.userInfo,
   },
   mutations,
   actions,

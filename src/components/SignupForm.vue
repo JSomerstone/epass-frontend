@@ -25,11 +25,17 @@
 
         <b-step-item label="Verification" step="2">
           <p>
-            You will receive a verification code to address <i>&lt;{{ referee.email }}&gt;</i> soon, 
-            please write it here:
+            A verification code has been sent to <i>&lt;{{ signupEmail }}&gt;</i>, 
+            please enter it here:
           </p>
           <b-field label="Verification code">
-            <b-input v-model="verification" maxlength="6" :has-counter="false" size="is-large"></b-input>
+            <b-input 
+              custom-class="center-text" 
+              v-model="verification" 
+              maxlength="6" 
+              :has-counter="false" 
+              size="is-large"
+            ></b-input>
           </b-field>
           <b-field>
             <b-button 
@@ -41,6 +47,11 @@
               :disabled="verification.length != 6"
             >Verify
             </b-button>
+            <b-button 
+              @click="handleResend" 
+              v-bind:loading="isLoading"
+              type="is-text"
+            >Resend</b-button>
           </b-field>
         </b-step-item> <!--/Verification -->
         <b-step-item label="Profile" step="3">
@@ -85,6 +96,7 @@
             >Save
             </b-button>
           </b-field>
+          <pre>{{ referee }}</pre>
         </b-step-item> <!--/Profile -->
         <b-step-item label="Done" step="4">
           <h2>Welcome {{referee.firstName}}</h2>
@@ -101,7 +113,11 @@
     <div class="column"></div>
   </div>
 </template>
-
+<style>
+input.center-text {
+  text-align: center;
+}
+</style>
 <script>
 import Referee from "../store/models/RefereeClass"
   export default {
@@ -140,6 +156,10 @@ import Referee from "../store/models/RefereeClass"
         setTimeout(() => { this.activeStep += 1; }, 2000);
       },
 
+      handleResend: function() {
+        this.$store.dispatch('auth/resendVerification');
+      },
+
       getCountries: function(name) {
         return name
           ? this.$store.getters['countries/byName'](name)
@@ -149,6 +169,9 @@ import Referee from "../store/models/RefereeClass"
     computed: {
       step: function() {
         return this.$store.getters['auth/signupStep']
+      },
+      signupEmail() {
+        return this.$store.getters['auth/signupEmail']
       },
       isLoading: function() {
         return this.$store.getters['auth/loading']
@@ -160,6 +183,18 @@ import Referee from "../store/models/RefereeClass"
       },
       profileReady: function() {
         return this.referee.isValid();
+      },
+      userId: function() {
+        return this.$store.getters['auth/signupUserId'];
+      }
+    },
+    watch: {
+      signupEmail: function(email) {
+        this.referee.email = email;
+      },
+      userId: function(userId) {
+        console.log("updated userId", userId);
+        this.referee.userId = userId;
       }
     }
   }

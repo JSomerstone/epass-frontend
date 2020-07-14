@@ -8,6 +8,7 @@ import tournaments from "./modules/tournaments";
 import referees from "./modules/referees";
 import countries from "./modules/countries";
 import auth from "./modules/auth";
+import navigation from "./modules/navigation";
 
 axios.defaults.baseURL = config.backendUrl;
 Vue.use(Vuex);
@@ -17,8 +18,9 @@ const store = new Vuex.Store({
     tournaments,
     referees,
     countries,
-    auth
-  }
+    auth,
+    navigation,
+  },
 });
 
 export default store;
