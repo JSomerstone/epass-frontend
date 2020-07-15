@@ -1,9 +1,8 @@
-import { v4 as uuidv4 } from "uuid";
 
 export default class Tournament {
   constructor(rawData = {}, refereeList = []) {
     const {
-      id = uuidv4(),
+      id = null,
       name = "",
       international = true,
       city = "",

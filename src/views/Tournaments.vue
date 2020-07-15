@@ -60,6 +60,9 @@ export default {
     },
     isLoading: function() {
       return this.$store.getters['tournaments/loading'];
+    },
+    currentRef: function() {
+      return this.$store.getters['referees/current'];
     }
   },
   methods: {

@@ -3,6 +3,8 @@ import { ToastProgrammatic as Toast } from 'buefy'
 import { v4 as uuidv4 } from "uuid";
 import { listTournaments } from "../../graphql/queries";
 import { API } from "aws-amplify";
+import { createTournament } from '../../graphql/mutations';
+//import Tournament from '../models/Tournament';
 
 const state = {
   loading: false,
@@ -88,13 +90,18 @@ const actions = {
   addTeam: async ({ commit }, { team }) => {
     commit(mutationTypes.ADD_TEAM, team);
   },
-  create: ({ commit, dispatch }, { tournament }) => {
+  create: async ({ commit, dispatch }, { tournament }) => {
     try {
       commit(mutationTypes.SET_LOADING, true);
+      const result = API.graphql({
+        query: createTournament,
+        variables: { input: tournament },
+      });
+      console.log("tournaments/create", { ...result });
       commit(mutationTypes.CREATE_TOURNAMENT, tournament);
       dispatch("load", { year: tournament.getYear() });
       Toast.open({
-        message: `Tournament ${tournament.name} added to your ePass`,
+        message: `Tournament created`,
         type: "is-success"
       });
     } catch (err) {

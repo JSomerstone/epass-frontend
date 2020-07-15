@@ -46,16 +46,20 @@ const actions = {
   setLoading({ commit }, { loading }) {
     commit(mutationTypes.SET_LOADING, loading);
   },
+
+  setCurrent({ commit }, { referee }) {
+    commit(mutationTypes.SET_CURRENT, referee);
+  },
   load: async ({ commit }) => {
     commit(mutationTypes.SET_LOADING, true);
     //const result = JSON.parse(localStorage.getItem("referees"));
     const result = await API.graphql({
-      query: listReferees
+      query: listReferees,
     });
     console.log(result.data.listReferees.items);
-    const referees = result.data.listReferees.items.map(
-      r => { return { ...r } }
-    )
+    const referees = result.data.listReferees.items.map((r) => {
+      return { ...r };
+    });
     commit(mutationTypes.SET_REFEREES, referees);
     commit(mutationTypes.SET_LOADING, false);
   },
@@ -64,20 +68,20 @@ const actions = {
       commit(mutationTypes.SET_LOADING, true);
       const result = await API.graphql({
         query: createReferee,
-        variables: {input: referee},
+        variables: { input: referee },
       });
       console.log("created Referee", { ...result });
       commit(mutationTypes.ADD_REFEREE, result.data.cre);
       Toast.open({
         message: `Referee added to system`,
-        type: "is-success"
+        type: "is-success",
       });
       dispatch("load");
       commit(mutationTypes.SET_LOADING, false);
     } catch (err) {
       Toast.open({
         message: `Saving failed: "${err.message}"`,
-        type: "is-danger"
+        type: "is-danger",
       });
     }
   },
@@ -86,24 +90,24 @@ const actions = {
       const result = await API.graphql({
         query: updateReferee,
         variables: {
-          input: referee
+          input: referee,
         },
       });
       console.log("referees/update", { ...result });
       commit(mutationTypes.UPDATE_REFEREE, result.data.updateReferee);
       Toast.open({
         message: `Referee updated`,
-        type: "is-success"
+        type: "is-success",
       });
       dispatch("load");
     } catch (err) {
       console.log(err);
       Toast.open({
         message: `Saving failed: "${err.message}"`,
-        type: "is-danger"
+        type: "is-danger",
       });
     }
-  }
+  },
 };
 
 const referees = {

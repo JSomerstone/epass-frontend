@@ -462,6 +462,11 @@ export default {
     if (this.selected) {
       this.loadTournamentById(this.selected);
     }
+    const currentUser = this.$store.getters["auth/user"];
+    const referee = this.$store.getters["referees/byUserId"](currentUser.username);
+    if (referee) {
+      this.$store.dispatch("referees/setCurrent", { referee });
+    }
   },
 }
 </script>
