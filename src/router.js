@@ -5,6 +5,7 @@ import store from "./store/index";
 import ErrorPage from "./views/ErrorPage.vue";
 import Tournaments from "./views/Tournaments.vue";
 import Signup from "./views/Signup.vue";
+import Settings from "./views/Settings.vue";
 
 Vue.use(Router);
 
@@ -15,6 +16,11 @@ const router = new Router({
       path: "/",
       name: "frontpage",
       component: Tournaments,
+    },
+    {
+      path: "/settings",
+      name: "settings",
+      component: Settings,
     },
     {
       path: "/tournaments/:year",
@@ -30,13 +36,13 @@ const router = new Router({
       path: "/signup",
       name: "signup",
       component: Signup,
-      props: { tab: 1 }
+      props: { tab: 1 },
     },
     {
       path: "/login",
       name: "login",
       component: Signup,
-      props: { tab: 0 }
+      props: { tab: 0 },
     },
     {
       path: "*",

@@ -1,6 +1,9 @@
 // import axios from "axios";
-import Referee from "../models/RefereeClass";
+//import Referee from "../models/RefereeClass";
 import { ToastProgrammatic as Toast } from 'buefy'
+import { createReferee } from "../../graphql/mutations";
+import { listReferees } from "../../graphql/queries";
+import { API } from "aws-amplify";
 
 const state = {
   loading: false,
@@ -45,16 +48,26 @@ const actions = {
   },
   load: async ({ commit }) => {
     commit(mutationTypes.SET_LOADING, true);
-    const result = JSON.parse(localStorage.getItem("referees"));
-    commit(mutationTypes.SET_REFEREES, result);
-    // Remove when authentication is implemented
-    commit(mutationTypes.SET_CURRENT, new Referee(result[282]));
+    //const result = JSON.parse(localStorage.getItem("referees"));
+    const result = await API.graphql({
+      query: listReferees
+    });
+    console.log(result.data.listReferees.items);
+    const referees = result.data.listReferees.items.map(
+      r => { return { ...r } }
+    )
+    commit(mutationTypes.SET_REFEREES, referees);
     commit(mutationTypes.SET_LOADING, false);
   },
-  create: ({ commit, dispatch }, { referee }) => {
+  create: async ({ commit, dispatch }, { referee }) => {
     try {
       commit(mutationTypes.SET_LOADING, true);
-      commit(mutationTypes.ADD_REFEREE, referee);
+      const result = await API.graphql({
+        query: createReferee,
+        variables: {input: referee},
+      });
+      console.log("created Referee", { ...result });
+      commit(mutationTypes.ADD_REFEREE, result.data.cre);
       Toast.open({
         message: `Referee added to system`,
         type: "is-success"

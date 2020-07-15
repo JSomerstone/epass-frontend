@@ -28,7 +28,6 @@ export default class Tournament {
       r => r.id ? r : this.getRef(r, refereeList)
     );
     this.teams = teams;
-    this.type = "Tournament Class"
   }
   getRef(id, refereeList) {
     return refereeList.find(

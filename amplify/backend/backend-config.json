@@ -1,83 +1,37 @@
 {
-	"api": {
-		"referees": {
-			"service": "API Gateway",
-			"providerPlugin": "awscloudformation",
-			"dependsOn": [
-				{
-					"category": "function",
-					"resourceName": "refereesApi",
-					"attributes": [
-						"Name",
-						"Arn"
-					]
-				},
-				{
-					"category": "function",
-					"resourceName": "tournamentsApi",
-					"attributes": [
-						"Name",
-						"Arn"
-					]
-				}
-			]
-		}
-	},
-	"auth": {
-		"epass2d7486d7": {
-			"service": "Cognito",
-			"providerPlugin": "awscloudformation",
-			"dependsOn": []
-		}
-	},
-	"function": {
-		"refereesApi": {
-			"build": true,
-			"providerPlugin": "awscloudformation",
-			"service": "Lambda",
-			"dependsOn": [
-				{
-					"category": "storage",
-					"resourceName": "referees",
-					"attributes": [
-						"Name",
-						"Arn"
-					],
-					"attributeEnvMap": {
-						"Name": "TABLE_NAME",
-						"Arn": "TABLE_ARN"
-					}
-				}
-			]
-		},
-		"tournamentsApi": {
-			"build": true,
-			"providerPlugin": "awscloudformation",
-			"service": "Lambda",
-			"dependsOn": [
-				{
-					"category": "storage",
-					"resourceName": "tournaments",
-					"attributes": [
-						"Name",
-						"Arn"
-					],
-					"attributeEnvMap": {
-						"Name": "TABLE_NAME",
-						"Arn": "TABLE_ARN"
-					}
-				}
-			]
-		}
-	},
-	"storage": {
-		"referees": {
-			"service": "DynamoDB",
-			"providerPlugin": "awscloudformation"
-		},
-		"tournaments": {
-			"service": "DynamoDB",
-			"providerPlugin": "awscloudformation"
-		}
-	}
+    "api": {
+        "epass": {
+            "service": "AppSync",
+            "providerPlugin": "awscloudformation",
+            "output": {
+                "authConfig": {
+                    "additionalAuthenticationProviders": [],
+                    "defaultAuthentication": {
+                        "authenticationType": "AMAZON_COGNITO_USER_POOLS",
+                        "userPoolConfig": {
+                            "userPoolId": "authepass2d7486d7"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "auth": {
+        "epass2d7486d7": {
+            "service": "Cognito",
+            "providerPlugin": "awscloudformation",
+            "dependsOn": []
+        }
+    },
+    "function": {},
+    "storage": {
+        "referees": {
+            "service": "DynamoDB",
+            "providerPlugin": "awscloudformation"
+        },
+        "tournaments": {
+            "service": "DynamoDB",
+            "providerPlugin": "awscloudformation"
+        }
+    }
 }
