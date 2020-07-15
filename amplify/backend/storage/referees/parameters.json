@@ -1,0 +1,7 @@
+{
+    "tableName": "referees",
+    "partitionKeyName": "id",
+    "partitionKeyType": "S",
+    "sortKeyName": "userId",
+    "sortKeyType": "S"
+}

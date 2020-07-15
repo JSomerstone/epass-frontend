@@ -8,6 +8,7 @@ export default class Tournament {
       international = true,
       city = "",
       country = "",
+      year = null,
       dates = [],
       td = {},
       referees = [],
@@ -20,6 +21,7 @@ export default class Tournament {
     this.city = city;
     this.country = country;
     this.dates = dates.map(d => new Date(d));
+    this.year = year || new Date().getFullYear();
     //this.dates = dates;
     this.td = td.id ? td : this.getRef(td, refereeList);
     this.referees = referees.map(

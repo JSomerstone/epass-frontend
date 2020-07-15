@@ -1,20 +1,26 @@
 {
 	"api": {
-		"epass": {
-			"service": "AppSync",
+		"referees": {
+			"service": "API Gateway",
 			"providerPlugin": "awscloudformation",
-			"output": {
-				"authConfig": {
-					"additionalAuthenticationProviders": [],
-					"defaultAuthentication": {
-						"authenticationType": "API_KEY",
-						"apiKeyConfig": {
-							"description": "epass api key",
-							"apiKeyExpirationDays": "30"
-						}
-					}
+			"dependsOn": [
+				{
+					"category": "function",
+					"resourceName": "refereesApi",
+					"attributes": [
+						"Name",
+						"Arn"
+					]
+				},
+				{
+					"category": "function",
+					"resourceName": "tournamentsApi",
+					"attributes": [
+						"Name",
+						"Arn"
+					]
 				}
-			}
+			]
 		}
 	},
 	"auth": {
@@ -24,5 +30,54 @@
 			"dependsOn": []
 		}
 	},
-	"function": {}
+	"function": {
+		"refereesApi": {
+			"build": true,
+			"providerPlugin": "awscloudformation",
+			"service": "Lambda",
+			"dependsOn": [
+				{
+					"category": "storage",
+					"resourceName": "referees",
+					"attributes": [
+						"Name",
+						"Arn"
+					],
+					"attributeEnvMap": {
+						"Name": "TABLE_NAME",
+						"Arn": "TABLE_ARN"
+					}
+				}
+			]
+		},
+		"tournamentsApi": {
+			"build": true,
+			"providerPlugin": "awscloudformation",
+			"service": "Lambda",
+			"dependsOn": [
+				{
+					"category": "storage",
+					"resourceName": "tournaments",
+					"attributes": [
+						"Name",
+						"Arn"
+					],
+					"attributeEnvMap": {
+						"Name": "TABLE_NAME",
+						"Arn": "TABLE_ARN"
+					}
+				}
+			]
+		}
+	},
+	"storage": {
+		"referees": {
+			"service": "DynamoDB",
+			"providerPlugin": "awscloudformation"
+		},
+		"tournaments": {
+			"service": "DynamoDB",
+			"providerPlugin": "awscloudformation"
+		}
+	}
 }

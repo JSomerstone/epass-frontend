@@ -1,0 +1,7 @@
+{
+    "tableName": "tournaments",
+    "partitionKeyName": "year",
+    "partitionKeyType": "N",
+    "sortKeyName": "id",
+    "sortKeyType": "S"
+}

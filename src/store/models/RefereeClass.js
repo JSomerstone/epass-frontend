@@ -1,9 +1,7 @@
-import { v4 as uuidv4 } from "uuid";
-
 export default class Referee {
   constructor(rawData = {}) {
     const {
-      id = uuidv4(),
+      id = null,
       firstName = "",
       lastName = "",
       country = "",
