@@ -4,6 +4,35 @@ import Amplify, { Auth } from 'aws-amplify';
 import awsconfig from "../../aws-exports";
 Amplify.configure(awsconfig);
 
+const AUTH_KEYS = {
+  META: "authMetaData",
+  USER: "LastAuthUser",
+  USER_DATA: "userData"
+};
+
+let userInfo = { email: "", username: "", email_verified: false };
+const localLoad = (key, defaultValue = null) => JSON.parse(localStorage.getItem(key)) || defaultValue;
+const localSave = (key, value) => localStorage.setItem(key, JSON.stringify(value));
+
+const authMeta = localLoad(AUTH_KEYS.META);
+if (authMeta) {
+  try {
+    // There has been a login -> Load from Local Storage
+    let username = localStorage.getItem(authMeta.userKey);
+    const userData = localLoad(authMeta.userDataKey);
+    userInfo = {
+      username,
+      email_verified: Boolean(userData.UserAttributes.find(
+        (attr) => attr.Name == "email_verified"
+      ).Value),
+      email: userData.UserAttributes.find((attr) => attr.Name == "email").Value,
+    };
+  } catch (error) {
+    console.log("Error while loading user data from localStorage:", error);
+  }
+}
+
+
 const signupSteps = {
   auth: 0,
   verify: 1,
@@ -13,8 +42,7 @@ const signupSteps = {
 
 const state = {
   loading: false,
-  user: null,
-  userInfo: { email: "", username: ""},
+  userInfo,
   signupStep: signupSteps.auth,
   signupEmail: "",
   signupUserId: "",
@@ -22,7 +50,7 @@ const state = {
 
 const mutationTypes = {
   SET_LOADING: "set-loading",
-  SET_USER: "set-user",
+  SET_USER_INFO: "set-user",
   SIGNUP_STEP: "set-signup-step",
   SET_SIGNUP_EMAIL: "set-signup-email",
   SET_SIGNUP_USERID: "set-signup-userid",
@@ -33,16 +61,21 @@ const mutations = {
     state.loading = loading;
   },
 
-  [mutationTypes.SET_USER](state, user) {
-    state.user = user;
+  [mutationTypes.SET_USER_INFO](state, user) {
     if (user == null) {
-      state.userInfo = { username: "", email: "" };
+      state.userInfo = { username: "", email: "", email_verified: false };
+      localStorage.removeItem(AUTH_KEYS.META);
     } else {
+      localSave(AUTH_KEYS.META, {
+        keyPrefix: user.keyPrefix,
+        userKey: `${user.keyPrefix}.${AUTH_KEYS.USER}`,
+        userDataKey: `${user.keyPrefix}.${user.username}.${AUTH_KEYS.USER_DATA}`,
+      });
       const {
-        attributes: { email = "" },
+        attributes: { email = "", email_verified = false },
         username = "",
       } = user;
-      state.userInfo = { email, username };
+      state.userInfo = { email, username, email_verified };
     }
   },
 
@@ -65,6 +98,9 @@ const actions = {
   },
   setSignupState({ commit }, { signup }) {
     commit(mutationTypes.SET_SIGNUP_STATE, signup);
+  },
+  setUser({ commit }, { user }) {
+    commit(mutationTypes.SET_USER_INFO, user);
   },
   async signUp({ commit, dispatch }, { username, password, attributes = {} }) {
     dispatch("setLoading", { loading: true });
@@ -129,7 +165,7 @@ const actions = {
     Auth.signIn(username, password)
       .then((user) => {
         console.log(user);
-        commit(mutationTypes.SET_USER, user);
+        commit(mutationTypes.SET_USER_INFO, user);
         Toast.open({
           message: `Welcome ${user.attributes.email}`,
           type: "is-success",
@@ -161,7 +197,7 @@ const actions = {
     dispatch("setLoading", { loading: true });
     Auth.signOut()
       .then(() => {
-        commit(mutationTypes.SET_USER, null);
+        commit(mutationTypes.SET_USER_INFO, null);
         Toast.open({
           message: "Logged out, bye! 👋",
           type: "is-success",
@@ -186,11 +222,11 @@ const auth = {
   state,
   getters: {
     loading: (state) => state.loading,
-    signupStep: state => state.signupStep,
-    signupEmail: state => state.signupEmail,
-    signupUserId: state => state.signupUserId,
-    loggedIn: state => Boolean(state.user),
-    user: state => state.userInfo,
+    signupStep: (state) => state.signupStep,
+    signupEmail: (state) => state.signupEmail,
+    signupUserId: (state) => state.signupUserId,
+    loggedIn: (state) => Boolean(state.userInfo.username),
+    user: (state) => state.userInfo,
   },
   mutations,
   actions,

@@ -3,6 +3,7 @@
     <template v-slot:hero-title>
       Goalball ePass
     </template>
+    <pre>{{ currentUser }}</pre>
     <b-tabs position="is-centered" class="block" v-model="activeTab">
       <b-tab-item label="Login">
           <login-form />
@@ -26,6 +27,11 @@ export default {
   data() {
     return {
       activeTab: 0
+    }
+  },
+  computed: {
+    currentUser: function() {
+      return this.$store.getters["auth/user"]
     }
   },
   props: ["tab"],
