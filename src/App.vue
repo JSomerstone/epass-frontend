@@ -16,5 +16,19 @@
 <script>
   export default {
     name: 'ePass',
+    computed: {
+      loggedIn: function() {
+        return this.$store.getters['auth/loggedIn']
+      }
+    },
+    watch: {
+      loggedIn: function(loggedIn) {
+        if (!loggedIn) {
+          this.$router.push({ name: "login" });
+        } else {
+          this.$router.push({ name: "frontpage" });
+        }
+      }
+    }
   }
 </script>

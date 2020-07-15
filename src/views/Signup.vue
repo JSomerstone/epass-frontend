@@ -3,7 +3,6 @@
     <template v-slot:hero-title>
       Goalball ePass
     </template>
-    <pre>{{ currentUser }}</pre>
     <b-tabs position="is-centered" class="block" v-model="activeTab">
       <b-tab-item label="Login">
           <login-form />
