@@ -35,6 +35,12 @@
         <tournament-detail-row :tournament="props.row" :year="year">
         </tournament-detail-row>
       </template>
+      <template slot="empty">
+        <p>
+          No tournaments to show, use the form above to add new or
+          <b-button @click="handleReload">Reload</b-button>
+        </p>
+      </template>
     </b-table>
   </div>
 </template>
@@ -75,6 +81,9 @@ export default {
     },
     toggle(row) {
         this.$refs.table.toggleDetails(row)
+    },
+    handleReload: function() {
+      this.$store.dispatch("tournaments/load", { year: this.year });
     },
     formatDateRange(dates) {
       if (!dates) {

@@ -1,6 +1,8 @@
 // import axios from "axios";
 import { ToastProgrammatic as Toast } from 'buefy'
 import { v4 as uuidv4 } from "uuid";
+import { listTournaments } from "../../graphql/queries";
+import { API } from "aws-amplify";
 
 const state = {
   loading: false,
@@ -67,10 +69,15 @@ const actions = {
   },
   load: async ({ commit }, { year }) => {
     commit(mutationTypes.SET_LOADING, true);
-    const all = JSON.parse(localStorage.getItem("tournaments"));
-    const result = all[year] || [];
-    console.log(`Found ${result.length} tournaments for ${year}`);
-    commit(mutationTypes.SET_TOURNAMENTS, result);
+    const result = await API.graphql({
+      query: listTournaments,
+      filter: { year }
+    });
+    console.log("tournaments/load", { ...result });
+    const tournaments = result.data.listTournaments.items.map((r) => {
+      return { ...r };
+    });
+    commit(mutationTypes.SET_TOURNAMENTS, tournaments);
     commit(mutationTypes.SET_LOADING, false);
   },
   loadTeams: async ({ commit }) => {
