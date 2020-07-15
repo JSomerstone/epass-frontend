@@ -17,16 +17,6 @@
       </b-field>
     </div>
     <div class="field">
-      <b-field label="Email" label-position="on-border">
-        <b-input type="email" v-model="referee.email" placeholder="@"></b-input>
-      </b-field>
-    </div>
-    <div class="field">
-      <b-field label="Password" label-position="on-border">
-        <b-input type="password" v-model="password" placeholder="******"></b-input>
-      </b-field>
-    </div>
-    <div class="field">
       <b-field label="Nationality" label-position="on-border">
         <b-autocomplete
             v-model="countryQuery"
@@ -67,7 +57,6 @@
         Save</b-button>
       <button class="button is-text" @click="handleCancel">Cancel</button>
     </div>
-    <pre>{{ referees }}</pre>
   </div>
 </template>
 <style lang="css">
@@ -99,7 +88,11 @@ export default {
   },
   methods: {
     handleSave: function() {
-      this.$store.dispatch("referees/create", { referee: this.referee });
+      if (this.referee.id) {
+        this.$store.dispatch("referees/update", { referee: this.referee });
+      } else {
+        this.$store.dispatch("referees/create", { referee: this.referee });
+      }
     },
     handleCancel: function() {
       this.referee = new Referee({ id: null });
@@ -110,16 +103,9 @@ export default {
         : [];
     },
     loadData: function() {
-      this.$store.dispatch("referees/load");
-      this.referee = new Referee({ 
-        id: null,
-        firstName: "John",
-        lastName: "Doe",
-        email: "john.doe@example.org",
-        country: "United states",
-        level: 3,
-        userId: this.userId
-      });
+      this.referee = new Referee(
+        this.$store.getters["referees/byUserId"](this.userId) || {}
+      );
       this.countryQuery = this.referee.country;
     }
   },
@@ -128,7 +114,7 @@ export default {
       this.loadData();
     }
   },
-  mounted() {
+  created() {
     this.loadData();
   }
 }

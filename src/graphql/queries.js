@@ -87,6 +87,7 @@ export const getReferee = /* GraphQL */ `
       level
       createdAt
       updatedAt
+      userId
     }
   }
 `;
@@ -106,6 +107,7 @@ export const listReferees = /* GraphQL */ `
         level
         createdAt
         updatedAt
+        userId
       }
       nextToken
     }

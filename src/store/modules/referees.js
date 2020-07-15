@@ -1,7 +1,7 @@
 // import axios from "axios";
 //import Referee from "../models/RefereeClass";
 import { ToastProgrammatic as Toast } from 'buefy'
-import { createReferee } from "../../graphql/mutations";
+import { createReferee, updateReferee } from "../../graphql/mutations";
 import { listReferees } from "../../graphql/queries";
 import { API } from "aws-amplify";
 
@@ -81,15 +81,23 @@ const actions = {
       });
     }
   },
-  update({ commit, dispatch }, { referee }) {
+  async update({ commit, dispatch }, { referee }) {
     try {
-      commit(mutationTypes.UPDATE_REFEREE, referee);
+      const result = await API.graphql({
+        query: updateReferee,
+        variables: {
+          input: referee
+        },
+      });
+      console.log("referees/update", { ...result });
+      commit(mutationTypes.UPDATE_REFEREE, result.data.updateReferee);
       Toast.open({
         message: `Referee updated`,
         type: "is-success"
       });
       dispatch("load");
     } catch (err) {
+      console.log(err);
       Toast.open({
         message: `Saving failed: "${err.message}"`,
         type: "is-danger"
@@ -102,26 +110,30 @@ const referees = {
   namespaced: true,
   state,
   getters: {
-    loading: state => state.loading,
-    all: state => state.referees,
-    current: state => state.current,
+    loading: (state) => state.loading,
+    all: (state) => state.referees,
+    current: (state) => state.current,
     search: (state) => (query) => {
       const all = state.referees;
-      return query == "" ? all : all.filter(
-        ref => {
-          const { firstName, lastName, country, email = "" } = ref;
-          const match = [firstName, lastName, country, email].find(
-            prop => prop.toLowerCase().includes(query.toString().toLowerCase())
-          )
-          return Boolean(match);
-        }
-      ).sort( (r0, r1) => r0.firstName > r1.firstName )
+      return query == ""
+        ? all
+        : all
+            .filter((ref) => {
+              const { firstName, lastName, country, email = "" } = ref;
+              const match = [firstName, lastName, country, email].find((prop) =>
+                prop.toLowerCase().includes(query.toString().toLowerCase())
+              );
+              return Boolean(match);
+            })
+            .sort((r0, r1) => r0.firstName > r1.firstName);
     },
     byId: (state) => (id) => {
-      return state.referees.find(
-        r => r.id === id
-      )
-    }
+      return state.referees.find((r) => r.id === id);
+    },
+
+    byUserId: (state) => (userId) => {
+      return state.referees.find((r) => r.userId === userId);
+    },
   },
   mutations,
   actions,

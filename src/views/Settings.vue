@@ -4,7 +4,10 @@
     <div class="columns">
       <div class="column"></div>
       <div class="column is-half">
-        <settings />
+        <div v-if="loading" class="loading">
+          Loading...
+        </div>
+        <settings v-else />
       </div>
       <div class="column"></div>
     </div>
@@ -20,6 +23,22 @@ export default {
   components: {
     Layout,
     Settings
+  },
+  computed: {
+    loading: function() {
+      return this.$store.getters["referees/loading"];
+    }
+  },
+  methods: {
+    loadData: function() {
+      if (!this.$store.getters["referees/all"].length) {
+        this.$store.dispatch("referees/load");
+      }
+    }
+  },
+  created() {
+    this.loadData();
   }
+
 }
 </script>

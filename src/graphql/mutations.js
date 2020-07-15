@@ -141,6 +141,7 @@ export const updateReferee = /* GraphQL */ `
       country
       email
       level
+      userId
       createdAt
       updatedAt
     }
@@ -158,6 +159,7 @@ export const deleteReferee = /* GraphQL */ `
       country
       email
       level
+      userId
       createdAt
       updatedAt
     }
