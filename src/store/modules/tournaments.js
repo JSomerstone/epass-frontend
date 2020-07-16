@@ -23,6 +23,8 @@ const notifyError = (error) => {
 const state = {
   loading: false,
   tournaments: [],
+  filteredTournaments: [],
+  filter: { show: "own" },
   wip: null,
   showTournamentForm: false,
   teams: []
@@ -37,6 +39,8 @@ const mutationTypes = {
   SET_SHOW_FORM: "set-show-form",
   SET_TEAMS: "set-teams",
   ADD_TEAM: "add-team",
+  SET_FILTER: "set-filter",
+  SET_FILTERED: "set-filtered",
 };
 
 const mutations = {
@@ -53,6 +57,9 @@ const mutations = {
   [mutationTypes.SET_TOURNAMENTS](state, tournaments) {
     state.tournaments = tournaments;
   },
+  [mutationTypes.SET_FILTERED](state, tournaments) {
+    state.filteredTournaments = tournaments;
+  },
   [mutationTypes.SET_TEAMS](state, list) {
     state.teams = list;
   },
@@ -65,6 +72,9 @@ const mutations = {
   },
   [mutationTypes.SET_SHOW_FORM](state, show) {
     state.showTournamentForm = Boolean(show);
+  },
+  [mutationTypes.SET_FILTER](state, show) {
+    state.filter = show;
   }
 };
 
@@ -72,7 +82,7 @@ const actions = {
   setLoading({ commit }, { loading }) {
     commit(mutationTypes.SET_LOADING, loading);
   },
-  load: async ({ commit }, { year }) => {
+  load: async ({ commit, dispatch }, { year }) => {
     commit(mutationTypes.SET_LOADING, true);
     try {
       const result = await API.graphql({
@@ -83,16 +93,33 @@ const actions = {
           },
         }
       });
-      console.log("tournaments/load", { ...result });
-      const tournaments = result.data.listTournaments.items.map((r) => {
-        return { ...r };
-      });
+      const tournaments = result.data.listTournaments.items
       commit(mutationTypes.SET_TOURNAMENTS, tournaments);
+      dispatch("filter");
     } catch (error) {
       console.log("tournaments/load", error);
       notifyError(error);
     }
     commit(mutationTypes.SET_LOADING, false);
+  },
+  filter: ({ commit, rootGetters, state }) => {
+    commit(mutationTypes.SET_LOADING, true);
+    if (state.filter.show == "all") {
+      commit(mutationTypes.SET_FILTERED, state.tournaments);
+    } else {
+      const { id = null } = rootGetters["referees/current"];
+      const result = state.tournaments.filter((t) => {
+        let found = t.referees.find((r) => r.id == id);
+        console.log("inside filter", {
+          refs: t.referees.map((r) => r.id),
+          td: t.td == id,
+          found,
+        });
+        return t.td == id || found;
+      });
+      commit(mutationTypes.SET_FILTERED, result);
+      commit(mutationTypes.SET_LOADING, false);
+    }
   },
   loadTeams: async ({ commit }) => {
     const result = JSON.parse(localStorage.getItem("teams") || "[]");
@@ -140,6 +167,10 @@ const actions = {
       notifyError(err);
     }
     commit(mutationTypes.SET_LOADING, false);
+  },
+  setFilter: ({ commit, dispatch }, { filter }) => {
+    commit(mutationTypes.SET_FILTER, filter);
+    dispatch("filter");
   }
 };
 
@@ -148,12 +179,13 @@ const tournaments = {
   state,
   getters: {
     loading: state => state.loading,
-    all: state => state.tournaments,
+    all: state => state.filteredTournaments,
     byId: state => id => state.tournaments.find( t => t.id == id ),
     teams: state => state.teams,
     showForm: state => state.showTournamentForm,
     wip: state => state.wip,
     hasWip: state => Boolean(state.wip),
+    filter: state => state.filter,
   },
   mutations,
   actions,

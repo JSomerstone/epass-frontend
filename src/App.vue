@@ -23,11 +23,10 @@
     },
     watch: {
       loggedIn: function(loggedIn) {
-        if (!loggedIn) {
-          this.$router.push({ name: "login" });
-        } else {
+        if (loggedIn) {
           this.$router.push({ name: "frontpage" });
-            
+        } else {
+          this.$router.push({ name: "login" });
         }
       }
     }

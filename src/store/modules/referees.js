@@ -52,18 +52,15 @@ const actions = {
   },
   load: async ({ commit, rootGetters }) => {
     commit(mutationTypes.SET_LOADING, true);
-    //const result = JSON.parse(localStorage.getItem("referees"));
     const result = await API.graphql({
       query: listReferees,
     });
-    console.log(result.data.listReferees.items);
     const referees = result.data.listReferees.items.map((r) => {
       return { ...r };
     });
     commit(mutationTypes.SET_REFEREES, referees);
     const currentUser = rootGetters["auth/user"];
     const currentReferee = referees.find((r) => r.userId == currentUser.userId);
-    console.log({ currentUser, currentReferee });
     commit(mutationTypes.SET_CURRENT, currentReferee);
     commit(mutationTypes.SET_LOADING, false);
   },

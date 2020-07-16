@@ -17,6 +17,7 @@
       :editable="isEditable"
       :open="Boolean(tournamentId)"
     />
+    <tournament-filter v-if="!tournamentId" />
     <tournament-list 
       :loading="isLoading" 
       :items="tournaments"
@@ -34,13 +35,15 @@
 import Layout from "../components/Layout"
 import TournamentList from "../components/TournamentList";
 import TournamentForm from "../components/TournamentForm";
-import { formatDateRange } from "../utils/dateUtils"
+import TournamentFilter from "../components/TournamentsFilter";
+import { formatDateRange } from "../utils/dateUtils";
 
 export default {
   components: {
     Layout,
     TournamentList,
-    TournamentForm
+    TournamentForm,
+    TournamentFilter,
   },
   data() {
     return {
@@ -67,9 +70,9 @@ export default {
   },
   methods: {
     fetchData: function() {
-      this.$store.dispatch("tournaments/load", { year: this.year });
-      this.$store.dispatch("tournaments/loadTeams");
       this.$store.dispatch("referees/load");
+      this.$store.dispatch("tournaments/loadTeams");
+      this.$store.dispatch("tournaments/load", { year: this.year });
     },
     formatDateRange: (dates) => formatDateRange(dates),
   },
