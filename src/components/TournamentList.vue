@@ -35,7 +35,7 @@
         <tournament-detail-row :tournament="props.row" :year="year">
         </tournament-detail-row>
       </template>
-      <template slot="empty">
+      <template slot="empty" v-if="!loading">
         <p>
           No tournaments to show, use the form above to add new or
           <b-button @click="handleReload">Reload</b-button>

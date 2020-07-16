@@ -8,7 +8,7 @@ type Referee @model {
   userId: String!
 }
 
-type Tournament @model {
+type Tournament @model @key(name: "byYear", fields: ["year", "id"]) {
   id: ID!
   name: String!
   international: Boolean!

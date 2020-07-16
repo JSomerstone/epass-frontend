@@ -77,7 +77,11 @@ const actions = {
     try {
       const result = await API.graphql({
         query: listTournaments,
-        filter: { year }
+        variables: {
+          filter: {
+            year: { eq: year, },
+          },
+        }
       });
       console.log("tournaments/load", { ...result });
       const tournaments = result.data.listTournaments.items.map((r) => {

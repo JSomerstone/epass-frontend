@@ -16,7 +16,7 @@
     </div>
     <div class="column is-one-third">
       <div>
-        <strong>TD:</strong> {{ getRefereeName(tournament.td.id) }}
+        <strong>TD:</strong> {{ getRefereeName(tournament.td) }}
       </div>
       <div>
         <strong>Referees:</strong>
@@ -68,7 +68,9 @@ export default {
   methods: {
     getRefereeName: function(id) {
       const ref = this.$store.getters['referees/byId'](id);
-      return `${ref.firstName} ${ref.lastName} [${ref.country}]`;
+      return ref
+        ? `${ref.firstName} ${ref.lastName} [${ref.country}]`
+        : id
     },
     getCurrentRef: function() {
       const current = this.$store.getters['referees/current'];

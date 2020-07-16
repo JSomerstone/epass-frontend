@@ -195,7 +195,7 @@
                               :expanded="true"
                           >
                               <template slot-scope="props">
-                                  {{ props.option.firstName }} {{ props.option.lastName }}, {{ props.option.country.toUpperCase() }}
+                                  {{ props.option.firstName }} {{ props.option.lastName }} [{{ props.option.country }}]
                               </template>
                               <template slot="empty">
                                   No results for {{ref}}, 
