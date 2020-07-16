@@ -77,7 +77,7 @@ export default {
   },
   computed: {
     userId: function() {
-      return this.$store.getters["auth/user"].username || null
+      return this.$store.getters["auth/user"].userId || null
     },
     isLoading: function() {
       return this.$store.getters["auth/loading"] || this.$store.getters["referees/loading"]

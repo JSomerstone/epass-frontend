@@ -496,7 +496,7 @@ export default {
       this.loadTournamentById(this.selected);
     }
     const currentUser = this.$store.getters["auth/user"];
-    const referee = this.$store.getters["referees/byUserId"](currentUser.username);
+    const referee = this.$store.getters["referees/byUserId"](currentUser.userId);
     if (referee) {
       this.$store.dispatch("referees/setCurrent", { referee });
     }

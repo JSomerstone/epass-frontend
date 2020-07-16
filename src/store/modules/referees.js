@@ -62,7 +62,7 @@ const actions = {
     });
     commit(mutationTypes.SET_REFEREES, referees);
     const currentUser = rootGetters["auth/user"];
-    const currentReferee = referees.find((r) => r.userId == currentUser.username);
+    const currentReferee = referees.find((r) => r.userId == currentUser.userId);
     console.log({ currentUser, currentReferee });
     commit(mutationTypes.SET_CURRENT, currentReferee);
     commit(mutationTypes.SET_LOADING, false);

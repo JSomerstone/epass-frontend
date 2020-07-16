@@ -10,7 +10,7 @@ const AUTH_KEYS = {
   USER_DATA: "userData"
 };
 
-let userInfo = { email: "", username: "", email_verified: false };
+let userInfo = { email: "", userId: "", email_verified: false };
 const localLoad = (key, defaultValue = null) => JSON.parse(localStorage.getItem(key)) || defaultValue;
 const localSave = (key, value) => localStorage.setItem(key, JSON.stringify(value));
 
@@ -18,10 +18,10 @@ const authMeta = localLoad(AUTH_KEYS.META);
 if (authMeta) {
   try {
     // There has been a login -> Load from Local Storage
-    let username = localStorage.getItem(authMeta.userKey);
+    let userId = localStorage.getItem(authMeta.userKey);
     const userData = localLoad(authMeta.userDataKey);
     userInfo = {
-      username,
+      userId,
       email_verified: Boolean(userData.UserAttributes.find(
         (attr) => attr.Name == "email_verified"
       ).Value),
@@ -63,7 +63,7 @@ const mutations = {
 
   [mutationTypes.SET_USER_INFO](state, user) {
     if (user == null) {
-      state.userInfo = { username: "", email: "", email_verified: false };
+      state.userInfo = { userId: "", email: "", email_verified: false };
       localStorage.removeItem(AUTH_KEYS.META);
     } else {
       localSave(AUTH_KEYS.META, {
@@ -75,7 +75,7 @@ const mutations = {
         attributes: { email = "", email_verified = false },
         username = "",
       } = user;
-      state.userInfo = { email, username, email_verified };
+      state.userInfo = { email, userId: username, email_verified };
     }
   },
 
@@ -102,12 +102,12 @@ const actions = {
   setUser({ commit }, { user }) {
     commit(mutationTypes.SET_USER_INFO, user);
   },
-  async signUp({ commit, dispatch }, { username, password, attributes = {} }) {
+  async signUp({ commit, dispatch }, { email, password, attributes = {} }) {
     dispatch("setLoading", { loading: true });
     try {
-      commit(mutationTypes.SET_SIGNUP_EMAIL, username);
+      commit(mutationTypes.SET_SIGNUP_EMAIL, email);
       const result = await Auth.signUp({
-        username,
+        username: email,
         password,
         attributes,
       });
@@ -159,10 +159,10 @@ const actions = {
         dispatch("setLoading", { loading: false });
       });
   },
-  async login({ commit, dispatch }, { username, password }) {
+  async login({ commit, dispatch }, { email, password }) {
     dispatch("setLoading", { loading: true });
 
-    Auth.signIn(username, password)
+    Auth.signIn(email, password)
       .then((user) => {
         console.log(user);
         commit(mutationTypes.SET_USER_INFO, user);
@@ -180,7 +180,7 @@ const actions = {
         });
         if (error.code == "UserNotConfirmedException") {
           commit(mutationTypes.SIGNUP_STEP, signupSteps.verify);
-          commit(mutationTypes.SET_SIGNUP_EMAIL, username);
+          commit(mutationTypes.SET_SIGNUP_EMAIL, email);
           dispatch(
             "navigation/redirect",
             { target: { name: "signup" } },
@@ -225,7 +225,7 @@ const auth = {
     signupStep: (state) => state.signupStep,
     signupEmail: (state) => state.signupEmail,
     signupUserId: (state) => state.signupUserId,
-    loggedIn: (state) => Boolean(state.userInfo.username),
+    loggedIn: (state) => Boolean(state.userInfo.userId),
     user: (state) => state.userInfo,
   },
   mutations,

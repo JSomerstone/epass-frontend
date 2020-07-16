@@ -38,12 +38,7 @@ export default class Tournament {
       r => r.id == id
     ) || {};
   }
-  getYear() {
-    if (this.date) {
-      return new Date(this.date[0]).getFullYear();
-    }
-    return new Date().getFullYear();
-  }
+  
   setGames(refereeId, games, tenSeconds) {
     const index = this.referees.findIndex(
       r => r.id === refereeId

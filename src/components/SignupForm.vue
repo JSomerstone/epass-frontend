@@ -135,14 +135,14 @@ import Referee from "../store/models/RefereeClass"
     methods: {
       handleSignup: function() {
         this.$store.dispatch('auth/signUp', { 
-          username: this.referee.email,
+          email: this.referee.email,
           password: this.password
         });
       },
 
       handleVerification: function() {
         this.$store.dispatch('auth/verifyAddress', { 
-          username: this.referee.email,
+          email: this.referee.email,
           code: this.verification
         });
       },

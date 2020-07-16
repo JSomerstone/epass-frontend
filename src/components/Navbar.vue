@@ -7,16 +7,16 @@
           </b-navbar-item>
         </template>
         <template slot="start">
-            <b-navbar-dropdown label="Tournaments">
-                <b-navbar-item 
-                  v-for="year in years"
-                  v-bind:key="year"
-                  tag="router-link" 
-                  :to="{ path: `/tournaments/${year}` }"
-                >
-                    {{ year }}
-                </b-navbar-item>
-            </b-navbar-dropdown>
+          <b-navbar-dropdown label="Tournaments">
+              <b-navbar-item 
+                v-for="year in years"
+                v-bind:key="year"
+                tag="router-link" 
+                :to="{ path: `/tournaments/${year}` }"
+              >
+                  {{ year }}
+              </b-navbar-item>
+          </b-navbar-dropdown>
         </template>
 
         <template slot="end">
@@ -35,6 +35,9 @@
                   </b-navbar-item>
                   <b-navbar-item @click="handleLogout">
                       <b-icon icon="logout-variant"></b-icon> Logout
+                  </b-navbar-item>
+                  <b-navbar-item>
+                    <pre>{{ currentUser }}</pre>
                   </b-navbar-item>
               </b-navbar-dropdown>
             </b-navbar-item>
@@ -60,11 +63,11 @@ export default {
     isLoggedIn() {
       return this.$store.getters['auth/loggedIn'];
     },
-    getCurrent() {
+    currentUser() {
       return this.$store.getters['auth/user'];
     },
     username: function() {
-      return this.getCurrent.email.split("@").shift()
+      return this.currentUser.email.split("@").shift()
     }
   },
   methods: {
