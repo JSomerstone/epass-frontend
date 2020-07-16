@@ -1,24 +1,10 @@
 // import axios from "axios";
-import { ToastProgrammatic as Toast } from 'buefy'
 import { listTournaments, getTournament } from "../../graphql/queries";
 import { API } from "aws-amplify";
-import { createTournament, updateTournament } from '../../graphql/mutations';
+import { createTournament, updateTournament, notifyException} from '../../graphql/mutations';
 import { notifyException, successMessage } from '../../utils/notificationUtils';
 //import Tournament from '../models/Tournament';
 
-
-const notifyError = (error) => {
-  if (error.message) {
-    Toast.open({
-      message: error.message,
-      type: "is-danger"
-    });
-  } else if (error.errors) {
-    for (let { message } of error.errors) {
-      Toast.open({ message, type: "is-danger" });
-    }
-  }
-}
 
 const state = {
   loading: false,
@@ -97,7 +83,7 @@ const actions = {
       commit(mutationTypes.SET_TOURNAMENTS, tournaments);
       dispatch("filter");
     } catch (error) {
-      notifyError(error);
+      notifyException(error);
     }
     commit(mutationTypes.SET_LOADING, false);
   },
@@ -111,10 +97,7 @@ const actions = {
         commit(mutationTypes.SET_WIP, result.data.getTournament);
         onSuccess(result.data.getTournament);
       })
-      .catch(error => {
-        console.error(error);
-        notifyError(error);
-      })
+      .catch(notifyException)
       .finally(() => {
         commit(mutationTypes.SET_LOADING, false);
       });
@@ -141,7 +124,7 @@ const actions = {
   addTeam: async ({ commit }, { team }) => {
     commit(mutationTypes.ADD_TEAM, team);
   },
-  create: async ({ commit }, { tournament }) => {
+  create: async ({ commit, dispatch}, { tournament }) => {
     commit(mutationTypes.SET_LOADING, true);
     try {
       const result = await API.graphql({
@@ -150,8 +133,9 @@ const actions = {
       });
       commit(mutationTypes.NEW_TOURNAMENT, result.data.createTournament);
       successMessage("Tournament saved");
+      dispatch("load");
     } catch (err) {
-      notifyError(err);
+      notifyException(err);
     }
     commit(mutationTypes.SET_LOADING, false);
   },
@@ -164,12 +148,10 @@ const actions = {
       });
       commit(mutationTypes.UPDATE_TOURNAMENT, result.data.updateTournament);
       commit(mutationTypes.SET_WIP, null);
-      Toast.open({
-        message: `Tournament updated`,
-        type: "is-success"
-      });
+      dispatch("load");
+      successMessage("Tournament updated");
     } catch (err) {
-      notifyError(err);
+      notifyException(err);
     }
     commit(mutationTypes.SET_LOADING, false);
   },
