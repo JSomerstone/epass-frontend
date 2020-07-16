@@ -3,7 +3,7 @@ import { ToastProgrammatic as Toast } from 'buefy'
 import { v4 as uuidv4 } from "uuid";
 import { listTournaments } from "../../graphql/queries";
 import { API } from "aws-amplify";
-import { createTournament } from '../../graphql/mutations';
+import { createTournament, updateTournament } from '../../graphql/mutations';
 //import Tournament from '../models/Tournament';
 
 
@@ -121,22 +121,25 @@ const actions = {
     }
     commit(mutationTypes.SET_LOADING, false);
   },
-  update: ({ commit, dispatch }, { tournament }) => {
+  update: async ({ commit }, { tournament }) => {
+    commit(mutationTypes.SET_LOADING, true);
     try {
-      commit(mutationTypes.SET_LOADING, true);
-      commit(mutationTypes.UPDATE_TOURNAMENT, tournament);
+      const result = await API.graphql({
+        query: updateTournament,
+        variables: { input: tournament.toJson() },
+      });
+      console.log("tournaments/update", { ...result });
+      commit(mutationTypes.UPDATE_TOURNAMENT, result.data.updateTournament);
       commit(mutationTypes.SET_WIP, null);
-      dispatch("load", { year: tournament.getYear() });
       Toast.open({
-        message: `Tournament ${tournament.name} updated`,
+        message: `Tournament updated`,
         type: "is-success"
       });
     } catch (err) {
-      Toast.open({
-        message: err.message,
-        type: "is-danger"
-      });
+      console.log("tournaments/update", err);
+      notifyError(err);
     }
+    commit(mutationTypes.SET_LOADING, false);
   }
 };
 
