@@ -1,5 +1,6 @@
 // import axios from "axios";
 import { ToastProgrammatic as Toast } from 'buefy'
+import { successMessage, errorMessage, notifyException, infoMessage } from "../../utils/notificationUtils";
 import Amplify, { Auth } from 'aws-amplify';
 import awsconfig from "../../aws-exports";
 Amplify.configure(awsconfig);
@@ -28,7 +29,7 @@ if (authMeta) {
       email: userData.UserAttributes.find((attr) => attr.Name == "email").Value,
     };
   } catch (error) {
-    console.log("Error while loading user data from localStorage:", error);
+    errorMessage("Error while loading user data from localStorage", error);
   }
 }
 
@@ -96,8 +97,8 @@ const actions = {
   setLoading({ commit }, { loading }) {
     commit(mutationTypes.SET_LOADING, loading);
   },
-  setSignupState({ commit }, { signup }) {
-    commit(mutationTypes.SET_SIGNUP_STATE, signup);
+  setSignupStep({ commit }, { step }) {
+    commit(mutationTypes.SIGNUP_STEP, step);
   },
   setUser({ commit }, { user }) {
     commit(mutationTypes.SET_USER_INFO, user);
@@ -111,15 +112,10 @@ const actions = {
         password,
         attributes,
       });
-      console.log("signup", { ...result });
       commit(mutationTypes.SET_SIGNUP_USERID, result.userSub);
       commit(mutationTypes.SIGNUP_STEP, signupSteps.verify);
     } catch (error) {
-      console.log("error signing up:", error);
-      Toast.open({
-        message: error.message,
-        type: "is-danger",
-      });
+      errorMessage(error.message, error);
       if (error.code == "UsernameExistsException") {
         commit(mutationTypes.SIGNUP_STEP, signupSteps.verify);
       }
@@ -127,18 +123,15 @@ const actions = {
     dispatch("setLoading", { loading: false });
   },
 
-  async verifyAddress({ commit, dispatch, state }, { code }) {
+  async verifyAddress({ commit, dispatch, state }, { code, onSuccess = () => { } }) {
     dispatch("setLoading", { loading: true });
-    console.log({ action: "Verify", code });
     try {
       await Auth.confirmSignUp(state.signupEmail, code);
+      successMessage("Address verified");
       commit(mutationTypes.SIGNUP_STEP, signupSteps.profile);
+      onSuccess();
     } catch (error) {
-      console.log("error verifying up:", error);
-      Toast.open({
-        message: error.message,
-        type: "is-danger",
-      });
+      notifyException(error);
     }
     dispatch("setLoading", { loading: false });
   },
@@ -146,15 +139,9 @@ const actions = {
     dispatch("setLoading", { loading: true });
     Auth.resendSignUp(state.signupEmail)
       .then(() => {
-        Toast.open({ message: "Verification code sent" });
+        infoMessage("Verification message sent");
       })
-      .catch((error) => {
-        console.log("error in resendVerification:", error);
-        Toast.open({
-          message: error.message,
-          type: "is-danger",
-        });
-      })
+      .catch(notifyException)
       .finally(() => {
         dispatch("setLoading", { loading: false });
       });
@@ -164,20 +151,12 @@ const actions = {
 
     Auth.signIn(email, password)
       .then((user) => {
-        console.log(user);
         commit(mutationTypes.SET_USER_INFO, user);
-        Toast.open({
-          message: `Welcome ${user.attributes.email}`,
-          type: "is-success",
-        });
+        commit(mutationTypes.SIGNUP_STEP, signupSteps.profile);
+        successMessage(`Welcome ${user.attributes.email}`);
       })
       .catch((error) => {
-        console.log("error signIn up:", error);
-        Toast.open({
-          duration: 10000,
-          message: error.message,
-          type: "is-danger",
-        });
+        notifyException(error);
         if (error.code == "UserNotConfirmedException") {
           commit(mutationTypes.SIGNUP_STEP, signupSteps.verify);
           commit(mutationTypes.SET_SIGNUP_EMAIL, email);
@@ -203,14 +182,7 @@ const actions = {
           type: "is-success",
         });
       })
-      .catch((error) => {
-        console.log("error in Auth.signOut():", error);
-        Toast.open({
-          duration: 10000,
-          message: error.message,
-          type: "is-danger",
-        });
-      })
+      .catch(notifyException)
       .finally(() => {
         dispatch("setLoading", { loading: false });
       });

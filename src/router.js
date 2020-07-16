@@ -3,6 +3,7 @@ import Router from "vue-router";
 import store from "./store/index";
 
 import ErrorPage from "./views/ErrorPage.vue";
+import TournamentPage from "./views/TournamentPage.vue";
 import Tournaments from "./views/Tournaments.vue";
 import Signup from "./views/Signup.vue";
 import Settings from "./views/Settings.vue";
@@ -24,13 +25,13 @@ const router = new Router({
     },
     {
       path: "/tournaments/:year",
-      name: "tournaments-of-year",
+      name: "tournaments",
       component: Tournaments,
     },
     {
-      path: "/tournaments/:year/:tournament",
-      name: "tournament-selected",
-      component: Tournaments,
+      path: "/tournament/:id",
+      name: "tournament",
+      component: TournamentPage,
     },
     {
       path: "/signup",
@@ -60,7 +61,6 @@ router.beforeEach((to, from, next) => {
      next();
   }
   else {
-    console.log({ from, next: "login" });
     next({ name: "login" });
   }
 });

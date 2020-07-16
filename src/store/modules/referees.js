@@ -1,6 +1,7 @@
 // import axios from "axios";
 //import Referee from "../models/RefereeClass";
 import { ToastProgrammatic as Toast } from 'buefy'
+import { errorMessage, successMessage, notifyException } from "../../utils/notificationUtils";
 import { createReferee, updateReferee } from "../../graphql/mutations";
 import { listReferees } from "../../graphql/queries";
 import { API } from "aws-amplify";
@@ -64,27 +65,21 @@ const actions = {
     commit(mutationTypes.SET_CURRENT, currentReferee);
     commit(mutationTypes.SET_LOADING, false);
   },
-  create: async ({ commit, dispatch }, { referee }) => {
+  create: async ({ commit, dispatch }, { referee, onSuccess = () => { } }) => {
+    commit(mutationTypes.SET_LOADING, true);
     try {
-      commit(mutationTypes.SET_LOADING, true);
       const result = await API.graphql({
         query: createReferee,
         variables: { input: referee },
       });
-      console.log("created Referee", { ...result });
-      commit(mutationTypes.ADD_REFEREE, result.data.cre);
-      Toast.open({
-        message: `Referee added to system`,
-        type: "is-success",
-      });
+      commit(mutationTypes.ADD_REFEREE, result.data.createReferee);
+      successMessage("Referee added");
+      onSuccess();
       dispatch("load");
-      commit(mutationTypes.SET_LOADING, false);
     } catch (err) {
-      Toast.open({
-        message: `Saving failed: "${err.message}"`,
-        type: "is-danger",
-      });
+      errorMessage(err.message || "Saving referee failed", error);
     }
+    commit(mutationTypes.SET_LOADING, false);
   },
   async update({ commit, dispatch }, { referee }) {
     try {
@@ -94,19 +89,11 @@ const actions = {
           input: referee,
         },
       });
-      console.log("referees/update", { ...result });
       commit(mutationTypes.UPDATE_REFEREE, result.data.updateReferee);
-      Toast.open({
-        message: `Referee updated`,
-        type: "is-success",
-      });
+      successMessage("Updated");
       dispatch("load");
     } catch (err) {
-      console.log(err);
-      Toast.open({
-        message: `Saving failed: "${err.message}"`,
-        type: "is-danger",
-      });
+      notifyException(err);
     }
   },
 };

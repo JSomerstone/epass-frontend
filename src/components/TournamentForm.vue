@@ -4,6 +4,7 @@
       aria-id="newEntryForm" 
       animation="slide" 
       class="card"
+      :key="t.id"
     >
         <div 
             slot="trigger" 
@@ -12,7 +13,7 @@
             role="button"
         >
             <span class="card-header-title">
-                <span v-if="tournament.id">Edit tournament</span>
+                <span v-if="t.id">Edit tournament</span>
                 <span v-else>Add new tournament</span>
             </span>
             <a class="card-header-icon">
@@ -28,15 +29,15 @@
                     <div class="columns">
                       <div class="column is-half is-full-tablet">
                         <b-field label="Name of tournament" label-position="on-border">
-                          <b-input v-model="tournament.name" :required="true" :expanded="true"></b-input>
+                          <b-input v-model="t.name" :required="true" :expanded="true"></b-input>
                         </b-field>
                       </div>
                       <div class="column is-half is-full-tablet">
                         <b-field>
-                         <b-radio-button v-model="tournament.international" :native-value="true" expanded>
+                         <b-radio-button v-model="t.international" :native-value="true" expanded>
                               International
                           </b-radio-button>
-                          <b-radio-button v-model="tournament.international" :native-value="false" expanded>
+                          <b-radio-button v-model="t.international" :native-value="false" expanded>
                               National
                           </b-radio-button>
                         </b-field>
@@ -46,7 +47,7 @@
                   <div class="field">
                       <b-field label="Place of the tournament" label-position="on-border">
                           <b-input 
-                              v-model="tournament.city"
+                              v-model="t.city"
                               :required="true" 
                               placeholder="City" 
                               :expanded="true"
@@ -59,7 +60,7 @@
                               :keep-first="true"
                               :data="getCountries(countryQuery)"
                               :expanded="true"
-                              @select="option => tournament.country = option"
+                              @select="option => t.country = option"
                           >
                           </b-autocomplete>
                       </b-field>
@@ -71,7 +72,7 @@
                               trap-focus
                               range
                               inline
-                              v-model="tournament.dates"
+                              v-model="t.dates"
                               placeholder="Pick tournament dates"
                               :required="true"
                               :min-date="minDate"
@@ -86,7 +87,7 @@
                   <div class="field" id="td-field">
                       <b-field label="Technical Delegate TD">
                         <div class="columns">
-                          <div class="column is-full" v-if="!tournament.td.id && !showAddTdForm">
+                          <div class="column is-full" v-if="!t.td.id && !showAddTdForm">
                             <b-field>
                               <b-autocomplete
                                   v-model="tdQuery"
@@ -95,7 +96,7 @@
                                   :data="filteredTd"
                                   icon="magnify"
                                   expanded
-                                  @select="option => tournament.td = option">
+                                  @select="option => t.td = option">
                               >
                                   <template slot-scope="props">
                                       {{ props.option.firstName }} {{ props.option.lastName }} [{{ props.option.country }}]
@@ -108,40 +109,24 @@
                                   </template>
                               </b-autocomplete>
                               <b-button 
-                                @click="tournament.td = getCurrent()" 
+                                @click="t.td = getCurrent()" 
                                 type="is-info" 
                                 icon-left="account-plus" 
                                 title="Set yourself as TD">
                               </b-button>
                             </b-field>
                           </div>
-                          <div class="column is-half" v-if="tournament.td.id">
+                          <div class="column is-half" v-if="t.td.id">
                               <b-tag 
                                 size="is-medium" 
                                 closable 
                                 rounded
-                                :key="tournament.td.id"
-                                @close="tournament.td={}"
+                                :key="t.td.id"
+                                @close="t.td={}"
                             >
-                                {{ tournament.td.firstName }} {{ tournament.td.lastName }}
-                                &lt;{{tournament.td.email || "email-missing" }}&gt;
+                                {{ t.td.firstName }} {{ t.td.lastName }}
+                                &lt;{{t.td.email || "email-missing" }}&gt;
                             </b-tag>
-                          </div>
-                          <div  class="column is-half" v-if="tournament.td.id && !tournament.td.email">
-                            <b-field >
-                              <b-input 
-                                v-model="tdEmail"
-                                type="email"
-                                placeholder="Add missing email"
-                                :expanded="true"
-                              ></b-input>
-                              <b-button 
-                                type="is-info"
-                                icon-left="email-check-outline"
-                                title="Save email"
-                                @click="handleSaveTdEmail"
-                              ></b-button>
-                            </b-field>
                           </div>
                         </div>
                       </b-field>
@@ -213,7 +198,7 @@
                       </b-field>
                       <div>
                           <b-tag 
-                              v-for="ref in tournament.referees"
+                              v-for="ref in t.referees"
                               v-bind:key="ref.id"
                               size="is-medium" 
                               closable 
@@ -227,7 +212,7 @@
                   <div class="field">
                       <b-field label="Teams competing (Name / Country)">
                           <b-taginput
-                              v-model="tournament.teams"
+                              v-model="t.teams"
                               :data="filteredTeams"
                               autocomplete
                               :keep-first="true"
@@ -242,7 +227,6 @@
                           </b-taginput>
                       </b-field>
                   </div>
-              <pre>{{ tournament.toJson() }}</pre>
               </div>
           </div>
         </div>
@@ -255,12 +239,12 @@
               class="card-footer-item" 
               outlined
             >
-                {{ tournament.id ? "Update" : "Save" }}
+                {{ t.id ? "Update" : "Save" }}
             </b-button>
             <b-button @click="handleCancel" type="is-light" icon-left="cancel" class="card-footer-item" >
                 Cancel
             </b-button>
-            <b-button @click="handleFill">
+            <b-button @click="handleFill" v-if="!t.id">
               Fill
             </b-button>
         </div>
@@ -274,9 +258,10 @@
 <script>
 import RefereeForm from "./RefereeForm";
 import Tournament from "../store/models/Tournament";
+import { infoMessage, warningMessage } from "../utils/notificationUtils";
 
 const defaults = {
-  tournament: new Tournament({ id: null }),
+  t: new Tournament(),
   countryQuery: "",
   tdEmail: "",
   tdQuery: "",
@@ -285,17 +270,17 @@ const defaults = {
   noOfTenSeconds: 0
 };
 export default {
-    components: {
-        RefereeForm,
-    },
+  components: {
+      RefereeForm,
+  },
   props: {
     editable: {
       type: Boolean,
       default: true
     },
-    selected: {
-      type: String,
-      default: null
+    tournament: {
+      type: Object,
+      default: () => new Tournament(),
     },
     open: {
       type: Boolean,
@@ -303,17 +288,16 @@ export default {
     }
   },
   data: () => {
-      const today = new Date();
-      return {
-        ...defaults,
-        tournament: new Tournament({ id: null }),
-        minDate: new Date(`${today.getFullYear()-1}-12-31`),
-        maxDate: today,
-        showAddTdForm: false,
-        showAddRefereeForm: false,
-        existingTeams: [],
-        filteredTeams: [],
-      }
+    const today = new Date();
+    return {
+      ...defaults,
+      minDate: new Date(`${today.getFullYear()-1}-12-31`),
+      maxDate: today,
+      showAddTdForm: false,
+      showAddRefereeForm: false,
+      existingTeams: [],
+      filteredTeams: [],
+    }
   },
   computed: {
     isLoading() {
@@ -334,22 +318,8 @@ export default {
     }
   },
   methods: {
-    loadWip() {
-      const wip = this.$store.getters['tournaments/wip'];
-      if (! wip) {
-        return;
-      }
-      this.loadTournament(wip);
-    },
-    loadTournamentById(tournamentId) {
-      const wip = this.$store.getters['tournaments/byId'](tournamentId);
-      if (! wip) {
-        return;
-      }
-      this.loadTournament(wip);
-    },
-    loadTournament(tournament) {
-      this.tournament = new Tournament(tournament, this.$store.getters['referees/all']);
+    loadTournamentForm(tournament) {
+      this.t = new Tournament(tournament, this.$store.getters['referees/all']);
       this.countryQuery = tournament.country;
       const current = this.getCurrent();
       const { games = 0, tenSeconds = 0 } = tournament.referees.find(
@@ -364,33 +334,29 @@ export default {
     handleSave() {
       if (this.noOfGames > 0 || this.noOfGames > 0) {
         const current = this.getCurrent();
-        this.tournament.setGames(current.id, this.noOfGames, this.noOfTenSeconds);
+        this.t.setGames(current.id, this.noOfGames, this.noOfTenSeconds);
       }
-      if (this.tournament.id) {
-        this.$buefy.toast.open({ message: "Updating... "});
+      if (this.t.id) {
+        infoMessage("Updating...");
         this.$store.dispatch("tournaments/update", { tournament: this.tournament });
       } else {
-        this.$buefy.toast.open({ message: "Saving new tournament... "});
+        infoMessage("Saving...");
         this.$store.dispatch("tournaments/create", { tournament: this.tournament });
       }
-      //this.$router.push({ path: `/tournaments/${this.$route.params.year}` });
     },
     handleCancel() {
-      this.$buefy.toast.open({
-        message: "Cancelled",
-        type: "is-warning"
-      });
-      this.$router.push({ path: `/tournaments/${this.$route.params.year}` });
+      warningMessage("Cancelled");
+      this.loadTournamentForm(this.tournament);
     },
       selectReferee: function(referee) {
-        if ( ! this.tournament.referees.find( r => r.id === referee.id)) {
-          this.tournament.referees.push({ ...referee, games: 0, tenSeconds: 0 });
+        if ( ! this.t.referees.find( r => r.id === referee.id)) {
+          this.t.referees.push({ ...referee, games: 0, tenSeconds: 0 });
         }
       },
       removeReferee: function (referee) {
-          let index = this.tournament.referees.findIndex( ref => ref.id === referee.id );
+          let index = this.t.referees.findIndex( ref => ref.id === referee.id );
           if (index >= 0) {
-              this.tournament.referees.splice(index, 1);
+              this.t.referees.splice(index, 1);
           }
       },
     addCurrent() {
@@ -433,19 +399,13 @@ export default {
       },
       addTd: function(referee) {
           this.$store.dispatch("referees/create", { referee });
-          this.tournament.td = referee;
+          this.t.td = referee;
           this.showAddTdForm = false;
           this.tdQuery = "";
           this.$buefy.toast.open({
             message: `${referee.firstName} ${referee.lastName} added as TD`,
             type: 'is-success'
           })
-      },
-      handleSaveTdEmail() {
-        this.tournament.td.email = this.tdEmail;
-        this.$buefy.toast.open({ message: "Updating..." });
-        this.$store.dispatch("referees/update", { referee: this.tournament.td });
-        this.tdEmail = "";
       },
       handleFill() {
         this.tournament = new Tournament({
@@ -469,7 +429,7 @@ export default {
           ],
           teams: this.existingTeams
         }, this.allReferees);
-        this.countryQuery = this.tournament.country;
+        this.countryQuery = this.t.country;
         this.noOfTenSeconds = 10;
         this.noOfGames = 6;
       },
@@ -484,6 +444,9 @@ export default {
       if (this.noOfGames > 0 || this.noOfTenSeconds > 0) {
         this.addCurrent();
       }
+    },
+    tournament: function(tournament) {
+      this.loadTournamentForm(this.tournament);
     }
   },
   mounted() {
@@ -491,14 +454,6 @@ export default {
       let existingTeams = this.$store.getters['tournaments/teams'] || [];
       this.existingTeams = existingTeams;
       this.filteredTeams = existingTeams;
-    }
-    if (this.selected) {
-      this.loadTournamentById(this.selected);
-    }
-    const currentUser = this.$store.getters["auth/user"];
-    const referee = this.$store.getters["referees/byUserId"](currentUser.userId);
-    if (referee) {
-      this.$store.dispatch("referees/setCurrent", { referee });
     }
   },
 }

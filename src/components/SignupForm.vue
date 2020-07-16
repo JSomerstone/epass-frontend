@@ -2,8 +2,8 @@
   <div class="columns">
     <div class="column"></div>
     <div class="column is-half">
-      <b-steps v-model="step" animated :has-navigation="false">
-        <b-step-item label="Authentication" step="1">
+      <b-steps v-model="step" animated :has-navigation="false" >
+        <b-step-item label="Authentication" step="1" :clickable="false">
           <b-field label="Email" label-position="on-border">
             <b-input type="email" v-model="referee.email" placeholder="@" required></b-input>
           </b-field>
@@ -23,7 +23,7 @@
         </b-field>
         </b-step-item> <!--/Authentication -->
 
-        <b-step-item label="Verification" step="2">
+        <b-step-item label="Verification" step="2"  :clickable="false">
           <p>
             A verification code has been sent to <i>&lt;{{ signupEmail }}&gt;</i>, 
             please enter it here:
@@ -54,7 +54,7 @@
             >Resend</b-button>
           </b-field>
         </b-step-item> <!--/Verification -->
-        <b-step-item label="Profile" step="3">
+        <b-step-item label="Profile" step="3"  :clickable="false">
           <b-field label="Name" label-position="on-border">
             <b-input v-model="referee.firstName" required expanded placeholder="Given name" />
             <b-input v-model="referee.lastName" required expanded placeholder="Family name" />
@@ -98,7 +98,7 @@
           </b-field>
           <pre>{{ referee }}</pre>
         </b-step-item> <!--/Profile -->
-        <b-step-item label="Done" step="4">
+        <b-step-item label="Done" step="4" :clickable="false">
           <h2>Welcome {{referee.firstName}}</h2>
           <p>
             Your account is now set up and you can start filling your ePass from 
@@ -126,6 +126,7 @@ import Referee from "../store/models/RefereeClass"
         signupButton: "is-primary",
         verifyButton: "is-primary",
         profileButton: "is-primary",
+        loginButton: "is-primary",
         referee: new Referee({ id: null }),
         password: "",
         verification: "",
@@ -136,26 +137,36 @@ import Referee from "../store/models/RefereeClass"
       handleSignup: function() {
         this.$store.dispatch('auth/signUp', { 
           email: this.referee.email,
-          password: this.password
+          password: this.password,
         });
       },
 
       handleVerification: function() {
         this.$store.dispatch('auth/verifyAddress', { 
           email: this.referee.email,
-          code: this.verification
+          code: this.verification,
+          onSuccess: this.handleLogin
         });
       },
 
-      handleSaveProfile: function() {
-        this.$store.dispatch('auth/setLoading', { loading: true });
-        setTimeout(() => {  
-          this.$store.dispatch('auth/setLoading', { loading: false });
-          this.profileButton = "is-success"; 
-        }, 1000);
-        setTimeout(() => { this.activeStep += 1; }, 2000);
+      handleLogin: function() {
+        this.$store.dispatch('auth/login', { 
+          email: this.referee.email,
+          password: this.password
+        });
       },
 
+      handleSaveProfile() {
+        this.$store.dispatch('referees/create', { 
+          referee: this.referee,
+          onSuccess: this.nextStep
+        });
+      },
+
+      nextStep() {
+        this.$store.dispatch('auth/setSignupStep', this.step + 1 );
+      },
+      
       handleResend: function() {
         this.$store.dispatch('auth/resendVerification');
       },
@@ -193,7 +204,6 @@ import Referee from "../store/models/RefereeClass"
         this.referee.email = email;
       },
       userId: function(userId) {
-        console.log("updated userId", userId);
         this.referee.userId = userId;
       }
     }

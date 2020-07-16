@@ -49,13 +49,6 @@ export default {
         password: this.password
       });
     }
-  },
-  watch: {
-    isLoggedIn: function (loggedIn) {
-      if (loggedIn) {
-        console.log('Noticed logged in -> todo: redirect')
-      }
-    }
   }
 }
 </script>

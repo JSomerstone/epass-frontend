@@ -27,6 +27,11 @@ export default {
       this.$store.dispatch("tournaments/setFilter", { filter: { show } });
     }
   },
+  computed: {
+    filter() {
+      return this.$store.getters["tournaments/filter"]
+    }
+  },
   watch: {
     showTournaments(newValue) {
       this.setShowTournaments(newValue);

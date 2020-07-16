@@ -1,9 +1,9 @@
 // import axios from "axios";
 import { ToastProgrammatic as Toast } from 'buefy'
-import { v4 as uuidv4 } from "uuid";
-import { listTournaments } from "../../graphql/queries";
+import { listTournaments, getTournament } from "../../graphql/queries";
 import { API } from "aws-amplify";
 import { createTournament, updateTournament } from '../../graphql/mutations';
+import { notifyException, successMessage } from '../../utils/notificationUtils';
 //import Tournament from '../models/Tournament';
 
 
@@ -97,10 +97,27 @@ const actions = {
       commit(mutationTypes.SET_TOURNAMENTS, tournaments);
       dispatch("filter");
     } catch (error) {
-      console.log("tournaments/load", error);
       notifyError(error);
     }
     commit(mutationTypes.SET_LOADING, false);
+  },
+  loadTournament: ({ commit }, { id, onSuccess = () => { } }) => {
+    commit(mutationTypes.SET_LOADING, true);
+    API.graphql({
+      query: getTournament,
+      variables: { id }
+    })
+      .then(result => {
+        commit(mutationTypes.SET_WIP, result.data.getTournament);
+        onSuccess(result.data.getTournament);
+      })
+      .catch(error => {
+        console.error(error);
+        notifyError(error);
+      })
+      .finally(() => {
+        commit(mutationTypes.SET_LOADING, false);
+      });
   },
   filter: ({ commit, rootGetters, state }) => {
     commit(mutationTypes.SET_LOADING, true);
@@ -110,16 +127,11 @@ const actions = {
       const { id = null } = rootGetters["referees/current"];
       const result = state.tournaments.filter((t) => {
         let found = t.referees.find((r) => r.id == id);
-        console.log("inside filter", {
-          refs: t.referees.map((r) => r.id),
-          td: t.td == id,
-          found,
-        });
         return t.td == id || found;
       });
       commit(mutationTypes.SET_FILTERED, result);
-      commit(mutationTypes.SET_LOADING, false);
     }
+    commit(mutationTypes.SET_LOADING, false);
   },
   loadTeams: async ({ commit }) => {
     const result = JSON.parse(localStorage.getItem("teams") || "[]");
@@ -136,14 +148,9 @@ const actions = {
         query: createTournament,
         variables: { input: tournament.toJson() },
       });
-      console.log("tournaments/create", { ...result });
       commit(mutationTypes.NEW_TOURNAMENT, result.data.createTournament);
-      Toast.open({
-        message: `Tournament created`,
-        type: "is-success"
-      });
+      successMessage("Tournament saved");
     } catch (err) {
-      console.log("tournaments/create", err);
       notifyError(err);
     }
     commit(mutationTypes.SET_LOADING, false);
@@ -155,7 +162,6 @@ const actions = {
         query: updateTournament,
         variables: { input: tournament.toJson() },
       });
-      console.log("tournaments/update", { ...result });
       commit(mutationTypes.UPDATE_TOURNAMENT, result.data.updateTournament);
       commit(mutationTypes.SET_WIP, null);
       Toast.open({
@@ -163,7 +169,6 @@ const actions = {
         type: "is-success"
       });
     } catch (err) {
-      console.log("tournaments/update", err);
       notifyError(err);
     }
     commit(mutationTypes.SET_LOADING, false);
