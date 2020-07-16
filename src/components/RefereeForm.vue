@@ -17,12 +17,12 @@
       </b-field>
     </div>
     <div class="field">
-      <b-field label="Email" label-position="on-border">
+      <b-field :label="emailTitle" label-position="on-border">
         <b-input type="email" v-model="email" placeholder="@" :required="emailRequired"></b-input>
       </b-field>
     </div>
     <div class="field">
-      <b-field label="Nationality" label-position="on-border">
+      <b-field :label="countryTitle" label-position="on-border" :required="countryRequired">
         <b-autocomplete
             v-model="countryQuery"
             placeholder="As in passport"
@@ -132,6 +132,18 @@ export default {
         ? this.$store.getters['countries/byName'](name)
         : [];
     }
+  },
+  computed: {
+    emailTitle: function() {
+      return this.emailRequired 
+        ? "Email"
+        : "Email (optional)";
+    },
+    countryTitle: function() {
+      return this.countryQuery 
+        ? "Nationality"
+        : "Nationality (optional)";
+    },
   },
 }
 </script>

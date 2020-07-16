@@ -74,7 +74,7 @@ const actions = {
       });
       commit(mutationTypes.ADD_REFEREE, result.data.createReferee);
       successMessage("Referee added");
-      onSuccess();
+      onSuccess(result.data.createReferee);
       dispatch("load");
     } catch (err) {
       errorMessage(err.message || "Saving referee failed", error);

@@ -1,7 +1,7 @@
 // import axios from "axios";
 import { listTournaments, getTournament } from "../../graphql/queries";
 import { API } from "aws-amplify";
-import { createTournament, updateTournament, notifyException} from '../../graphql/mutations';
+import { createTournament, updateTournament } from '../../graphql/mutations';
 import { notifyException, successMessage } from '../../utils/notificationUtils';
 //import Tournament from '../models/Tournament';
 
@@ -75,11 +75,11 @@ const actions = {
         query: listTournaments,
         variables: {
           filter: {
-            year: { eq: year, },
+            year: { eq: year },
           },
-        }
+        },
       });
-      const tournaments = result.data.listTournaments.items
+      const tournaments = result.data.listTournaments.items;
       commit(mutationTypes.SET_TOURNAMENTS, tournaments);
       dispatch("filter");
     } catch (error) {
@@ -87,13 +87,13 @@ const actions = {
     }
     commit(mutationTypes.SET_LOADING, false);
   },
-  loadTournament: ({ commit }, { id, onSuccess = () => { } }) => {
+  loadTournament: ({ commit }, { id, onSuccess = () => {} }) => {
     commit(mutationTypes.SET_LOADING, true);
     API.graphql({
       query: getTournament,
-      variables: { id }
+      variables: { id },
     })
-      .then(result => {
+      .then((result) => {
         commit(mutationTypes.SET_WIP, result.data.getTournament);
         onSuccess(result.data.getTournament);
       })
@@ -124,7 +124,7 @@ const actions = {
   addTeam: async ({ commit }, { team }) => {
     commit(mutationTypes.ADD_TEAM, team);
   },
-  create: async ({ commit, dispatch}, { tournament }) => {
+  create: async ({ commit, dispatch }, { tournament }) => {
     commit(mutationTypes.SET_LOADING, true);
     try {
       const result = await API.graphql({
@@ -133,13 +133,13 @@ const actions = {
       });
       commit(mutationTypes.NEW_TOURNAMENT, result.data.createTournament);
       successMessage("Tournament saved");
-      dispatch("load");
+      dispatch("load", { year: tournament.year });
     } catch (err) {
       notifyException(err);
     }
     commit(mutationTypes.SET_LOADING, false);
   },
-  update: async ({ commit }, { tournament }) => {
+  update: async ({ commit, dispatch }, { tournament }) => {
     commit(mutationTypes.SET_LOADING, true);
     try {
       const result = await API.graphql({
@@ -148,7 +148,7 @@ const actions = {
       });
       commit(mutationTypes.UPDATE_TOURNAMENT, result.data.updateTournament);
       commit(mutationTypes.SET_WIP, null);
-      dispatch("load");
+      dispatch("load", { year: tournament.year });
       successMessage("Tournament updated");
     } catch (err) {
       notifyException(err);
@@ -158,7 +158,7 @@ const actions = {
   setFilter: ({ commit, dispatch }, { filter }) => {
     commit(mutationTypes.SET_FILTER, filter);
     dispatch("filter");
-  }
+  },
 };
 
 const tournaments = {

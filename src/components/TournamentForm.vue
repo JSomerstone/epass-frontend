@@ -194,7 +194,13 @@
                         </b-field>
                       </b-field>
                       <b-field label="Add referee"  v-if="showAddRefereeForm" label-position="on-border">
-                        <referee-form :onSave="addReferee" :onCancel="() => showAddRefereeForm = false" />
+                        <referee-form 
+                          :onSave="addReferee" 
+                          :onCancel="() => showAddRefereeForm = false"
+                          :emailRequired="false"
+                          :countryRequired="false"
+                          :levelRequired="false"
+                        />
                       </b-field>
                       <div>
                           <b-tag 
@@ -258,7 +264,7 @@
 <script>
 import RefereeForm from "./RefereeForm";
 import Tournament from "../store/models/Tournament";
-import { infoMessage, warningMessage } from "../utils/notificationUtils";
+import { infoMessage, warningMessage, successMessage } from "../utils/notificationUtils";
 
 const defaults = {
   t: new Tournament(),
@@ -338,10 +344,10 @@ export default {
       }
       if (this.t.id) {
         infoMessage("Updating...");
-        this.$store.dispatch("tournaments/update", { tournament: this.tournament });
+        this.$store.dispatch("tournaments/update", { tournament: this.t });
       } else {
         infoMessage("Saving...");
-        this.$store.dispatch("tournaments/create", { tournament: this.tournament });
+        this.$store.dispatch("tournaments/create", { tournament: this.t });
       }
     },
     handleCancel() {
@@ -388,27 +394,23 @@ export default {
             }
       },
       addReferee: function(referee) {
-          this.$store.dispatch("referees/create", { referee });
-          this.selectReferee(referee);
+          this.$store.dispatch("referees/create", { 
+            referee,
+            onSuccess: this.selectReferee
+          });
           this.showAddRefereeForm = false;
           this.ref = "";
-          this.$buefy.toast.open({
-            message: `${referee.firstName} ${referee.lastName} added as referee`,
-            type: 'is-success'
-          });
       },
       addTd: function(referee) {
-          this.$store.dispatch("referees/create", { referee });
-          this.t.td = referee;
+         this.$store.dispatch("referees/create", { 
+            referee,
+            onSuccess: (td) => { this.t.td = td; } 
+          });
           this.showAddTdForm = false;
           this.tdQuery = "";
-          this.$buefy.toast.open({
-            message: `${referee.firstName} ${referee.lastName} added as TD`,
-            type: 'is-success'
-          })
       },
       handleFill() {
-        this.tournament = new Tournament({
+        this.t = new Tournament({
           name: "Test tournament",
           year: 2020,
           city: "Helsinki",
