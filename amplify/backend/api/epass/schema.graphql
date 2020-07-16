@@ -1,4 +1,4 @@
-type Referee @model {
+type Referee @model @key(name: "byEmail", fields: ["email", "id"]) {
   id: ID!
   firstName: String!
   lastName: String!

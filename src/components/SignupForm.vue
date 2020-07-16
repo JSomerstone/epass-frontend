@@ -86,6 +86,11 @@
             </b-radio-button>
           </b-field>
           <b-field>
+            <b-button
+              @click="findExistingProfile"
+              icon-left="account-search-outline"
+            >
+            </b-button>
             <b-button 
               v-bind:type="profileButton" 
               @click="handleSaveProfile"
@@ -120,6 +125,7 @@ input.center-text {
 </style>
 <script>
 import Referee from "../store/models/RefereeClass"
+import { infoMessage } from '../utils/notificationUtils';
   export default {
     data() {
       return {
@@ -157,14 +163,35 @@ import Referee from "../store/models/RefereeClass"
       },
 
       handleSaveProfile() {
-        this.$store.dispatch('referees/create', { 
+        const action = this.referee.id ? 'update' : 'create';
+        this.$store.dispatch(`referees/${action}`, { 
           referee: this.referee,
           onSuccess: this.nextStep
         });
       },
 
+      findExistingProfile() {
+        this.$store.dispatch('referees/findByEmail', { 
+          email: this.referee.email,
+          onSuccess: this.preFillProfile
+        });
+      },
+
+      preFillProfile(results = []) {
+        if (!results) {
+          infoMessage("No profile found");
+          return;
+        } else {
+          infoMessage("Profile found");
+          this.referee = new Referee(results[0]);
+          this.referee.userId = this.userId;
+          this.countryQuery = this.referee.country;
+        }
+      },
+
       nextStep() {
-        this.$store.dispatch('auth/setSignupStep', this.step + 1 );
+        console.log('nextStep',  this.step + 1 );
+        this.$store.dispatch('auth/setSignupStep', { step: this.step + 1 });
       },
       
       handleResend: function() {
@@ -197,6 +224,9 @@ import Referee from "../store/models/RefereeClass"
       },
       userId: function() {
         return this.$store.getters['auth/signupUserId'];
+      },
+      loggedIn: function() {
+        return this.$store.getters['auth/loggedIn'];
       }
     },
     watch: {
@@ -205,6 +235,11 @@ import Referee from "../store/models/RefereeClass"
       },
       userId: function(userId) {
         this.referee.userId = userId;
+      },
+      loggedIn: function(loggedIn) {
+        if (loggedIn && this.signupEmail && this.userId) {
+          this.findExistingProfile();
+        }
       }
     }
   }

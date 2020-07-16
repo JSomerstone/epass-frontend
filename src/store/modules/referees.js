@@ -9,6 +9,7 @@ import { API } from "aws-amplify";
 const state = {
   loading: false,
   referees: [],
+  queryResult: [],
   current: null,
 };
 
@@ -16,6 +17,7 @@ const mutationTypes = {
   SET_LOADING: "set-loading",
   SET_REFEREES: "set-referees",
   SET_CURRENT: "set-current",
+  QUERY_RESULT: "set-query-result",
   ADD_REFEREE: "add-referee",
   UPDATE_REFEREE: "update-referee",
 };
@@ -40,7 +42,10 @@ const mutations = {
   [mutationTypes.SET_CURRENT](state, referee) {
     state.current = referee;
     localStorage.setItem("currentReferee", JSON.stringify(referee));
-  }
+  },
+  [mutationTypes.QUERY_RESULT](state, refereeList) {
+    state.queryResult = refereeList;
+  },
 };
 
 const actions = {
@@ -65,7 +70,7 @@ const actions = {
     commit(mutationTypes.SET_CURRENT, currentReferee);
     commit(mutationTypes.SET_LOADING, false);
   },
-  create: async ({ commit, dispatch }, { referee, onSuccess = () => { } }) => {
+  create: async ({ commit, dispatch }, { referee, onSuccess = () => {} }) => {
     commit(mutationTypes.SET_LOADING, true);
     try {
       const result = await API.graphql({
@@ -81,7 +86,7 @@ const actions = {
     }
     commit(mutationTypes.SET_LOADING, false);
   },
-  async update({ commit, dispatch }, { referee }) {
+  async update({ commit, dispatch }, { referee, onSuccess = () => {} }) {
     try {
       const result = await API.graphql({
         query: updateReferee,
@@ -90,11 +95,35 @@ const actions = {
         },
       });
       commit(mutationTypes.UPDATE_REFEREE, result.data.updateReferee);
+      onSuccess(result.data.updateReferee);
       successMessage("Updated");
       dispatch("load");
     } catch (err) {
       notifyException(err);
     }
+  },
+  async findByEmail({ commit }, { email, onSuccess = () => {} }) {
+    commit(mutationTypes.SET_LOADING, true);
+    API.graphql({
+      query: listReferees,
+      variables: {
+        filter: {
+          email: { eq: email },
+        },
+      },
+    })
+      .then((result) => {
+        const referees = result.data.listReferees.items.map((r) => {
+          return { ...r };
+        });
+        console.log("findByEmail", referees);
+        onSuccess(referees);
+        commit(mutationTypes.QUERY_RESULT, referees);
+      })
+      .catch(notifyException)
+      .finally(() => {
+        commit(mutationTypes.SET_LOADING, false);
+      });
   },
 };
 
