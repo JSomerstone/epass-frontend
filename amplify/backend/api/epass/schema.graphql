@@ -16,7 +16,13 @@ type Tournament @model {
   country: String!
   year: Int!
   dates: [String]!
-  td: Referee!
-  referees: [Referee]!
+  td: String!
+  referees: [Entry]!
   teams: [String]!
+}
+
+type Entry {
+  games: Int!
+  tenSeconds: Int!
+  id: ID!
 }

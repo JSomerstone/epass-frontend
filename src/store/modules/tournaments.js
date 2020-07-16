@@ -6,6 +6,20 @@ import { API } from "aws-amplify";
 import { createTournament } from '../../graphql/mutations';
 //import Tournament from '../models/Tournament';
 
+
+const notifyError = (error) => {
+  if (error.message) {
+    Toast.open({
+      message: error.message,
+      type: "is-danger"
+    });
+  } else if (error.errors) {
+    for (let { message } of error.errors) {
+      Toast.open({ message, type: "is-danger" });
+    }
+  }
+}
+
 const state = {
   loading: false,
   tournaments: [],
@@ -16,7 +30,7 @@ const state = {
 
 const mutationTypes = {
   SET_LOADING: "set-loading",
-  CREATE_TOURNAMENT: "create-tournament",
+  NEW_TOURNAMENT: "create-tournament",
   UPDATE_TOURNAMENT: "update-tournament",
   SET_TOURNAMENTS: "set-tournaments",
   SET_WIP: "set-wip",
@@ -29,23 +43,12 @@ const mutations = {
   [mutationTypes.SET_LOADING](state, loading) {
     state.loading = Boolean(loading);
   },
-  [mutationTypes.CREATE_TOURNAMENT](state, tournament) {
-    tournament.id = uuidv4();
-    console.log("Saving", { name: tournament.name, id: tournament.id });
+  [mutationTypes.NEW_TOURNAMENT](state, tournament) {
     state.tournaments.push(tournament);
-    const all = JSON.parse(localStorage.getItem("tournaments"));
-    const year = tournament.getYear();
-    all[year] = all[year] || [];
-    all[year].push(tournament);
-    localStorage.setItem("tournaments", JSON.stringify(all));
   },
   [mutationTypes.UPDATE_TOURNAMENT](state, tournament) {
     const index = state.tournaments.findIndex(t => t.id === tournament.id);
     state.tournaments[index] = tournament
-    const all = JSON.parse(localStorage.getItem("tournaments"));
-    const year = tournament.getYear();
-    all[year] = state.tournaments;
-    localStorage.setItem("tournaments", JSON.stringify(all));
   },
   [mutationTypes.SET_TOURNAMENTS](state, tournaments) {
     state.tournaments = tournaments;
@@ -71,15 +74,20 @@ const actions = {
   },
   load: async ({ commit }, { year }) => {
     commit(mutationTypes.SET_LOADING, true);
-    const result = await API.graphql({
-      query: listTournaments,
-      filter: { year }
-    });
-    console.log("tournaments/load", { ...result });
-    const tournaments = result.data.listTournaments.items.map((r) => {
-      return { ...r };
-    });
-    commit(mutationTypes.SET_TOURNAMENTS, tournaments);
+    try {
+      const result = await API.graphql({
+        query: listTournaments,
+        filter: { year }
+      });
+      console.log("tournaments/load", { ...result });
+      const tournaments = result.data.listTournaments.items.map((r) => {
+        return { ...r };
+      });
+      commit(mutationTypes.SET_TOURNAMENTS, tournaments);
+    } catch (error) {
+      console.log("tournaments/load", error);
+      notifyError(error);
+    }
     commit(mutationTypes.SET_LOADING, false);
   },
   loadTeams: async ({ commit }) => {
@@ -90,26 +98,24 @@ const actions = {
   addTeam: async ({ commit }, { team }) => {
     commit(mutationTypes.ADD_TEAM, team);
   },
-  create: async ({ commit, dispatch }, { tournament }) => {
+  create: async ({ commit }, { tournament }) => {
+    commit(mutationTypes.SET_LOADING, true);
     try {
-      commit(mutationTypes.SET_LOADING, true);
-      const result = API.graphql({
+      const result = await API.graphql({
         query: createTournament,
-        variables: { input: tournament },
+        variables: { input: tournament.toJson() },
       });
       console.log("tournaments/create", { ...result });
-      commit(mutationTypes.CREATE_TOURNAMENT, tournament);
-      dispatch("load", { year: tournament.getYear() });
+      commit(mutationTypes.NEW_TOURNAMENT, result.data.createTournament);
       Toast.open({
         message: `Tournament created`,
         type: "is-success"
       });
     } catch (err) {
-      Toast.open({
-        message: err.message,
-        type: "is-danger"
-      });
+      console.log("tournaments/create", err);
+      notifyError(err);
     }
+    commit(mutationTypes.SET_LOADING, false);
   },
   update: ({ commit, dispatch }, { tournament }) => {
     try {

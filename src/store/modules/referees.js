@@ -50,7 +50,7 @@ const actions = {
   setCurrent({ commit }, { referee }) {
     commit(mutationTypes.SET_CURRENT, referee);
   },
-  load: async ({ commit }) => {
+  load: async ({ commit, rootGetters }) => {
     commit(mutationTypes.SET_LOADING, true);
     //const result = JSON.parse(localStorage.getItem("referees"));
     const result = await API.graphql({
@@ -61,6 +61,10 @@ const actions = {
       return { ...r };
     });
     commit(mutationTypes.SET_REFEREES, referees);
+    const currentUser = rootGetters["auth/user"];
+    const currentReferee = referees.find((r) => r.userId == currentUser.username);
+    console.log({ currentUser, currentReferee });
+    commit(mutationTypes.SET_CURRENT, currentReferee);
     commit(mutationTypes.SET_LOADING, false);
   },
   create: async ({ commit, dispatch }, { referee }) => {

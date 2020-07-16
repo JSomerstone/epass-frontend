@@ -1,108 +1,6 @@
 /* eslint-disable */
 // this is an auto generated file. This will be overwritten
 
-export const onCreateTournament = /* GraphQL */ `
-  subscription OnCreateTournament {
-    onCreateTournament {
-      id
-      name
-      international
-      city
-      country
-      dates
-      td {
-        id
-        firstName
-        lastName
-        country
-        email
-        level
-        createdAt
-        updatedAt
-      }
-      referees {
-        id
-        firstName
-        lastName
-        country
-        email
-        level
-        createdAt
-        updatedAt
-      }
-      createdAt
-      updatedAt
-    }
-  }
-`;
-export const onUpdateTournament = /* GraphQL */ `
-  subscription OnUpdateTournament {
-    onUpdateTournament {
-      id
-      name
-      international
-      city
-      country
-      dates
-      td {
-        id
-        firstName
-        lastName
-        country
-        email
-        level
-        createdAt
-        updatedAt
-      }
-      referees {
-        id
-        firstName
-        lastName
-        country
-        email
-        level
-        createdAt
-        updatedAt
-      }
-      createdAt
-      updatedAt
-    }
-  }
-`;
-export const onDeleteTournament = /* GraphQL */ `
-  subscription OnDeleteTournament {
-    onDeleteTournament {
-      id
-      name
-      international
-      city
-      country
-      dates
-      td {
-        id
-        firstName
-        lastName
-        country
-        email
-        level
-        createdAt
-        updatedAt
-      }
-      referees {
-        id
-        firstName
-        lastName
-        country
-        email
-        level
-        createdAt
-        updatedAt
-      }
-      createdAt
-      updatedAt
-    }
-  }
-`;
 export const onCreateReferee = /* GraphQL */ `
   subscription OnCreateReferee {
     onCreateReferee {
@@ -112,6 +10,7 @@ export const onCreateReferee = /* GraphQL */ `
       country
       email
       level
+      userId
       createdAt
       updatedAt
     }
@@ -126,6 +25,7 @@ export const onUpdateReferee = /* GraphQL */ `
       country
       email
       level
+      userId
       createdAt
       updatedAt
     }
@@ -140,6 +40,73 @@ export const onDeleteReferee = /* GraphQL */ `
       country
       email
       level
+      userId
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const onCreateTournament = /* GraphQL */ `
+  subscription OnCreateTournament {
+    onCreateTournament {
+      id
+      name
+      international
+      city
+      country
+      year
+      dates
+      td
+      referees {
+        games
+        tenSeconds
+        id
+      }
+      teams
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const onUpdateTournament = /* GraphQL */ `
+  subscription OnUpdateTournament {
+    onUpdateTournament {
+      id
+      name
+      international
+      city
+      country
+      year
+      dates
+      td
+      referees {
+        games
+        tenSeconds
+        id
+      }
+      teams
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const onDeleteTournament = /* GraphQL */ `
+  subscription OnDeleteTournament {
+    onDeleteTournament {
+      id
+      name
+      international
+      city
+      country
+      year
+      dates
+      td
+      referees {
+        games
+        tenSeconds
+        id
+      }
+      teams
       createdAt
       updatedAt
     }

@@ -1,6 +1,43 @@
 /* eslint-disable */
 // this is an auto generated file. This will be overwritten
 
+export const getReferee = /* GraphQL */ `
+  query GetReferee($id: ID!) {
+    getReferee(id: $id) {
+      id
+      firstName
+      lastName
+      country
+      email
+      level
+      userId
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const listReferees = /* GraphQL */ `
+  query ListReferees(
+    $filter: ModelRefereeFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    listReferees(filter: $filter, limit: $limit, nextToken: $nextToken) {
+      items {
+        id
+        firstName
+        lastName
+        country
+        email
+        level
+        userId
+        createdAt
+        updatedAt
+      }
+      nextToken
+    }
+  }
+`;
 export const getTournament = /* GraphQL */ `
   query GetTournament($id: ID!) {
     getTournament(id: $id) {
@@ -9,27 +46,15 @@ export const getTournament = /* GraphQL */ `
       international
       city
       country
+      year
       dates
-      td {
-        id
-        firstName
-        lastName
-        country
-        email
-        level
-        createdAt
-        updatedAt
-      }
+      td
       referees {
+        games
+        tenSeconds
         id
-        firstName
-        lastName
-        country
-        email
-        level
-        createdAt
-        updatedAt
       }
+      teams
       createdAt
       updatedAt
     }
@@ -48,66 +73,17 @@ export const listTournaments = /* GraphQL */ `
         international
         city
         country
+        year
         dates
-        td {
-          id
-          firstName
-          lastName
-          country
-          email
-          level
-          createdAt
-          updatedAt
-        }
+        td
         referees {
+          games
+          tenSeconds
           id
-          firstName
-          lastName
-          country
-          email
-          level
-          createdAt
-          updatedAt
         }
+        teams
         createdAt
         updatedAt
-      }
-      nextToken
-    }
-  }
-`;
-export const getReferee = /* GraphQL */ `
-  query GetReferee($id: ID!) {
-    getReferee(id: $id) {
-      id
-      firstName
-      lastName
-      country
-      email
-      level
-      createdAt
-      updatedAt
-      userId
-    }
-  }
-`;
-export const listReferees = /* GraphQL */ `
-  query ListReferees(
-    $filter: ModelRefereeFilterInput
-    $limit: Int
-    $nextToken: String
-  ) {
-    listReferees(filter: $filter, limit: $limit, nextToken: $nextToken) {
-      items {
-        id
-        firstName
-        lastName
-        country
-        email
-        level
-        createdAt
-        updatedAt
-        userId
       }
       nextToken
     }

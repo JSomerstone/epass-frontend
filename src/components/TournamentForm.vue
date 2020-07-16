@@ -242,6 +242,7 @@
                           </b-taginput>
                       </b-field>
                   </div>
+              <pre>{{ tournament.toJson() }}</pre>
               </div>
           </div>
         </div>
@@ -258,6 +259,9 @@
             </b-button>
             <b-button @click="handleCancel" type="is-light" icon-left="cancel" class="card-footer-item" >
                 Cancel
+            </b-button>
+            <b-button @click="handleFill">
+              Fill
             </b-button>
         </div>
     </b-collapse>
@@ -324,6 +328,9 @@ export default {
     },
     allTeams: function() {
         return this.$store.getters['tournaments/teams'] || [];
+    },
+    allReferees: function() {
+        return this.$store.getters['referees/all'] || [];
     }
   },
   methods: {
@@ -356,7 +363,7 @@ export default {
     },
     handleSave() {
       if (this.noOfGames > 0 || this.noOfGames > 0) {
-        const current = this.$store.getters["referees/current"];
+        const current = this.getCurrent();
         this.tournament.setGames(current.id, this.noOfGames, this.noOfTenSeconds);
       }
       if (this.tournament.id) {
@@ -366,7 +373,7 @@ export default {
         this.$buefy.toast.open({ message: "Saving new tournament... "});
         this.$store.dispatch("tournaments/create", { tournament: this.tournament });
       }
-      this.$router.push({ path: `/tournaments/${this.$route.params.year}` });
+      //this.$router.push({ path: `/tournaments/${this.$route.params.year}` });
     },
     handleCancel() {
       this.$buefy.toast.open({
@@ -439,7 +446,33 @@ export default {
         this.$buefy.toast.open({ message: "Updating..." });
         this.$store.dispatch("referees/update", { referee: this.tournament.td });
         this.tdEmail = "";
-      }
+      },
+      handleFill() {
+        this.tournament = new Tournament({
+          name: "Test tournament",
+          year: 2020,
+          city: "Helsinki",
+          country: "Finland",
+          dates: ["2020-07-16","2020-07-16"],
+          td: this.getCurrent(),
+          referees: [
+            {
+              "id": "e901993c-6021-4533-bae3-6a171726517d",
+              "games": 0,
+              "tenSeconds": 0
+            },
+            {
+              "id": "024a1a55-16cc-4b86-8fbf-0441daa30b22",
+              "games": 0,
+              "tenSeconds": 0
+            }
+          ],
+          teams: this.existingTeams
+        }, this.allReferees);
+        this.countryQuery = this.tournament.country;
+        this.noOfTenSeconds = 10;
+        this.noOfGames = 6;
+      },
   },
   watch: {
     noOfGames: function() {

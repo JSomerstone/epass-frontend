@@ -24,7 +24,12 @@ export default class Tournament {
     //this.dates = dates;
     this.td = td.id ? td : this.getRef(td, refereeList);
     this.referees = referees.map(
-      r => r.id ? r : this.getRef(r, refereeList)
+      r => {
+        return {
+          ...this.getRef(r.id, refereeList),
+          ...r
+        }
+      }
     );
     this.teams = teams;
   }
@@ -59,14 +64,12 @@ export default class Tournament {
       city: this.city,
       country: this.country,
       dates: this.dates.map(d => d.toUTCString()),
+      year: this.year,
       td: this.td.id,
       referees: this.referees.map(
         r => {
-          return {
-            id: r.id,
-            games: r.games,
-            tenSeconds: r.tenSeconds
-          }
+          const { id, games = 0, tenSeconds = 0 } = r;
+          return { id, games, tenSeconds };
         }
       ),
       teams: this.teams,
