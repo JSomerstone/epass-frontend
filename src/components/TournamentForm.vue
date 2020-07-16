@@ -321,7 +321,7 @@ export default {
     loadTournamentForm(tournament) {
       this.t = new Tournament(tournament, this.$store.getters['referees/all']);
       this.countryQuery = tournament.country;
-      const current = this.getCurrent();
+      const current = this.getCurrent() || { id: null };
       const { games = 0, tenSeconds = 0 } = tournament.referees.find(
         r => r.id == current.id
       ) || {};
@@ -446,7 +446,10 @@ export default {
       }
     },
     tournament: function(tournament) {
-      this.loadTournamentForm(this.tournament);
+      setTimeout(
+        () => this.loadTournamentForm(this.tournament),
+        500
+      );
     }
   },
   mounted() {

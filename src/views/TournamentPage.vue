@@ -1,6 +1,5 @@
 <template>
   <div>
-    <b-loading is-full-page :active.sync="isLoading" ></b-loading>
     <layout>
         <template v-slot:hero-title>
         {{ tournament.name }}
@@ -10,7 +9,7 @@
           {{ tournament.country }},
           {{ tournament.dates | daterange }}
         </template>
-        <router-link :to="{ name: 'tournaments', params: { year: this.year }}">
+        <router-link :to="{ name: 'tournaments', params: { year: this.year }}" class="button is-link">
           Back
         </router-link>
         <tournament-form 

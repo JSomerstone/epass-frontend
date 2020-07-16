@@ -16,6 +16,8 @@
     </div>
   </section>
   <section class="content">
+    <b-loading :active.sync="isLoading" >
+    </b-loading>
     <div class="container">
       <h1><slot name="title"></slot></h1>
       <slot></slot>
@@ -31,6 +33,13 @@ import Navbar from "./Navbar"
 export default {
   components: {
     Navbar
-  }
+  },
+  computed: {
+    isLoading: function() {
+      return this.$store.getters['tournaments/loading'] 
+        || this.$store.getters['referees/loading']
+        || this.$store.getters['auth/loading'];
+    }
+  },
 }
 </script>
