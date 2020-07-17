@@ -1,7 +1,4 @@
-// import axios from "axios";
-//import Referee from "../models/RefereeClass";
-import { ToastProgrammatic as Toast } from 'buefy'
-import { errorMessage, successMessage, notifyException } from "../../utils/notificationUtils";
+import { successMessage, notifyException } from "../../utils/notificationUtils";
 import { createReferee, updateReferee } from "../../graphql/mutations";
 import { listReferees } from "../../graphql/queries";
 import { API } from "aws-amplify";
@@ -82,7 +79,7 @@ const actions = {
       onSuccess(result.data.createReferee);
       dispatch("load");
     } catch (err) {
-      errorMessage(err.message || "Saving referee failed", error);
+      notifyException(err);
     }
     commit(mutationTypes.SET_LOADING, false);
   },

@@ -264,7 +264,7 @@
 <script>
 import RefereeForm from "./RefereeForm";
 import Tournament from "../store/models/Tournament";
-import { infoMessage, warningMessage, successMessage } from "../utils/notificationUtils";
+import { infoMessage, warningMessage } from "../utils/notificationUtils";
 
 const defaults = {
   t: new Tournament(),
@@ -449,7 +449,7 @@ export default {
     },
     tournament: function(tournament) {
       setTimeout(
-        () => this.loadTournamentForm(this.tournament),
+        () => this.loadTournamentForm(tournament),
         500
       );
     }

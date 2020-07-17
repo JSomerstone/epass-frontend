@@ -158,7 +158,8 @@ import { infoMessage } from '../utils/notificationUtils';
       handleLogin: function() {
         this.$store.dispatch('auth/login', { 
           email: this.referee.email,
-          password: this.password
+          password: this.password,
+          onSuccess: this.findExistingProfile
         });
       },
 
@@ -235,11 +236,6 @@ import { infoMessage } from '../utils/notificationUtils';
       },
       userId: function(userId) {
         this.referee.userId = userId;
-      },
-      loggedIn: function(loggedIn) {
-        if (loggedIn && this.signupEmail && this.userId) {
-          this.findExistingProfile();
-        }
       }
     }
   }

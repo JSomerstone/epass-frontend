@@ -14,10 +14,14 @@
           type="is-primary" 
           expanded 
           icon-left="login-variant"
-          v-bind:loading="isLoading"
           v-bind:disabled="!authFormReady"
         >Login
         </b-button>
+        <router-link
+          class="button is-text"
+          :to="{ name: 'forgot-password'}"
+        >Forgot password?
+        </router-link>
       </b-field>
     </div>
     <div class="column"></div>

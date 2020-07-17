@@ -24,8 +24,9 @@
     watch: {
       loggedIn: function(loggedIn) {
         if (loggedIn) {
-          this.$store.getters['auth/signupStep'] > 0
-            ||  this.$router.push({ name: "frontpage" });
+          if (!this.$store.getters['auth/signupOngoing']) {
+            this.$router.push({ name: "frontpage" });
+          }
         } else {
           this.$router.push({ name: "login" });
         }

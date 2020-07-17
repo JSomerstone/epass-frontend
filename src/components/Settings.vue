@@ -174,7 +174,7 @@
 </style>
 <script>
 import Referee from "../store/models/RefereeClass";
-import { infoMessage, warningMessage, successMessage } from '../utils/notificationUtils';
+import { infoMessage, warningMessage } from '../utils/notificationUtils';
 export default {
   data() {
     return {
@@ -243,7 +243,7 @@ export default {
       })
     },
 
-    emailUpdated(result) {
+    emailUpdated() {
       this.referee.email = this.newEmail;
       this.handleProfileSave();
     },

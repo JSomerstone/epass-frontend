@@ -149,14 +149,14 @@ const actions = {
         dispatch("setLoading", { loading: false });
       });
   },
-  async login({ commit, dispatch }, { email, password }) {
+  async login({ commit, dispatch }, { email, password, onSuccess = () => {} }) {
     dispatch("setLoading", { loading: true });
 
     Auth.signIn(email, password)
       .then((user) => {
-        commit(mutationTypes.SET_USER_INFO, user);
-        commit(mutationTypes.SIGNUP_STEP, signupSteps.profile);
         successMessage(`Welcome ${user.attributes.email}`);
+        commit(mutationTypes.SET_USER_INFO, user);
+        onSuccess(user);
       })
       .catch((error) => {
         notifyException(error);
@@ -222,12 +222,31 @@ const actions = {
     { verificationCode, onSuccess = () => {} }
   ) {
     commit(mutationTypes.SET_LOADING, true);
-    Auth.verifyCurrentUserAttributeSubmit('email', verificationCode)
+    Auth.verifyCurrentUserAttributeSubmit("email", verificationCode)
       .then(onSuccess)
       .catch(notifyException)
       .finally(() => {
         commit(mutationTypes.SET_LOADING, false);
       });
+  },
+  
+  async forgotPassword({ commit }, { email, onSuccess = () => {} }) {
+    commit(mutationTypes.SET_LOADING, true);
+    Auth.forgotPassword(email)
+      .then(onSuccess)
+      .catch(notifyException)
+      .finally(() => commit(mutationTypes.SET_LOADING, false));
+  },
+
+  async forgotPasswordConfirm(
+    { commit },
+    { email, code, newPassword, onSuccess = () => { } }
+  ) {
+    commit(mutationTypes.SET_LOADING, true);
+    Auth.forgotPasswordSubmit(email, code, newPassword)
+      .then(onSuccess)
+      .catch(notifyException)
+      .finally(() => commit(mutationTypes.SET_LOADING, false));
   },
 };
 
@@ -236,6 +255,7 @@ const auth = {
   state,
   getters: {
     loading: (state) => state.loading,
+    signupOngoing: state => state.signupStep > 0 && state.signupStep < signupSteps.done,
     signupStep: (state) => state.signupStep,
     signupEmail: (state) => state.signupEmail,
     signupUserId: (state) => state.signupUserId,

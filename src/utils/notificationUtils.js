@@ -15,8 +15,6 @@ export const notifyException = (error) => {
   if (error.message) {
     errorMessage(error.message);
   } else if (error.errors) {
-    for (e of error.errors) {
-      errorMessage(e.message);
-    }
+    error.errors.map((subError) => errorMessage(subError.message));
   }
 }

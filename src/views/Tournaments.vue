@@ -11,9 +11,6 @@
     <template v-slot:hero-title v-else>
       Tournaments {{ year }}
     </template>
-    <router-link :to="{ name: 'tournaments', params: { year: this.year }}">
-      Back
-    </router-link>
     <tournament-form 
       class="tournament-form" 
       :selected="tournamentId" 
