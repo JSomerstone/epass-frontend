@@ -19,7 +19,7 @@ const router = new Router({
       component: Tournaments,
     },
     {
-      path: "/settings",
+      path: "/settings/:category?",
       name: "settings",
       component: Settings,
     },

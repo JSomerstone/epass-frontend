@@ -4,8 +4,8 @@
     <b-collapse
       class="card"
       animation="slide"
-      :open="isOpen == P"
-      @open="isOpen = P"
+      :open="isOpen == 'profile'"
+      @open="isOpen = 'profile'"
     >
       <div
           slot="trigger"
@@ -86,8 +86,8 @@
     <b-collapse
       class="card"
       animation="slide"
-      :open="isOpen == S"
-      @open="isOpen = S"
+      :open="isOpen == 'security'"
+      @open="isOpen = 'security'"
     >
       <div
           slot="trigger"
@@ -145,8 +145,8 @@
     <b-collapse
       class="card"
       animation="slide"
-      :open="isOpen == N"
-      @open="isOpen = N"
+      :open="isOpen == 'association'"
+      @open="isOpen = 'association'"
     >
       <div
           slot="trigger"
@@ -176,12 +176,9 @@
 import Referee from "../store/models/RefereeClass";
 import { infoMessage, warningMessage, successMessage } from '../utils/notificationUtils';
 export default {
-  data: () => {
+  data() {
     return {
-      S: 'security',
-      P: 'profile',
-      N: 'national-association',
-      isOpen: 'profile',
+      isOpen: this.$route.params.category || 'profile',
       referee: new Referee(),
       newEmail: "",
       currentPassword: "",
@@ -277,6 +274,12 @@ export default {
   watch: {
     userId: function() {
       this.loadData();
+    },
+    isOpen: function(category){
+      this.$router.replace({
+        name: 'settings',
+        params: { category }
+      });
     }
   },
   created() {
