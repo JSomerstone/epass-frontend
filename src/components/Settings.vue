@@ -224,12 +224,13 @@ export default {
       infoMessage("Updating email...");
     },
     handlePasswordUpdate() {
-      if (this.currentPassword !== "password") {
-        warningMessage("Incorrect password");
-      } else if (this.newPassword !== this.confirmPassword) {
+      if (this.newPassword !== this.confirmPassword) {
         warningMessage("Passwords do not match");
       } else{
-        successMessage("Password updated... not");
+        this.$store.dispatch("auth/changePassword", {
+          oldPassword: this.currentPassword,
+          newPassword: this.newPassword
+        });
       }
     },
     getCountries: function(name) {

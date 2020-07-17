@@ -186,7 +186,23 @@ const actions = {
       .finally(() => {
         dispatch("setLoading", { loading: false });
       });
-  }
+  },
+
+  async changePassword({ commit }, { oldPassword, newPassword }) {
+    commit(mutationTypes.SET_LOADING, true);
+    Auth.currentAuthenticatedUser()
+      .then((user) => {
+        return Auth.changePassword(user, oldPassword, newPassword);
+      })
+      .then((data) => {
+        successMessage("Password updated");
+        console.log(data);
+      })
+      .catch(notifyException)
+      .finally(() => {
+        commit(mutationTypes.SET_LOADING, true);
+      });
+  },
 };
 
 const auth = {
