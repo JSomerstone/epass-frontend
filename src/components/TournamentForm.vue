@@ -149,6 +149,7 @@
                               v-model="noOfGames"
                               :min="0"
                               :max="20"
+                              expanded
                             ></b-numberinput>
                           </b-field>
                         </div>
@@ -160,6 +161,7 @@
                               v-model="noOfTenSeconds"
                               :min="0"
                               :max="20"
+                              expanded
                             ></b-numberinput>
                           </b-field>
                         </div>
