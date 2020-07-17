@@ -22,32 +22,32 @@
       <div class="card-content">
         <div class="content referee-form">
           <div class="field">
-            <b-field>
+            <b-field label="Given name" label-position="on-border">
               <b-input 
                 v-model="referee.firstName" 
                 required
-                placeholder="Given name" 
-                :expanded="true"
+                expanded
               ></b-input>
+            </b-field>
+            <b-field label="Family name" label-position="on-border">
               <b-input 
                 v-model="referee.lastName" 
                 required
-                placeholder="Family name" 
-                :expanded="true"
+                expanded
               ></b-input>
             </b-field>
           </div>
           <div class="field">
             <b-field label="Nationality" label-position="on-border">
               <b-autocomplete
-                  v-model="countryQuery"
-                  placeholder="As in passport"
-                  icon="passport"
-                  :keep-first="true"
-                  required
-                  :data="getCountries(countryQuery)"
-                  :expanded="true"
-                  @select="option => referee.country = option"
+                v-model="countryQuery"
+                placeholder="As in passport"
+                icon="passport"
+                :keep-first="true"
+                required
+                expanded
+                :data="getCountries(countryQuery)"
+                @select="option => referee.country = option"
               >
               </b-autocomplete>
             </b-field>
@@ -71,7 +71,7 @@
           <div class="field">
             <b-button 
               type="is-primary" 
-              @click="handleSave" 
+              @click="handleProfileSave" 
               icon-left="account-check"
               v-bind:loading="isLoading"
             >
@@ -102,7 +102,43 @@
           </a>
       </div>
       <div class="card-content">
-        Placeholder for email/password/2fa settings
+        <form>
+          <div class="field">
+            <b-field label="Email">
+              <b-input type="email" v-model="newEmail" required/>
+            </b-field>
+          </div>
+        </form>
+        <form>
+          <b-field label="Change password"></b-field>
+          <div class="field">
+            <b-field label="Current" label-position="on-border">
+              <b-input type="password" v-model="currentPassword" required/>
+            </b-field>
+          </div>
+          <div class="field">
+            <b-field label="New" label-position="on-border">
+              <b-input type="password" v-model="newPassword" required/>
+            </b-field>
+          </div>
+          <div class="field">
+            <b-field label="Confirm new" label-position="on-border">
+              <b-input type="password" v-model="confirmPassword" required/>
+            </b-field>
+          </div>
+          <div class="field">
+            <b-button 
+              @click="handleSecuritySave" 
+              type="is-primary" 
+              icon-left="account-check"
+            >Update
+            </b-button>
+          </div>
+        </form>
+        <hr />
+        <div>
+          Placeholder for 2FA settings
+        </div>
       </div>
     </b-collapse><!-- /SERCURITY -->
     <!-- ASSOCIATION -->
@@ -138,6 +174,7 @@
 </style>
 <script>
 import Referee from "../store/models/RefereeClass";
+import { infoMessage, warningMessage, successMessage } from '../utils/notificationUtils';
 export default {
   data: () => {
     return {
@@ -146,7 +183,10 @@ export default {
       N: 'national-association',
       isOpen: 'profile',
       referee: new Referee(),
-      password: "",
+      newEmail: "",
+      currentPassword: "",
+      newPassword: "",
+      confirmPassword: "",
       countryQuery: "",
     }
   },
@@ -162,7 +202,7 @@ export default {
     },
   },
   methods: {
-    handleSave: function() {
+    handleProfileSave: function() {
       if (this.referee.id) {
         this.$store.dispatch("referees/update", { referee: this.referee });
       } else {
@@ -170,7 +210,27 @@ export default {
       }
     },
     handleCancel: function() {
-      this.referee = new Referee({ id: null });
+      this.loadData();
+    },
+    handleSecuritySave: function() {
+      if (this.referee.email !== this.newEmail) {
+        this.handleEmailUpdate();
+      }
+      if (this.newPassword != "") {
+        this.handlePasswordUpdate();
+      }
+    },
+    handleEmailUpdate: function() {
+      infoMessage("Updating email...");
+    },
+    handlePasswordUpdate() {
+      if (this.currentPassword !== "password") {
+        warningMessage("Incorrect password");
+      } else if (this.newPassword !== this.confirmPassword) {
+        warningMessage("Passwords do not match");
+      } else{
+        successMessage("Password updated... not");
+      }
     },
     getCountries: function(name) {
       return name
@@ -182,6 +242,7 @@ export default {
         this.$store.getters["referees/byUserId"](this.userId) || {}
       );
       this.countryQuery = this.referee.country;
+      this.newEmail = this.referee.email;
     }
   },
   watch: {
