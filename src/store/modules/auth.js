@@ -123,7 +123,10 @@ const actions = {
     dispatch("setLoading", { loading: false });
   },
 
-  async verifyAddress({ commit, dispatch, state }, { code, onSuccess = () => { } }) {
+  async verifyAddress(
+    { commit, dispatch, state },
+    { code, onSuccess = () => {} }
+  ) {
     dispatch("setLoading", { loading: true });
     try {
       await Auth.confirmSignUp(state.signupEmail, code);
@@ -200,7 +203,34 @@ const actions = {
       })
       .catch(notifyException)
       .finally(() => {
-        commit(mutationTypes.SET_LOADING, true);
+        commit(mutationTypes.SET_LOADING, false);
+      });
+  },
+
+  async changeEmail({ commit }, { email, onSuccess = () => {} }) {
+    commit(mutationTypes.SET_LOADING, true);
+    let user = await Auth.currentAuthenticatedUser();
+    Auth.updateUserAttributes(user, { email })
+      .then((data) => {
+        onSuccess(data);
+        console.log(data);
+      })
+      .catch(notifyException)
+      .finally(() => {
+        commit(mutationTypes.SET_LOADING, false);
+      });
+  },
+
+  async verifyEmailChange(
+    { commit },
+    { verificationCode, onSuccess = () => {} }
+  ) {
+    commit(mutationTypes.SET_LOADING, true);
+    Auth.verifyCurrentUserAttributeSubmit('email', verificationCode)
+      .then(onSuccess)
+      .catch(notifyException)
+      .finally(() => {
+        commit(mutationTypes.SET_LOADING, false);
       });
   },
 };

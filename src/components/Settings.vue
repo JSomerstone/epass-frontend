@@ -126,15 +126,15 @@
               <b-input type="password" v-model="confirmPassword" required/>
             </b-field>
           </div>
-          <div class="field">
-            <b-button 
-              @click="handleSecuritySave" 
-              type="is-primary" 
-              icon-left="account-check"
-            >Update
-            </b-button>
-          </div>
         </form>
+        <div class="field">
+          <b-button 
+            @click="handleSecuritySave" 
+            type="is-primary" 
+            icon-left="account-check"
+          >Update
+          </b-button>
+        </div>
         <hr />
         <div>
           Placeholder for 2FA settings
@@ -222,7 +222,36 @@ export default {
     },
     handleEmailUpdate: function() {
       infoMessage("Updating email...");
+      this.$store.dispatch("auth/changeEmail", {
+        email: this.newEmail,
+        onSuccess: this.openConfirmDialog,
+      })
     },
+    openConfirmDialog() {
+      this.$buefy.dialog.prompt({
+        message: `A verification code has been sent to <i>&lt;${ this.newEmail }&gt;</i>, please enter it here:`,
+        inputAttrs: {
+            placeholder: 'Verification code',
+            maxlength: 6
+        },
+        trapFocus: true,
+        onConfirm: this.handleConfirmEmailUpdate
+      });
+    },
+
+    handleConfirmEmailUpdate: function(verificationCode) {
+      this.$store.dispatch("auth/verifyEmailChange", {
+        verificationCode,
+        onSuccess: this.emailUpdated,
+      })
+    },
+
+    emailUpdated(result) {
+      console.log("emailUpdated:result", result);
+      this.referee.email = this.newEmail;
+      this.handleProfileSave();
+    },
+
     handlePasswordUpdate() {
       if (this.newPassword !== this.confirmPassword) {
         warningMessage("Passwords do not match");
