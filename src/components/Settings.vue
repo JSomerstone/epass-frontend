@@ -247,7 +247,6 @@ export default {
     },
 
     emailUpdated(result) {
-      console.log("emailUpdated:result", result);
       this.referee.email = this.newEmail;
       this.handleProfileSave();
     },

@@ -197,9 +197,8 @@ const actions = {
       .then((user) => {
         return Auth.changePassword(user, oldPassword, newPassword);
       })
-      .then((data) => {
+      .then(() => {
         successMessage("Password updated");
-        console.log(data);
       })
       .catch(notifyException)
       .finally(() => {
@@ -211,10 +210,7 @@ const actions = {
     commit(mutationTypes.SET_LOADING, true);
     let user = await Auth.currentAuthenticatedUser();
     Auth.updateUserAttributes(user, { email })
-      .then((data) => {
-        onSuccess(data);
-        console.log(data);
-      })
+      .then(onSuccess)
       .catch(notifyException)
       .finally(() => {
         commit(mutationTypes.SET_LOADING, false);

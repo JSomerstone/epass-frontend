@@ -29,7 +29,7 @@
                     Sign up
                   </router-link>
                 </div>
-                <b-navbar-dropdown  v-else :label="username">
+                <b-navbar-dropdown  v-else :label="username" :key="username">
                   <b-navbar-item to="/settings" tag="router-link">
                       <b-icon icon="account-cog-outline"></b-icon> Settings
                   </b-navbar-item>
@@ -67,7 +67,8 @@ export default {
       return this.$store.getters['auth/user'];
     },
     username: function() {
-      return this.currentUser.email.split("@").shift()
+      const { firstName = "User", lastName = "account"} = this.$store.getters['referees/current'] || {}
+      return `${firstName} ${lastName}`;
     }
   },
   methods: {
