@@ -6,8 +6,8 @@
             ePass
           </b-navbar-item>
         </template>
-        <template slot="start" v-if="isLoggedIn">
-          <b-navbar-dropdown label="Tournaments">
+        <template slot="start">
+          <b-navbar-dropdown label="Tournaments"  v-if="isLoggedIn">
               <b-navbar-item 
                 v-for="year in years"
                 v-bind:key="year"
@@ -17,6 +17,11 @@
                   {{ year }}
               </b-navbar-item>
           </b-navbar-dropdown>
+          <b-navbar-item v-else>
+            <router-link :to="{ name: 'about'}">
+              About
+            </router-link>
+          </b-navbar-item>
         </template>
 
         <template slot="end">

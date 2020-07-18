@@ -2,6 +2,7 @@ import Vue from "vue";
 import Router from "vue-router";
 import store from "./store/index";
 
+import About from "./views/About.vue";
 import ErrorPage from "./views/ErrorPage.vue";
 import TournamentPage from "./views/TournamentPage.vue";
 import Tournaments from "./views/Tournaments.vue";
@@ -18,6 +19,11 @@ const router = new Router({
       path: "/",
       name: "frontpage",
       component: Tournaments,
+    },
+    {
+      path: "/about/",
+      name: "about",
+      component: About,
     },
     {
       path: "/settings/:category?",
@@ -62,7 +68,7 @@ const router = new Router({
 
 router.beforeEach((to, from, next) => {
   const isAuthenticated = store.getters["auth/loggedIn"];
-  const allowed = ["error", "login", "signup", "forgot-password"];
+  const allowed = ["about", "error", "login", "signup", "forgot-password"];
   if (isAuthenticated || allowed.indexOf(to.name) >= 0 ) {
      next();
   }
