@@ -25,29 +25,29 @@ const router = new Router({
       component: Settings,
     },
     {
-      path: "/tournaments/:year",
+      path: "/tournaments/:year/",
       name: "tournaments",
       component: Tournaments,
     },
     {
-      path: "/tournament/:id",
+      path: "/tournament/:id/",
       name: "tournament",
       component: TournamentPage,
     },
     {
-      path: "/signup",
+      path: "/signup/",
       name: "signup",
       component: Signup,
       props: { tab: 1 },
     },
     {
-      path: "/login",
+      path: "/login/",
       name: "login",
       component: Signup,
       props: { tab: 0 },
     },
     {
-      path: "/forgot-password",
+      path: "/forgot-password/",
       name: "forgot-password",
       component: ForgotPassword
     },
