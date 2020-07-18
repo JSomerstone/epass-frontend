@@ -6,7 +6,7 @@
             ePass
           </b-navbar-item>
         </template>
-        <template slot="start">
+        <template slot="start" v-if="isLoggedIn">
           <b-navbar-dropdown label="Tournaments">
               <b-navbar-item 
                 v-for="year in years"
@@ -35,9 +35,6 @@
                   </b-navbar-item>
                   <b-navbar-item @click="handleLogout">
                       <b-icon icon="logout-variant"></b-icon> Logout
-                  </b-navbar-item>
-                  <b-navbar-item>
-                    <pre>{{ currentUser }}</pre>
                   </b-navbar-item>
               </b-navbar-dropdown>
             </b-navbar-item>
