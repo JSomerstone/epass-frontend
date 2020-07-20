@@ -3,7 +3,7 @@
     <template v-slot:hero-title>
       Goalball ePass
     </template>
-    <b-tabs position="is-centered" class="block" v-model="activeTab">
+    <b-tabs position="is-centered" class="block" v-model="activeTab" @change="tabChanged">
       <b-tab-item label="Login">
           <login-form />
       </b-tab-item>
@@ -25,7 +25,7 @@ export default {
   },
   data() {
     return {
-      activeTab: 0
+      activeTab: this.tab
     }
   },
   computed: {
@@ -34,8 +34,12 @@ export default {
     }
   },
   props: ["tab"],
-  mounted(){
-    this.activeTab = Number(this.tab);
-  }
+  methods: {
+    tabChanged: function(tab) {
+      this.$router.replace({
+        name: tab == 0 ? "login" : "signup",
+      });
+    }
+  },
 }
 </script>
