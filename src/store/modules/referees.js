@@ -7,7 +7,7 @@ const state = {
   loading: false,
   referees: [],
   queryResult: [],
-  current: null,
+  current: {},
 };
 
 const mutationTypes = {
@@ -62,8 +62,8 @@ const actions = {
       return { ...r };
     });
     commit(mutationTypes.SET_REFEREES, referees);
-    const currentUser = rootGetters["auth/user"];
-    const currentReferee = referees.find((r) => r.userId == currentUser.userId);
+    const { userId = null } = rootGetters["auth/user"];
+    const currentReferee = referees.find((r) => r.userId == userId) || {};
     commit(mutationTypes.SET_CURRENT, currentReferee);
     commit(mutationTypes.SET_LOADING, false);
   },

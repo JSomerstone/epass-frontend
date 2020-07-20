@@ -82,7 +82,10 @@ export default {
   },
   watch: {
     // call again the method if the route changes
-    '$route': 'fetchData'
+    '$route': 'fetchData',
+    currentRef: function(referee) {
+      referee && this.$store.dispatch("tournaments/filter");
+    }
   },
 }
 </script>
