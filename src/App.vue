@@ -1,5 +1,6 @@
 <template>
   <div id="app">
+    <vue-headful v-bind:title="title" />
     <router-view :key="$route.fullPath"></router-view>
   </div>
 </template>
@@ -14,11 +15,22 @@
 </style>
 
 <script>
+  const ucfirst = (word) => word.charAt(0).toUpperCase() + word.slice(1)
+  const decebab = word => word.replace( "-" ," ")
+
   export default {
     name: 'ePass',
     computed: {
       loggedIn: function() {
         return this.$store.getters['auth/loggedIn']
+      },
+      title: function() {
+        return [
+          "ePass", 
+          this.$route.meta.title
+            ? this.$route.meta.title
+            : decebab(ucfirst(this.$route.name)) 
+          ].join(" - ");
       }
     },
     watch: {

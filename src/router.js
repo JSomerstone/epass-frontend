@@ -55,7 +55,7 @@ const router = new Router({
     {
       path: "/forgot-password/",
       name: "forgot-password",
-      component: ForgotPassword
+      component: ForgotPassword,
     },
     {
       path: "*",
