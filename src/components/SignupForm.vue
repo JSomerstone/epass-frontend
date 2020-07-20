@@ -2,7 +2,7 @@
   <div class="columns">
     <div class="column"></div>
     <div class="column is-half">
-      <b-steps v-model="step" animated :has-navigation="false" >
+      <b-steps v-model="step" animated :has-navigation="false" class="signup-steps">
         <b-step-item label="Authentication" step="1" :clickable="false">
           <b-field label="Email" label-position="on-border">
             <b-input type="email" v-model="referee.email" placeholder="@" required></b-input>
@@ -89,6 +89,7 @@
             <b-button
               @click="findExistingProfile"
               icon-left="account-search-outline"
+              v-if="debug"
             >
             </b-button>
             <b-button 
@@ -101,7 +102,7 @@
             >Save
             </b-button>
           </b-field>
-          <pre>{{ referee }}</pre>
+          <pre v-if="debug">{{ referee }}</pre>
         </b-step-item> <!--/Profile -->
         <b-step-item label="Done" step="4" :clickable="false">
           <h2>Welcome {{referee.firstName}}</h2>
@@ -122,10 +123,14 @@
 input.center-text {
   text-align: center;
 }
+.signup-steps li {
+  list-style: none;
+}
 </style>
 <script>
 import Referee from "../store/models/RefereeClass"
 import { infoMessage } from '../utils/notificationUtils';
+import { mapGetters } from 'vuex'
   export default {
     data() {
       return {
@@ -144,6 +149,10 @@ import { infoMessage } from '../utils/notificationUtils';
         this.$store.dispatch('auth/signUp', { 
           email: this.referee.email,
           password: this.password,
+          onSuccess: this.nextStep,
+          onFailure: (error) => {
+            (error.code == "UsernameExistsException") && this.nextStep();
+          }
         });
       },
 
@@ -159,7 +168,10 @@ import { infoMessage } from '../utils/notificationUtils';
         this.$store.dispatch('auth/login', { 
           email: this.referee.email,
           password: this.password,
-          onSuccess: this.findExistingProfile
+          onSuccess: () => {
+            this.findExistingProfile();
+            this.nextStep();
+          }
         });
       },
 
@@ -179,8 +191,7 @@ import { infoMessage } from '../utils/notificationUtils';
       },
 
       preFillProfile(results = []) {
-        if (!results) {
-          infoMessage("No profile found");
+        if (!results || results.length < 1) {
           return;
         } else {
           infoMessage("Profile found");
@@ -191,7 +202,6 @@ import { infoMessage } from '../utils/notificationUtils';
       },
 
       nextStep() {
-        console.log('nextStep',  this.step + 1 );
         this.$store.dispatch('auth/setSignupStep', { step: this.step + 1 });
       },
       
@@ -206,15 +216,6 @@ import { infoMessage } from '../utils/notificationUtils';
       }
     },
     computed: {
-      step: function() {
-        return this.$store.getters['auth/signupStep']
-      },
-      signupEmail() {
-        return this.$store.getters['auth/signupEmail']
-      },
-      isLoading: function() {
-        return this.$store.getters['auth/loading']
-      },
       authFormReady: function() {
         return (
           this.referee.email && this.password.length >= 8
@@ -224,11 +225,15 @@ import { infoMessage } from '../utils/notificationUtils';
         return this.referee.isValid();
       },
       userId: function() {
-        return this.$store.getters['auth/signupUserId'];
+        return this.$store.getters["auth/user"].userId || null;
       },
-      loggedIn: function() {
-        return this.$store.getters['auth/loggedIn'];
-      }
+      ...mapGetters({
+        debug: 'auth/debug',
+        step: "auth/signupStep",
+        signupEmail: "auth/signupEmail",
+        isLoading: "auth/loading",
+        loggedIn: "auth/loggedIn",
+      })
     },
     watch: {
       signupEmail: function(email) {

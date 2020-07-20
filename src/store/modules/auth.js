@@ -42,12 +42,25 @@ const signupSteps = {
 }
 
 const state = {
+  debug: false,
   loading: false,
   userInfo,
   signupStep: signupSteps.auth,
   signupEmail: "",
   signupUserId: "",
 };
+
+/*
+Auth.currentAuthenticatedUser()
+  .then(user => {
+    state.userInfo = {
+      userId: user.username,
+      email_verified: user.attributes.email_verified,
+      email: user.attributes.email
+    };
+  })
+  .catch(err => console.log(err));
+*/
 
 const mutationTypes = {
   SET_LOADING: "set-loading",
@@ -103,7 +116,10 @@ const actions = {
   setUser({ commit }, { user }) {
     commit(mutationTypes.SET_USER_INFO, user);
   },
-  async signUp({ commit, dispatch }, { email, password, attributes = {} }) {
+  async signUp(
+    { commit, dispatch },
+    { email, password, attributes = {}, onSuccess = () => { }, onFailure = () => { } }
+  ) {
     dispatch("setLoading", { loading: true });
     try {
       commit(mutationTypes.SET_SIGNUP_EMAIL, email);
@@ -112,26 +128,23 @@ const actions = {
         password,
         attributes,
       });
+      onSuccess(result);
       commit(mutationTypes.SET_SIGNUP_USERID, result.userSub);
-      commit(mutationTypes.SIGNUP_STEP, signupSteps.verify);
     } catch (error) {
-      errorMessage(error.message, error);
-      if (error.code == "UsernameExistsException") {
-        commit(mutationTypes.SIGNUP_STEP, signupSteps.verify);
-      }
+      notifyException(error);
+      onFailure(error);
     }
     dispatch("setLoading", { loading: false });
   },
 
   async verifyAddress(
-    { commit, dispatch, state },
+    { dispatch, state },
     { code, onSuccess = () => {} }
   ) {
     dispatch("setLoading", { loading: true });
     try {
       await Auth.confirmSignUp(state.signupEmail, code);
       successMessage("Address verified");
-      commit(mutationTypes.SIGNUP_STEP, signupSteps.profile);
       onSuccess();
     } catch (error) {
       notifyException(error);
@@ -261,6 +274,7 @@ const auth = {
     signupUserId: (state) => state.signupUserId,
     loggedIn: (state) => Boolean(state.userInfo.userId),
     user: (state) => state.userInfo,
+    debug: state => state.debug
   },
   mutations,
   actions,
