@@ -7,7 +7,6 @@
 
 <style>
   body {
-    font-family: Montserrat;
     font-style: normal;
     min-height: 101vh;
     background-color: transparent;
