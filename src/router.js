@@ -18,6 +18,7 @@ const router = new Router({
     {
       path: "/",
       name: "frontpage",
+      meta: { title: "Frontpage" },
       component: Tournaments,
     },
     {
@@ -34,6 +35,7 @@ const router = new Router({
       path: "/tournaments/:year/",
       name: "tournaments",
       component: Tournaments,
+      meta: { title: "Tournaments of " },
     },
     {
       path: "/tournament/:id/",
@@ -55,7 +57,7 @@ const router = new Router({
     {
       path: "/forgot-password/",
       name: "forgot-password",
-      component: ForgotPassword
+      component: ForgotPassword,
     },
     {
       path: "*",
