@@ -7,10 +7,12 @@ import 'buefy/dist/buefy.css'
 import Amplify from 'aws-amplify';
 import '@aws-amplify/ui-vue';
 import aws_exports from './aws-exports';
+import vueHeadful from "vue-headful";
 
 Amplify.configure(aws_exports);
 
 Vue.config.productionTip = false
+Vue.component("vue-headful", vueHeadful);
 Vue.use(Buefy);
 
 new Vue({
