@@ -13,7 +13,8 @@ const state = {
   filter: { show: "own" },
   wip: null,
   showTournamentForm: false,
-  teams: []
+  teams: [],
+  debug: false
 };
 
 const mutationTypes = {
@@ -173,6 +174,7 @@ const tournaments = {
     wip: state => state.wip,
     hasWip: state => Boolean(state.wip),
     filter: state => state.filter,
+    debug: state => state.debug,
   },
   mutations,
   actions,

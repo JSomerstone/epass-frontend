@@ -256,6 +256,7 @@
               Fill
             </b-button>
         </div>
+        <pre v-if="debug">{{ t }}</pre>
     </b-collapse>
 </template>
 <style lang="css" scoped>
@@ -323,6 +324,9 @@ export default {
     },
     allReferees: function() {
         return this.$store.getters['referees/all'] || [];
+    },
+    debug: function() {
+      return this.$store.getters["tournaments/debug"];
     }
   },
   methods: {

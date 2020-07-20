@@ -24,6 +24,7 @@
       :year="year"
       v-if="!tournamentId"
     />
+    <pre v-if="debug">{{ tournaments }}</pre>
   </layout>
 </template>
 <style lang="css">
@@ -37,6 +38,7 @@ import TournamentList from "../components/TournamentList";
 import TournamentForm from "../components/TournamentForm";
 import TournamentFilter from "../components/TournamentsFilter";
 import { formatDateRange } from "../utils/dateUtils";
+import { mapGetters } from 'vuex'
 
 export default {
   components: {
@@ -58,15 +60,12 @@ export default {
     selectedTournament: function() {
       return this.$store.getters['tournaments/byId'](this.tournamentId) || {};
     },
-    tournaments: function() {
-      return this.$store.getters['tournaments/all'] || [];
-    },
-    isLoading: function() {
-      return this.$store.getters['tournaments/loading'];
-    },
-    currentRef: function() {
-      return this.$store.getters['referees/current'];
-    }
+    ...mapGetters({
+        debug: "tournaments/debug",
+        tournaments: "tournaments/all",
+        isLoading: "tournaments/loading",
+        currentRef: "referees/current",
+    }),
   },
   methods: {
     fetchData: function() {
