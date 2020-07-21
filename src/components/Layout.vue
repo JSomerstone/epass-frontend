@@ -24,7 +24,19 @@
     </div>
   </section>
   <section class="footer">
-    <slot name="footer"></slot>
+    <footer class="footer">
+      <div class="content has-text-centered">
+        <p>
+          <router-link :to="{ name: 'about'}">About</router-link>
+          | 
+          <router-link :to="{ name: 'privacy'}">Privacy Policy</router-link>
+        </p>
+        <p>
+          <strong>ePass</strong> by <a href="https://jsomerstone.github.io/">Joona Somerkivi</a>. 
+          The source code is licensed under <a href="http://www.apache.org/licenses/">Apache Lisence v. 2</a>.
+        </p>
+      </div>
+    </footer>
   </section>
   </div>
 </template>

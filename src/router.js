@@ -8,6 +8,7 @@ import TournamentPage from "./views/TournamentPage.vue";
 import Tournaments from "./views/Tournaments.vue";
 import Signup from "./views/Signup.vue";
 import Settings from "./views/Settings.vue";
+import Privacy from "./views/Privacy.vue";
 import ForgotPassword from "./views/ForgotPassword.vue";
 
 Vue.use(Router);
@@ -55,6 +56,12 @@ const router = new Router({
       props: { tab: 0 },
     },
     {
+      path: "/privacy",
+      name: "privacy",
+      component: Privacy,
+      meta: { title: "Privacy Policy" },
+    },
+    {
       path: "/forgot-password/",
       name: "forgot-password",
       component: ForgotPassword,
@@ -70,7 +77,7 @@ const router = new Router({
 
 router.beforeEach((to, from, next) => {
   const isAuthenticated = store.getters["auth/loggedIn"];
-  const allowed = ["about", "error", "login", "signup", "forgot-password"];
+  const allowed = ["about", "error", "login", "signup", "forgot-password", "privacy"];
   if (isAuthenticated || allowed.indexOf(to.name) >= 0 ) {
      next();
   }
