@@ -9,10 +9,16 @@
         <template slot="start">
           <b-navbar-dropdown label="Tournaments"  v-if="isLoggedIn">
               <b-navbar-item 
+                tag="router-link" 
+                :to="{ name: 'tournaments', params: {year: years[0]}, query: {new:true}}"
+              >
+                  <b-icon icon="plus" />New
+              </b-navbar-item>
+              <b-navbar-item 
                 v-for="year in years"
                 v-bind:key="year"
                 tag="router-link" 
-                :to="{ path: `/tournaments/${year}` }"
+                :to="{ name: 'tournaments', params: {year} }"
               >
                   {{ year }}
               </b-navbar-item>

@@ -1,28 +1,17 @@
 <template>
   <layout>
-    <template v-slot:hero-title v-if="tournamentId">
-      {{ selectedTournament.name }}
-    </template> 
-    <template v-slot:hero-subtitle v-if="tournamentId">
-      {{ selectedTournament.city }},
-      {{ selectedTournament.country }},
-      {{ formatDateRange(selectedTournament.dates) }}
-    </template>
-    <template v-slot:hero-title v-else>
-      Tournaments {{ year }}
-    </template>
+    <template v-slot:hero-title>Tournaments</template>
+    <template v-slot:hero-subtitle>{{ year }}</template>
     <tournament-form 
       class="tournament-form" 
-      :selected="tournamentId" 
       :editable="isEditable"
-      :open="Boolean(tournamentId)"
+      :open="$route.query.new"
     />
-    <tournament-filter v-if="!tournamentId" />
+    <tournament-filter />
     <tournament-list 
       :loading="isLoading" 
       :items="tournaments"
       :year="year"
-      v-if="!tournamentId"
     />
     <pre v-if="debug">{{ tournaments }}</pre>
   </layout>
@@ -50,15 +39,11 @@ export default {
   data() {
     return {
       year:  this.$route.params.year || new Date().getFullYear(),
-      tournamentId:  this.$route.params.tournament || null,
     }
   },
   computed: {
     isEditable: function() {
       return this.year == new Date().getFullYear();
-    },
-    selectedTournament: function() {
-      return this.$store.getters['tournaments/byId'](this.tournamentId) || {};
     },
     ...mapGetters({
         debug: "tournaments/debug",
