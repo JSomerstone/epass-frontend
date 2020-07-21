@@ -1,7 +1,7 @@
 <template>
-  <b-table :data="referees">
+  <b-table :data="referees" class="no-margin-on-control" hoverable>
     <template slot-scope="props">
-        <b-table-column field="name" label="Name">
+        <b-table-column field="name" label="Name" width="190">
             {{ props.row.firstName }}  {{ props.row.lastName }}
         </b-table-column>
         <b-table-column field="games" label="Games as referee" centered>
@@ -33,13 +33,18 @@
               @click="removeRow(props.row)" 
               icon-left="close"
               type="is-danger"
-              
+              outlined
             />
           </b-tooltip>
         </b-table-column>
       </template>
   </b-table>
 </template>
+<style>
+.no-margin-on-control .field p.control {
+  margin-bottom: 0px;
+}
+</style>
 <script>
 export default {
   data(){

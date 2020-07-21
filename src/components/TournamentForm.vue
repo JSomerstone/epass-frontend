@@ -119,10 +119,10 @@
                           <div class="column is-half" v-if="t.td.id">
                               <b-tag 
                                 size="is-medium" 
-                                closable 
+                                :closable="userIsTd() || !t.id"
                                 rounded
                                 :key="t.td.id"
-                                @close="t.td={}"
+                                @close="confirmRemoveTd"
                             >
                                 {{ t.td.firstName }} {{ t.td.lastName }}
                                 &lt;{{t.td.email || "email-missing" }}&gt;
@@ -138,36 +138,6 @@
                     </referee-form>
                   </div><!-- /td-field -->
                   
-                  <div class="field" id="your-games">
-                    <b-field label="Your Games">
-                      <div class="columns">
-                        <div class="column is-half">
-                          <b-field label="As referee" label-position="on-border">
-                            <b-numberinput 
-                              controls-position="compact"
-                              :controls-rounded="true"
-                              v-model="noOfGames"
-                              :min="0"
-                              :max="20"
-                              expanded
-                            ></b-numberinput>
-                          </b-field>
-                        </div>
-                        <div class="column is-half">
-                          <b-field label="As table official / 10 sec timer" label-position="on-border">
-                            <b-numberinput 
-                              controls-position="compact"
-                              :controls-rounded="true"
-                              v-model="noOfTenSeconds"
-                              :min="0"
-                              :max="20"
-                              expanded
-                            ></b-numberinput>
-                          </b-field>
-                        </div>
-                      </div>
-                    </b-field>
-                  </div><!-- /your-games -->
                   <div class="field" id="referees-field">
                       <b-field label="Referees">
                         <b-field v-if="!showAddRefereeForm">
@@ -204,25 +174,13 @@
                           :levelRequired="false"
                         />
                       </b-field>
-                      <div>
-                          <b-tag 
-                              v-for="ref in t.referees"
-                              v-bind:key="ref.id"
-                              size="is-medium" 
-                              closable 
-                              rounded
-                              @close="removeReferee(ref)"
-                          >
-                              {{ ref.firstName }} {{ ref.lastName }} [{{ ref.country }}]
-                          </b-tag>
-                      </div>
-                  </div><!-- /referees-field -->
+                  </div>
                   <div class="field">
                     <referee-table 
                       v-model="t.referees"
                       :editableItem="getEditableReferee()"
                     />
-                  </div>
+                  </div><!-- /referees-field -->
                   <div class="field">
                       <b-field label="Teams competing (Name / Country)">
                           <b-taginput
@@ -232,7 +190,7 @@
                               :keep-first="true"
                               :allow-new="true"
                               :clear-on-select="true"
-                              icon="flag-plus-outline"
+                              icon="label"
                               placeholder="Add team"
                               @typing="getFilteredTeams"
                               @add="newTeam"
@@ -282,8 +240,6 @@ const defaults = {
   tdEmail: "",
   tdQuery: "",
   ref: "",
-  noOfGames: 0,
-  noOfTenSeconds: 0
 };
 export default {
   components: {
@@ -341,21 +297,11 @@ export default {
     loadTournamentForm(tournament) {
       this.t = new Tournament(tournament, this.$store.getters['referees/all']);
       this.countryQuery = tournament.country;
-      const current = this.getCurrent() || { id: null };
-      const { games = 0, tenSeconds = 0 } = tournament.referees.find(
-        r => r.id == current.id
-      ) || {};
-      this.noOfGames = games;
-      this.noOfTenSeconds = tenSeconds;
     },
     getRefereeById(id) {
       return this.$store.getters['referees/byId'](id);
     },
     handleSave() {
-      if (this.noOfGames > 0 || this.noOfGames > 0) {
-        const current = this.getCurrent();
-        this.t.setGames(current.id, this.noOfGames, this.noOfTenSeconds);
-      }
       if (this.t.id) {
         infoMessage("Updating...");
         this.$store.dispatch("tournaments/update", { tournament: this.t });
@@ -367,6 +313,12 @@ export default {
     handleCancel() {
       warningMessage("Cancelled");
       this.loadTournamentForm(this.tournament);
+    },
+    confirmRemoveTd() {
+      this.$buefy.dialog.confirm({
+        message: 'Are you sure to remove the TD?',
+        onConfirm: () => { this.t.td = {}; }
+      });
     },
       selectReferee: function(referee) {
         if ( ! this.t.referees.find( r => r.id === referee.id)) {
@@ -386,11 +338,15 @@ export default {
     getCurrent() {
       return this.$store.getters["referees/current"] || {};
     },
+    userIsTd() {
+      const { id = null } = this.getCurrent();
+      return id == this.t.td.id;
+    },
     getEditableReferee() {
-      const user = this.getCurrent();
-      return (user.id == this.t.td.id) //If user is the TD of the tournament -> "all"
+      const { id = null } = this.getCurrent();
+      return this.userIsTd() //If user is the TD of the tournament -> "all"
         ? "all"
-        : user.id || "none"; //Otherwise only the current users' own stats
+        : id || "none"; //Otherwise only the current users' own stats
     },
       getFilteredTeams: function(text) {
         this.filteredTeams = this.existingTeams.filter((option) => {
@@ -457,16 +413,6 @@ export default {
       },
   },
   watch: {
-    noOfGames: function() {
-      if (this.noOfGames > 0 || this.noOfTenSeconds > 0) {
-        this.addCurrent();
-      }
-    },
-    noOfTenSeconds: function() {
-      if (this.noOfGames > 0 || this.noOfTenSeconds > 0) {
-        this.addCurrent();
-      }
-    },
     tournament: function(tournament) {
       setTimeout(
         () => this.loadTournamentForm(tournament),
