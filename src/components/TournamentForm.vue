@@ -202,10 +202,10 @@
               </div>
           </div>
         </div>
-        <div class="card-footer">
+        <div class="card-footer" v-if="editable">
             <b-button 
               @click="handleSave" 
-              v-bind:disabled="isLoading" 
+              v-bind:disabled="isLoading || !t.isValid()"
               icon-left="check-circle-outline" 
               type="is-primary" 
               class="card-footer-item" 
@@ -216,7 +216,7 @@
             <b-button @click="handleCancel" type="is-light" icon-left="cancel" class="card-footer-item" >
                 Cancel
             </b-button>
-            <b-button @click="handleFill" v-if="!t.id">
+            <b-button @click="handleFill" v-if="debug">
               Fill
             </b-button>
         </div>

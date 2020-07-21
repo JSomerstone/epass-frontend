@@ -21,7 +21,6 @@ export default class Tournament {
     this.country = country;
     this.dates = dates.map(d => new Date(d));
     this.year = year || new Date().getFullYear();
-    //this.dates = dates;
     this.td = td.id ? td : this.getRef(td, refereeList);
     this.referees = referees.map(
       r => {
@@ -73,20 +72,25 @@ export default class Tournament {
 
   validate() {
     const validity = {
-      international: typeof this.international == Boolean,
+      international: typeof this.international == "boolean",
       name: this.name.length > 2,
       city: this.city.length >= 2,
       country: this.country != "",
       dates: this.dates.length == 2,
       year: 2019 <= this.year && this.year <= new Date().getFullYear(),
       td: Boolean(this.td.id),
-      referees: this.referees.map(r => r.id).reduce(
-        (v0, v1) => v0 && Boolean(v1)
-      ),
+      referees: this.referees.length && this.referees
+        .map(r => Boolean(r.id))
+        .reduce((v0, v1) => v0 && Boolean(v1)),
       teams: this.teams.length >= 2,
     };
-    const errors = Object.entries(validity).filter((field, isValid) => !isValid);
-    console.log(errors);
+    const errors = Object.entries(validity)
+      .filter(entry => !entry[1])
+      .map(entry => entry[0]);
+    return errors;
   }
 
+  isValid() {
+    return this.validate().length == 0;
+  }
 }
