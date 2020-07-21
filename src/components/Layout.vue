@@ -32,7 +32,7 @@
           <router-link :to="{ name: 'privacy'}">Privacy Policy</router-link>
         </p>
         <p>
-          <strong>ePass</strong> by <a href="https://jsomerstone.github.io/">Joona Somerkivi</a>
+          <strong>ePass</strong> by <a href="https://github.com/JSomerstone">JSomerstone</a>
           |
           The source code is licensed under <a href="http://www.apache.org/licenses/">Apache Lisence v. 2</a>.
         </p>
