@@ -22,19 +22,34 @@
       <div class="card-content">
         <div class="content referee-form">
           <div class="field">
-            <b-field label="Given name" label-position="on-border">
+            <b-field label="Name" label-position="on-border">
               <b-input 
-                v-model="referee.firstName" 
+                v-model="referee.firstName"
+                placeholder="Given name"
+                required
+                expanded
+              ></b-input>
+              <b-input 
+                v-model="referee.lastName" 
+                placeholder="Family name"
                 required
                 expanded
               ></b-input>
             </b-field>
-            <b-field label="Family name" label-position="on-border">
-              <b-input 
-                v-model="referee.lastName" 
-                required
-                expanded
+          </div>
+          <div class="field">
+            <b-field label="Birth year and gender (relevant?)" label-position="on-border">
+              <b-input expanded placeholder="Birth year" disabled 
               ></b-input>
+              <b-select placeholder="Gender" disabled expanded>
+                <option
+                  v-for="option in genders"
+                  :value="option.key"
+                  :key="option.key"
+                >
+                  {{ option.gender }}
+                </option>
+              </b-select>
             </b-field>
           </div>
           <div class="field">
@@ -53,7 +68,10 @@
             </b-field>
           </div>
           <div class="field">
-            <b-field label="Level" label-position="on-border">
+            <b-field label="Referee Level" label-position="on-border">
+              <b-radio-button v-model="referee.level" :native-value="0" >
+                  National
+              </b-radio-button>
               <b-radio-button v-model="referee.level" :native-value="1" >
                   1
               </b-radio-button>
@@ -63,20 +81,31 @@
               <b-radio-button v-model="referee.level" :native-value="3" >
                   3
               </b-radio-button>
-              <b-radio-button v-model="referee.level" :native-value="0" >
-                  National
-              </b-radio-button>
             </b-field>
           </div>
           <div class="field">
-            <b-button 
-              type="is-primary" 
-              @click="handleProfileSave" 
-              icon-left="account-check"
-              v-bind:loading="isLoading"
-            >
-              Save</b-button>
-            <button class="button is-text" @click="handleCancel">Cancel</button>
+            <b-field label="Previous clinic" label-position="on-border">
+              <b-input placeholder="Date" disabled expanded />
+              <b-input placeholder="Coordinator" disabled expanded />
+            </b-field>
+          </div>
+          <div class="field">
+            <b-field>
+              <b-button 
+                type="is-primary" 
+                @click="handleProfileSave" 
+                icon-left="account-check"
+                v-bind:loading="isLoading"
+                expanded
+              >Save
+              </b-button>
+
+              <button 
+                class="button is-text" 
+                @click="handleCancel" 
+              >Cancel
+              </button>
+              </b-field>
           </div>
         </div>
       </div>
@@ -161,8 +190,39 @@
           </a>
       </div>
       <div class="card-content">
-        Placeholder for national association of {{ referee.country }} settings.
-        Or whatever country the referee lives in...
+        <p>Placeholder form - not functional</p>
+        <div class="field"><b-field label="Name" ><b-input /></b-field></div>
+        <div class="field">
+          <b-field label="Country">
+            <b-autocomplete
+              v-model="countryQuery"
+              placeholder="Country"
+              icon="earth"
+              :keep-first="true"
+              required
+              expanded
+              :data="getCountries(countryQuery)"
+              @select="option => countryQuery = option"
+            >
+            </b-autocomplete>
+          </b-field>
+        </div>
+        <div class="field"><b-field label="Address" ><b-input /></b-field></div>
+        <div class="field"><b-field label="Email" ><b-input /></b-field></div>
+        <div class="field">
+          <b-field label="Referee Coordinator" >
+            <b-field>
+              <b-input placeholder="Name" />
+              <b-input placeholder="Email"/>
+            </b-field>
+          </b-field>
+        </div>
+        <div class="field">
+          <b-field>
+            <b-button type="is-primary" @click="infoMessage('Unimplemented')" expanded>Save</b-button>
+            <b-button type="is-text" @click="infoMessage('Unimplemented')">Cancel</b-button>
+          </b-field>
+        </div>
       </div>
     </b-collapse><!-- /ASSOCIATION -->
   </div>
@@ -185,6 +245,11 @@ export default {
       newPassword: "",
       confirmPassword: "",
       countryQuery: "",
+      genders: [
+        { key: "m", gender: "Male" },
+        { key: "f", gender: "Female" },
+        { key: "x", gender: "Other" },
+      ]
     }
   },
   computed: {
