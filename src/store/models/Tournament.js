@@ -70,4 +70,23 @@ export default class Tournament {
       teams: this.teams,
     };
   }
+
+  validate() {
+    const validity = {
+      international: typeof this.international == Boolean,
+      name: this.name.length > 2,
+      city: this.city.length >= 2,
+      country: this.country != "",
+      dates: this.dates.length == 2,
+      year: 2019 <= this.year && this.year <= new Date().getFullYear(),
+      td: Boolean(this.td.id),
+      referees: this.referees.map(r => r.id).reduce(
+        (v0, v1) => v0 && Boolean(v1)
+      ),
+      teams: this.teams.length >= 2,
+    };
+    const errors = Object.entries(validity).filter((field, isValid) => !isValid);
+    console.log(errors);
+  }
+
 }
