@@ -218,6 +218,12 @@
                       </div>
                   </div><!-- /referees-field -->
                   <div class="field">
+                    <referee-table 
+                      v-model="t.referees"
+                      :editableItem="getEditableReferee()"
+                    />
+                  </div>
+                  <div class="field">
                       <b-field label="Teams competing (Name / Country)">
                           <b-taginput
                               v-model="t.teams"
@@ -266,6 +272,7 @@
 </style>
 <script>
 import RefereeForm from "./RefereeForm";
+import RefereeTable from "./EditableRefereeTable";
 import Tournament from "../store/models/Tournament";
 import { infoMessage, warningMessage } from "../utils/notificationUtils";
 
@@ -281,6 +288,7 @@ const defaults = {
 export default {
   components: {
       RefereeForm,
+      RefereeTable,
   },
   props: {
     editable: {
@@ -373,10 +381,16 @@ export default {
       },
     addCurrent() {
       const current = this.getCurrent();
-      current && this.selectReferee(current);
+      current.id && this.selectReferee(current);
     },
     getCurrent() {
-      return this.$store.getters["referees/current"];
+      return this.$store.getters["referees/current"] || {};
+    },
+    getEditableReferee() {
+      const user = this.getCurrent();
+      return (user.id == this.t.td.id) //If user is the TD of the tournament -> "all"
+        ? "all"
+        : user.id || "none"; //Otherwise only the current users' own stats
     },
       getFilteredTeams: function(text) {
         this.filteredTeams = this.existingTeams.filter((option) => {
