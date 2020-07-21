@@ -15,13 +15,22 @@
     <p>
       Start filling your ePass by <router-link :to="{ name: 'signup' }">signing up</router-link>.
     </p>
+    <p>
+      This site has been done voluntarily without any compensation from IBSA. If it makes your life
+      little easier, please concider giving me a small tip:
+    </p>
+    <div class="content has-text-centered">
+      <donate />
+    </div>
   </layout>
 </template>
 <script>
 import Layout from "../components/Layout"
+import Donate from "../components/Donate"
 export default {
   components: {
-    Layout
+    Layout,
+    Donate
   }
 }
 </script>
