@@ -258,13 +258,17 @@ export default {
     open: {
       type: Boolean,
       default: false
+    },
+    year: {
+      type: Number,
+      default: new Date().getFullYear()
     }
   },
   data: () => {
     const today = new Date();
     return {
       ...defaults,
-      minDate: new Date(`${today.getFullYear()-1}-12-31`),
+      minDate: new Date(`${today.getFullYear()-1}-01-01`),
       maxDate: today,
       showAddTdForm: false,
       showAddRefereeForm: false,
@@ -307,7 +311,10 @@ export default {
         this.$store.dispatch("tournaments/update", { tournament: this.t });
       } else {
         infoMessage("Saving...");
-        this.$store.dispatch("tournaments/create", { tournament: this.t });
+        this.$store.dispatch(
+          "tournaments/create", 
+          { tournament: this.t, onSuccess: (saved) => this.t.id = saved.id }
+        );
       }
     },
     handleCancel() {
@@ -426,6 +433,7 @@ export default {
       this.existingTeams = existingTeams;
       this.filteredTeams = existingTeams;
     }
+    this.t.year = this.year;
   },
 }
 </script>

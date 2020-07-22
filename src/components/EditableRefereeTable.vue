@@ -8,7 +8,6 @@
           <b-numberinput 
             controls-position="compact" 
             v-model="props.row.games"
-            @input="update(props.row)"
             v-if="isEditable(props.row)"
           />
           <span v-else>{{ props.row.games }}</span>
@@ -17,7 +16,6 @@
           <b-numberinput 
             controls-position="compact" 
             v-model="props.row.tenSeconds"
-            @input="update(props.row)"
             v-if="isEditable(props.row)"
           />
           <span v-else>{{ props.row.tenSeconds }}</span>
@@ -70,14 +68,9 @@ export default {
     isEditable: function(row) {
       return this.editable && (this.editableItem == "all" || this.editableItem == row.id);
     },
-    update({ id, games = 0, tenSeconds = 0 }) {
-      const indx = this.referees.find( r => r.id == id);
-      this.referees[indx] = {
-        ...this.referees[indx],
-        games,
-        tenSeconds
-      };
-      
+    removeRow({ id }) {
+      const indx = this.referees.findIndex( r => r.id == id);
+      this.referees.splice(indx, 1);
       this.$emit('input', this.referees);
     }
   }
