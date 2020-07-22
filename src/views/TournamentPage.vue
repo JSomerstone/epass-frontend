@@ -9,7 +9,7 @@
           {{ tournament.country }},
           {{ tournament.dates | daterange }}
         </template>
-        <router-link :to="{ name: 'tournaments', params: { year: this.year }}" class="button is-link">
+        <router-link :to="{ name: 'tournaments', params: { year: this.tournament.year }}" class="button is-link">
           Back
         </router-link>
         <tournament-form 
@@ -45,10 +45,7 @@ export default {
   },
   computed: {
     isEditable: function() {
-      return this.year == new Date().getFullYear();
-    },
-    year: function(){
-      return this.selectedTournament.year || new Date().getFullYear();
+      return this.tournament.year >= new Date().getFullYear() -1;
     },
     selectedTournament: function() {
       return this.$store.getters['tournaments/wip'] || new Tournament();

@@ -44,7 +44,7 @@ export default {
   },
   computed: {
     isEditable: function() {
-      return this.year == new Date().getFullYear();
+      return this.year >= new Date().getFullYear() - 1;
     },
     ...mapGetters({
         debug: "tournaments/debug",
