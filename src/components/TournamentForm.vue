@@ -200,6 +200,11 @@
                       </b-field>
                   </div>
               </div>
+              <div class="field">
+                <b-field label="Teams competing">
+                  <teams-field v-model="t.teams" />
+                </b-field>
+              </div>
           </div>
         </div>
         <div class="card-footer" v-if="editable">
@@ -231,6 +236,7 @@
 <script>
 import RefereeForm from "./RefereeForm";
 import RefereeTable from "./EditableRefereeTable";
+import TeamsField from "./TeamsField";
 import Tournament from "../store/models/Tournament";
 import { infoMessage, warningMessage } from "../utils/notificationUtils";
 
@@ -243,8 +249,9 @@ const defaults = {
 };
 export default {
   components: {
-      RefereeForm,
-      RefereeTable,
+    TeamsField,
+    RefereeForm,
+    RefereeTable,
   },
   props: {
     editable: {
