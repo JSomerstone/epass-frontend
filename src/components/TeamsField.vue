@@ -8,6 +8,7 @@
           clear-on-select
           expanded
           :data="matchingNames"
+          @keyup.native="onInput"
           @select="addTeam">
       </b-autocomplete>
       <b-button 
@@ -59,23 +60,22 @@ export default {
       this.teams.splice(index, 1);
       this.$emit('input', this.teams);
     },
-    addTeam(name) {
-      if (name.length <= 2 || this.isDuplicate) {
+    onInput(value) {
+      value.code == "Enter" && this.addTeam();
+    },
+    addTeam(selected = "") {
+      if (selected) {
+        this.name = selected;
+      }
+      if (this.name.length <= 2 || this.isDuplicate) {
         return;
       }
-      this.teams.push(name);
-      this.memorizeTeam(name)
+      this.teams.push(this.name);
+      this.teams.sort();
+      this.$store.dispatch("tournaments/addTeam", { team: this.name } );
       this.name="";
       this.$emit('input', this.teams);
     },
-    memorizeTeam: function(team) {
-      let existing = Boolean(this.teamPool.find( 
-        old => old.toLowerCase() == team.toLowerCase())
-      );
-      if (! existing) {
-        this.$store.dispatch("tournaments/addTeam", { team } );
-      }
-    }
   },
   computed: {
     teamPool: function() {

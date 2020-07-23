@@ -52,6 +52,7 @@ const mutations = {
   },
   [mutationTypes.ADD_TEAM](state, team) {
     state.teams.push(team);
+    state.teams.sort();
     localStorage.setItem("teams", JSON.stringify(state.teams));
   },
   [mutationTypes.SET_WIP](state, tournament) {
@@ -122,8 +123,13 @@ const actions = {
     result.sort();
     commit(mutationTypes.SET_TEAMS, result);
   },
-  addTeam: async ({ commit }, { team }) => {
-    commit(mutationTypes.ADD_TEAM, team);
+  addTeam: async ({ commit, state }, { team }) => {
+    const existing = Boolean(
+      state.teams.find(old => old.toLowerCase() == team.toLowerCase()),
+    );
+    if (!existing) {
+      commit(mutationTypes.ADD_TEAM, team);
+    }
   },
   create: async ({ commit, dispatch }, { tournament, onSuccess = () => { } }) => {
     commit(mutationTypes.SET_LOADING, true);

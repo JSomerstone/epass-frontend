@@ -24,15 +24,15 @@
         </div>
         <div class="card-content">
           <div class="columns">
-              <div class="column is-half is-full-tablet">
+              <div class="column is-half">
                   <div class="field">
                     <div class="columns">
-                      <div class="column is-half is-full-tablet">
+                      <div class="column is-half">
                         <b-field label="Name of tournament" label-position="on-border">
                           <b-input v-model="t.name" :required="true" :expanded="true"></b-input>
                         </b-field>
                       </div>
-                      <div class="column is-half is-full-tablet">
+                      <div class="column is-half">
                         <b-field>
                          <b-radio-button v-model="t.international" :native-value="true" expanded>
                               International
@@ -83,7 +83,7 @@
                       </b-field>
                   </div>
               </div>
-              <div class="column is-half is-full-tablet">
+              <div class="column is-half">
                   <div class="field" id="td-field">
                       <b-field label="Technical Delegate TD">
                         <div class="columns">
@@ -174,38 +174,18 @@
                           :levelRequired="false"
                         />
                       </b-field>
-                  </div>
-                  <div class="field">
-                    <referee-table 
-                      v-model="t.referees"
-                      :editableItem="getEditableReferee()"
-                    />
+                      <referee-table 
+                        v-model="t.referees"
+                        :editableItem="getEditableReferee()"
+                      />
                   </div><!-- /referees-field -->
-                  <div class="field">
-                      <b-field label="Teams competing (Name / Country)">
-                          <b-taginput
-                              v-model="t.teams"
-                              :data="filteredTeams"
-                              autocomplete
-                              :keep-first="true"
-                              :allow-new="true"
-                              :clear-on-select="true"
-                              icon="label"
-                              placeholder="Add team"
-                              @typing="getFilteredTeams"
-                              @add="newTeam"
-                              class="tag-list"
-                          >
-                          </b-taginput>
-                      </b-field>
-                  </div>
+                <div class="field"><!-- teams-field -->
+                  <b-field label="Teams competing">
+                    <teams-field v-model="t.teams" />
+                  </b-field>
+                </div><!-- /teams-field -->
               </div>
-              <div class="field">
-                <b-field label="Teams competing">
-                  <teams-field v-model="t.teams" />
-                </b-field>
-              </div>
-          </div>
+            </div>
         </div>
         <div class="card-footer" v-if="editable">
             <b-button 
