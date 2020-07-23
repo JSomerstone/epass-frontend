@@ -1,10 +1,10 @@
 <template>
   <b-table :data="referees" class="no-margin-on-control" hoverable>
     <template slot-scope="props">
-        <b-table-column field="name" label="Name" width="190">
+        <b-table-column field="name" label="Name">
             {{ props.row.firstName }}  {{ props.row.lastName }}
         </b-table-column>
-        <b-table-column field="games" label="Games as referee" centered>
+        <b-table-column field="games" label="Games as referee" centered width="140">
           <b-numberinput 
             controls-position="compact" 
             v-model="props.row.games"
@@ -12,7 +12,7 @@
           />
           <span v-else>{{ props.row.games }}</span>
         </b-table-column>
-        <b-table-column field="tenSeconds" label="Games as 10s / official" centered>
+        <b-table-column field="tenSeconds" label="Games as 10s / official" centered width="140">
           <b-numberinput 
             controls-position="compact" 
             v-model="props.row.tenSeconds"
