@@ -221,7 +221,6 @@ import Tournament from "../store/models/Tournament";
 import { infoMessage, warningMessage } from "../utils/notificationUtils";
 
 const defaults = {
-  t: new Tournament(),
   countryQuery: "",
   tdEmail: "",
   tdQuery: "",
@@ -251,16 +250,15 @@ export default {
       default: new Date().getFullYear()
     }
   },
-  data: () => {
+  data(){
     const today = new Date();
     return {
       ...defaults,
+      t: new Tournament({year: this.year }),
       minDate: new Date(`${today.getFullYear()-1}-01-01`),
       maxDate: today,
       showAddTdForm: false,
       showAddRefereeForm: false,
-      existingTeams: [],
-      filteredTeams: [],
     }
   },
   computed: {
@@ -273,9 +271,6 @@ export default {
     },
     filteredTd: function() {
         return this.$store.getters['referees/search'](this.tdQuery);
-    },
-    allTeams: function() {
-        return this.$store.getters['tournaments/teams'] || [];
     },
     allReferees: function() {
         return this.$store.getters['referees/all'] || [];
@@ -305,8 +300,15 @@ export default {
       }
     },
     handleCancel() {
+      if (this.t.id) {
+        this.$router.push({
+          name: 'tournaments',
+          params: { year: this.year }
+        });
+      } else {
+        this.loadTournamentForm(new Tournament({year: this.year }))
+      }
       warningMessage("Cancelled");
-      this.loadTournamentForm(this.tournament);
     },
     confirmRemoveTd() {
       this.$buefy.dialog.confirm({
@@ -342,69 +344,53 @@ export default {
         ? "all"
         : id || "none"; //Otherwise only the current users' own stats
     },
-      getFilteredTeams: function(text) {
-        this.filteredTeams = this.existingTeams.filter((option) => {
-                return option
-                    .toString()
-                    .toLowerCase()
-                    .indexOf(text.toLowerCase()) >= 0
-            })
-        },
-        getCountries: function(name) {
-            return name 
-                ? this.$store.getters['countries/byName'](name)
-                : [];
-        },
-      newTeam: function(team) {
-            let existing = this.existingTeams.find( 
-              t => t.toString().toLowerCase() === team.toLowerCase()
-            );
-            if ( ! existing) {
-                this.$store.dispatch("tournaments/addTeam", { team } );
-            }
-      },
-      addReferee: function(referee) {
-          this.$store.dispatch("referees/create", { 
-            referee,
-            onSuccess: this.selectReferee
-          });
-          this.showAddRefereeForm = false;
-          this.ref = "";
-      },
-      addTd: function(referee) {
-         this.$store.dispatch("referees/create", { 
-            referee,
-            onSuccess: (td) => { this.t.td = td; } 
-          });
-          this.showAddTdForm = false;
-          this.tdQuery = "";
-      },
-      handleFill() {
-        this.t = new Tournament({
-          name: "Test tournament",
-          year: 2020,
-          city: "Helsinki",
-          country: "Finland",
-          dates: ["2020-07-16","2020-07-16"],
-          td: this.getCurrent(),
-          referees: [
-            {
-              "id": "e901993c-6021-4533-bae3-6a171726517d",
-              "games": 0,
-              "tenSeconds": 0
-            },
-            {
-              "id": "024a1a55-16cc-4b86-8fbf-0441daa30b22",
-              "games": 0,
-              "tenSeconds": 0
-            }
-          ],
-          teams: this.existingTeams
-        }, this.allReferees);
-        this.countryQuery = this.t.country;
-        this.noOfTenSeconds = 10;
-        this.noOfGames = 6;
-      },
+    getCountries: function(name) {
+        return name 
+            ? this.$store.getters['countries/byName'](name)
+            : [];
+    },
+    addReferee: function(referee) {
+        this.$store.dispatch("referees/create", { 
+          referee,
+          onSuccess: this.selectReferee
+        });
+        this.showAddRefereeForm = false;
+        this.ref = "";
+    },
+    addTd: function(referee) {
+        this.$store.dispatch("referees/create", { 
+          referee,
+          onSuccess: (td) => { this.t.td = td; } 
+        });
+        this.showAddTdForm = false;
+        this.tdQuery = "";
+    },
+    handleFill() {
+      this.t = new Tournament({
+        name: "Test tournament",
+        year: 2020,
+        city: "Helsinki",
+        country: "Finland",
+        dates: ["2020-07-16","2020-07-16"],
+        td: this.getCurrent(),
+        referees: [
+          {
+            "id": "e901993c-6021-4533-bae3-6a171726517d",
+            "games": 0,
+            "tenSeconds": 0
+          },
+          {
+            "id": "024a1a55-16cc-4b86-8fbf-0441daa30b22",
+            "games": 0,
+            "tenSeconds": 0
+          }
+        ],
+        teams: this.$store.getters['tournaments/teams']
+      }, this.allReferees);
+      this.countryQuery = this.t.country;
+      this.noOfTenSeconds = 10;
+      this.noOfGames = 6;
+    },
   },
   watch: {
     tournament: function(tournament) {
@@ -413,14 +399,6 @@ export default {
         500
       );
     }
-  },
-  mounted() {
-    if(this.existingTeams.length == 0) {
-      let existingTeams = this.$store.getters['tournaments/teams'] || [];
-      this.existingTeams = existingTeams;
-      this.filteredTeams = existingTeams;
-    }
-    this.t.year = this.year;
   },
 }
 </script>

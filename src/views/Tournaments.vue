@@ -6,7 +6,7 @@
       class="tournament-form" 
       :editable="isEditable"
       :open="Boolean($route.query.new)"
-      :year="year"
+      :year="Number(year)"
     />
     <tournament-filter />
     <tournament-list 
