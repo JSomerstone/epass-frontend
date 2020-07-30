@@ -1,13 +1,15 @@
 import { successMessage, notifyException } from "../../utils/notificationUtils";
 import { createReferee, updateReferee } from "../../graphql/mutations";
-import { listReferees } from "../../graphql/queries";
+import { listReferees, getReferee } from "../../graphql/queries";
 import { API } from "aws-amplify";
+const courseConductors = require("../../assets/course-conductors.json");
 
 const state = {
   loading: false,
   referees: [],
   queryResult: [],
   current: {},
+  conductors: courseConductors,
 };
 
 const mutationTypes = {
@@ -50,21 +52,34 @@ const actions = {
     commit(mutationTypes.SET_LOADING, loading);
   },
 
-  setCurrent({ commit }, { referee }) {
-    commit(mutationTypes.SET_CURRENT, referee);
+  setCurrent: async ({ commit }, { id }) => {
+    API.graphql({
+      query: getReferee,
+      variables: { id },
+    })
+      .then(
+        result => {
+          const referee = result.data.getReferee;
+          commit(mutationTypes.SET_CURRENT, referee);
+        }
+      )
+      .catch(notifyException)
+      .finally(() => {
+        commit(mutationTypes.SET_LOADING, false);
+      });
   },
-  load: async ({ commit, rootGetters }) => {
+  load: async ({ commit, dispatch, rootGetters }) => {
     commit(mutationTypes.SET_LOADING, true);
     const result = await API.graphql({
       query: listReferees,
     });
-    const referees = result.data.listReferees.items.map((r) => {
-      return { ...r };
-    });
+    const referees = result.data.listReferees.items;
     commit(mutationTypes.SET_REFEREES, referees);
     const { userId = null } = rootGetters["auth/user"];
-    const currentReferee = referees.find((r) => r.userId == userId) || {};
-    commit(mutationTypes.SET_CURRENT, currentReferee);
+    if (userId) {
+      const { id } = referees.find((r) => r.userId == userId) || {};
+      dispatch('setCurrent', { id });
+    }
     commit(mutationTypes.SET_LOADING, false);
   },
   create: async ({ commit, dispatch }, { referee, onSuccess = () => {} }) => {
@@ -94,7 +109,7 @@ const actions = {
       commit(mutationTypes.UPDATE_REFEREE, result.data.updateReferee);
       onSuccess(result.data.updateReferee);
       successMessage("Updated");
-      dispatch("load");
+      dispatch('setCurrent', result.data.updateReferee);
     } catch (err) {
       notifyException(err);
     }
@@ -113,7 +128,6 @@ const actions = {
         const referees = result.data.listReferees.items.map((r) => {
           return { ...r };
         });
-        console.log("findByEmail", referees);
         onSuccess(referees);
         commit(mutationTypes.QUERY_RESULT, referees);
       })
@@ -152,6 +166,7 @@ const referees = {
     byUserId: (state) => (userId) => {
       return state.referees.find((r) => r.userId === userId);
     },
+    conductors: state => state.conductors,
   },
   mutations,
   actions,

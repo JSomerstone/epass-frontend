@@ -8,6 +8,10 @@ export default class Referee {
       email = "",
       level = 1,
       userId = "",
+      clinic = {
+        date: null,
+        conductor: ""
+      },
     } = rawData;
 
     this.id = id;
@@ -17,6 +21,10 @@ export default class Referee {
     this.email = email;
     this.level = level;
     this.userId = userId;
+    this.clinic = clinic;
+    if (typeof this.clinic.date == "string") {
+      this.clinic.date = new Date(this.clinic.date);
+    }
   }
   isValid() {
     return this.firstName && this.lastName && this.email && this.country;

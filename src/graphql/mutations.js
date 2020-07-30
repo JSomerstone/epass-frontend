@@ -14,6 +14,10 @@ export const createReferee = /* GraphQL */ `
       email
       level
       userId
+      clinic {
+        date
+        conductor
+      }
       createdAt
       updatedAt
     }
@@ -32,6 +36,10 @@ export const updateReferee = /* GraphQL */ `
       email
       level
       userId
+      clinic {
+        date
+        conductor
+      }
       createdAt
       updatedAt
     }
@@ -50,6 +58,10 @@ export const deleteReferee = /* GraphQL */ `
       email
       level
       userId
+      clinic {
+        date
+        conductor
+      }
       createdAt
       updatedAt
     }

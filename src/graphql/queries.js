@@ -11,6 +11,10 @@ export const getReferee = /* GraphQL */ `
       email
       level
       userId
+      clinic {
+        date
+        conductor
+      }
       createdAt
       updatedAt
     }

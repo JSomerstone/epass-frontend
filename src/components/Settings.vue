@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div :key="referee.id">
     <!-- PROFILE -->
     <b-collapse
       class="card"
@@ -84,9 +84,18 @@
             </b-field>
           </div>
           <div class="field">
-            <b-field label="Previous clinic" label-position="on-border">
-              <b-input placeholder="Date" disabled expanded />
-              <b-input placeholder="Coordinator" disabled expanded />
+            <b-field label="Previous clinic date" label-position="on-border">
+              <b-datepicker
+                placeholder="Click to select..."
+                icon="calendar-today"
+                trap-focus
+                v-model="referee.clinic.date"
+              />
+            </b-field>
+          </div>
+          <div class="field">
+            <b-field label="Cource Conductor" label-position="on-border">
+              <cource-conductor v-model="referee.clinic.conductor" placeholder="Select..." expanded />
             </b-field>
           </div>
           <div class="field">
@@ -108,6 +117,7 @@
               </b-field>
           </div>
         </div>
+        <pre>{{referee}}</pre>
       </div>
     </b-collapse><!-- /PROFILE -->
 
@@ -235,7 +245,11 @@
 <script>
 import Referee from "../store/models/RefereeClass";
 import { infoMessage, warningMessage } from '../utils/notificationUtils';
+import CourceConductor from "./CourceConductor";
 export default {
+  components: {
+    CourceConductor
+  },
   data() {
     return {
       isOpen: this.$route.params.category || 'profile',
@@ -259,8 +273,8 @@ export default {
     isLoading: function() {
       return this.$store.getters["auth/loading"] || this.$store.getters["referees/loading"]
     },
-    referees: function() {
-      return this.$store.getters['referees/all'];
+    original: function() {
+      return this.$store.getters['referees/current'];
     },
   },
   methods: {
@@ -329,14 +343,15 @@ export default {
         : [];
     },
     loadData: function() {
-      this.referee = new Referee(
-        this.$store.getters["referees/byUserId"](this.userId) || {}
-      );
+      this.referee = new Referee(this.$store.getters["referees/current"]);
       this.countryQuery = this.referee.country;
       this.newEmail = this.referee.email;
     }
   },
   watch: {
+    original: function() {
+      this.loadData();
+    },
     userId: function() {
       this.loadData();
     },

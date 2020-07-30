@@ -6,6 +6,7 @@ type Referee @model @key(name: "byEmail", fields: ["email", "id"]) {
   email: String!
   level: Int!
   userId: String!
+  clinic: Clinic
 }
 
 type Tournament @model @key(name: "byYear", fields: ["year", "id"]) {
@@ -25,4 +26,9 @@ type Entry {
   games: Int!
   tenSeconds: Int!
   id: ID!
+}
+
+type Clinic {
+  date: String!
+  conductor: String!
 }
