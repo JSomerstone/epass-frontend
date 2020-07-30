@@ -17,8 +17,8 @@
       </b-field>
     </div>
     <div class="field">
-      <b-field :label="emailTitle" label-position="on-border">
-        <b-input type="email" v-model="email" placeholder="@" :required="emailRequired"></b-input>
+      <b-field label="Email" label-position="on-border">
+        <b-input type="email" v-model="email" placeholder="@" required></b-input>
       </b-field>
     </div>
     <div class="field">
@@ -53,7 +53,7 @@
       </b-field>
     </div>
     <div class="field">
-      <b-button type="is-info" outlined @click="handleSave" icon-left="account-plus">
+      <b-button type="is-info" outlined @click="handleSave" icon-left="account-plus" :disabled="!isReady">
         Add</b-button>
       <button class="button is-text" @click="handleCancel">Cancel</button>
     </div>
@@ -78,10 +78,6 @@ export default {
       default: () => {}
     },
     countryRequired: {
-      type: Boolean,
-      default: true
-    },
-    emailRequired: {
       type: Boolean,
       default: true
     },
@@ -134,16 +130,16 @@ export default {
     }
   },
   computed: {
-    emailTitle: function() {
-      return this.emailRequired 
-        ? "Email"
-        : "Email (optional)";
-    },
     countryTitle: function() {
       return this.countryQuery 
         ? "Nationality"
         : "Nationality (optional)";
     },
+    isReady: function() {
+      return (
+        this.firstName && this.lastName && this.email && (this.country || !this.countryRequired)
+      )
+    }
   },
 }
 </script>

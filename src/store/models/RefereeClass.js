@@ -9,7 +9,7 @@ export default class Referee {
       level = 1,
       userId = "",
       clinic = {
-        date: null,
+        date: "",
         conductor: ""
       },
     } = rawData;
@@ -22,7 +22,7 @@ export default class Referee {
     this.level = level;
     this.userId = userId;
     this.clinic = clinic;
-    if (typeof this.clinic.date == "string") {
+    if (this.clinic.date != "") {
       this.clinic.date = new Date(this.clinic.date);
     }
   }

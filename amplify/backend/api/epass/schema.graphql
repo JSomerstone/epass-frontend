@@ -2,10 +2,10 @@ type Referee @model @key(name: "byEmail", fields: ["email", "id"]) {
   id: ID!
   firstName: String!
   lastName: String!
-  country: String!
+  country: String
   email: String!
-  level: Int!
-  userId: String!
+  level: Int
+  userId: String
   clinic: Clinic
 }
 
