@@ -117,7 +117,7 @@
               </b-field>
           </div>
         </div>
-        <pre>{{referee}}</pre>
+        <pre v-if="debug">{{referee}}</pre>
       </div>
     </b-collapse><!-- /PROFILE -->
 
@@ -276,6 +276,9 @@ export default {
     original: function() {
       return this.$store.getters['referees/current'];
     },
+    debug: function() {
+      return this.$store.getters['referees/debug'];
+    }
   },
   methods: {
     handleProfileSave: function() {
