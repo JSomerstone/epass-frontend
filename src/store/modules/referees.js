@@ -1,3 +1,4 @@
+import Referee from "../models/RefereeClass";
 import { successMessage, notifyException } from "../../utils/notificationUtils";
 import { createReferee, updateReferee, createAssociation, updateAssociation } from "../../graphql/mutations";
 import { listReferees, getReferee } from "../../graphql/queries";
@@ -29,20 +30,16 @@ const mutations = {
   },
   [mutationTypes.SET_REFEREES](state, referees) {
     state.referees = referees;
-    localStorage.setItem("referees", JSON.stringify(referees));
   },
   [mutationTypes.ADD_REFEREE](state, referee) {
     state.referees.push(referee);
-    localStorage.setItem("referees", JSON.stringify(state.referees));
   },
   [mutationTypes.UPDATE_REFEREE](state, referee) {
     const index = state.referees.find(r => r.id == referee.id);
     state.referees[index] = referee;
-    localStorage.setItem("referees", JSON.stringify(state.referees));
   },
   [mutationTypes.SET_CURRENT](state, referee) {
-    state.current = referee;
-    localStorage.setItem("currentReferee", JSON.stringify(referee));
+    state.current = new Referee(referee);
   },
   [mutationTypes.QUERY_RESULT](state, refereeList) {
     state.queryResult = refereeList;

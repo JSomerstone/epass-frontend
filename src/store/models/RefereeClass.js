@@ -14,7 +14,9 @@ export default class Referee {
         date: null,
         conductor: ""
       },
-      association = {}
+      association = {
+        country: ""
+      },
     } = rawData;
 
     this.id = id;
@@ -28,7 +30,8 @@ export default class Referee {
     if (this.clinic.date != null) {
       this.clinic.date = new Date(this.clinic.date);
     }
-    this.association = new Association(association);
+    console.log({ association });
+    this.association = new Association(association || {});
   }
   isValid() {
     return this.firstName && this.lastName && this.email && this.country;
