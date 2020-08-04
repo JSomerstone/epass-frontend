@@ -347,15 +347,13 @@ export default {
     },
     loadData: function() {
       this.referee = new Referee(this.$store.getters["referees/current"]);
+      console.log('Loaded data', this.referee)
       this.countryQuery = this.referee.country;
       this.newEmail = this.referee.email;
     }
   },
   watch: {
     original: function() {
-      this.loadData();
-    },
-    userId: function() {
       this.loadData();
     },
     isOpen: function(category){

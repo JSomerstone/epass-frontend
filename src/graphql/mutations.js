@@ -18,6 +18,16 @@ export const createReferee = /* GraphQL */ `
         date
         conductor
       }
+      association {
+        country
+        name
+        address
+        email
+        coordinator
+        coordinatorEmail
+        createdAt
+        updatedAt
+      }
       createdAt
       updatedAt
     }
@@ -40,6 +50,16 @@ export const updateReferee = /* GraphQL */ `
         date
         conductor
       }
+      association {
+        country
+        name
+        address
+        email
+        coordinator
+        coordinatorEmail
+        createdAt
+        updatedAt
+      }
       createdAt
       updatedAt
     }
@@ -61,6 +81,16 @@ export const deleteReferee = /* GraphQL */ `
       clinic {
         date
         conductor
+      }
+      association {
+        country
+        name
+        address
+        email
+        coordinator
+        coordinatorEmail
+        createdAt
+        updatedAt
       }
       createdAt
       updatedAt
@@ -137,6 +167,57 @@ export const deleteTournament = /* GraphQL */ `
         id
       }
       teams
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const createAssociation = /* GraphQL */ `
+  mutation CreateAssociation(
+    $input: CreateAssociationInput!
+    $condition: ModelAssociationConditionInput
+  ) {
+    createAssociation(input: $input, condition: $condition) {
+      country
+      name
+      address
+      email
+      coordinator
+      coordinatorEmail
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const updateAssociation = /* GraphQL */ `
+  mutation UpdateAssociation(
+    $input: UpdateAssociationInput!
+    $condition: ModelAssociationConditionInput
+  ) {
+    updateAssociation(input: $input, condition: $condition) {
+      country
+      name
+      address
+      email
+      coordinator
+      coordinatorEmail
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const deleteAssociation = /* GraphQL */ `
+  mutation DeleteAssociation(
+    $input: DeleteAssociationInput!
+    $condition: ModelAssociationConditionInput
+  ) {
+    deleteAssociation(input: $input, condition: $condition) {
+      country
+      name
+      address
+      email
+      coordinator
+      coordinatorEmail
       createdAt
       updatedAt
     }

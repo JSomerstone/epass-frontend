@@ -1,5 +1,5 @@
 import { successMessage, notifyException } from "../../utils/notificationUtils";
-import { createReferee, updateReferee } from "../../graphql/mutations";
+import { createReferee, updateReferee, createAssociation, updateAssociation } from "../../graphql/mutations";
 import { listReferees, getReferee } from "../../graphql/queries";
 import { API } from "aws-amplify";
 const courseConductors = require("../../assets/course-conductors.json");
@@ -10,6 +10,8 @@ const state = {
   queryResult: [],
   current: {},
   conductors: courseConductors,
+  associations: [],
+  debug: false,
 };
 
 const mutationTypes = {
@@ -136,12 +138,38 @@ const actions = {
         commit(mutationTypes.SET_LOADING, false);
       });
   },
+  async createAssociation({ commit }, { association, onSuccess = () => { } }) {
+    commit(mutationTypes.SET_LOADING, true);
+    API.graphql({
+        query: createAssociation,
+        variables: {  input: association }
+      }).then(result => {
+        onSuccess(result.data.createAssociation);
+      }).catch(notifyException)
+      .finally(() => {
+        commit(mutationTypes.SET_LOADING, false);
+      });
+  },
+  async updateAssociation({ commit }, { association, onSuccess = () => { } }) {
+    commit(mutationTypes.SET_LOADING, true);
+    API.graphql({
+        query: updateAssociation,
+        variables: { input: association }
+      }).then(result => {
+        onSuccess(result.data.createAssociation);
+      })
+      .catch(notifyException)
+      .finally(() => {
+        commit(mutationTypes.SET_LOADING, false);
+      });
+  }
 };
 
 const referees = {
   namespaced: true,
   state,
   getters: {
+    debug: (state) => state.debug,
     loading: (state) => state.loading,
     all: (state) => state.referees,
     current: (state) => state.current,
@@ -167,6 +195,7 @@ const referees = {
       return state.referees.find((r) => r.userId === userId);
     },
     conductors: state => state.conductors,
+    nationalAssociations: state => state.associations,
   },
   mutations,
   actions,

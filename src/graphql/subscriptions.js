@@ -15,6 +15,16 @@ export const onCreateReferee = /* GraphQL */ `
         date
         conductor
       }
+      association {
+        country
+        name
+        address
+        email
+        coordinator
+        coordinatorEmail
+        createdAt
+        updatedAt
+      }
       createdAt
       updatedAt
     }
@@ -34,6 +44,16 @@ export const onUpdateReferee = /* GraphQL */ `
         date
         conductor
       }
+      association {
+        country
+        name
+        address
+        email
+        coordinator
+        coordinatorEmail
+        createdAt
+        updatedAt
+      }
       createdAt
       updatedAt
     }
@@ -52,6 +72,16 @@ export const onDeleteReferee = /* GraphQL */ `
       clinic {
         date
         conductor
+      }
+      association {
+        country
+        name
+        address
+        email
+        coordinator
+        coordinatorEmail
+        createdAt
+        updatedAt
       }
       createdAt
       updatedAt
@@ -119,6 +149,48 @@ export const onDeleteTournament = /* GraphQL */ `
         id
       }
       teams
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const onCreateAssociation = /* GraphQL */ `
+  subscription OnCreateAssociation {
+    onCreateAssociation {
+      country
+      name
+      address
+      email
+      coordinator
+      coordinatorEmail
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const onUpdateAssociation = /* GraphQL */ `
+  subscription OnUpdateAssociation {
+    onUpdateAssociation {
+      country
+      name
+      address
+      email
+      coordinator
+      coordinatorEmail
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const onDeleteAssociation = /* GraphQL */ `
+  subscription OnDeleteAssociation {
+    onDeleteAssociation {
+      country
+      name
+      address
+      email
+      coordinator
+      coordinatorEmail
       createdAt
       updatedAt
     }
