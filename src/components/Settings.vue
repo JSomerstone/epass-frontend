@@ -106,7 +106,7 @@
                 icon-left="account-check"
                 v-bind:loading="isLoading"
                 expanded
-              >Save
+              >Update
               </b-button>
 
               <button 
@@ -200,40 +200,42 @@
           </a>
       </div>
       <div class="card-content">
-        <p>Placeholder form - not functional</p>
-        <div class="field"><b-field label="Name" ><b-input /></b-field></div>
         <div class="field">
           <b-field label="Country">
             <b-autocomplete
-              v-model="countryQuery"
+              v-model="associationCountry"
               placeholder="Country"
               icon="earth"
               :keep-first="true"
               required
               expanded
-              :data="getCountries(countryQuery)"
-              @select="option => countryQuery = option"
+              :data="getCountries(associationCountry)"
+              @select="option => selectAssociation(option)"
             >
             </b-autocomplete>
           </b-field>
         </div>
-        <div class="field"><b-field label="Address" ><b-input /></b-field></div>
-        <div class="field"><b-field label="Email" ><b-input /></b-field></div>
+        <div class="field"><b-field label="Name" ><b-input v-model="association.name" /></b-field></div>
+        <div class="field"><b-field label="Address" ><b-input v-model="association.address" /></b-field></div>
+        <div class="field"><b-field label="Email" ><b-input v-model="association.email" /></b-field></div>
         <div class="field">
           <b-field label="Referee Coordinator" >
             <b-field>
-              <b-input placeholder="Name" />
-              <b-input placeholder="Email"/>
+              <b-input placeholder="Name" v-model="association.coordinator" />
+              <b-input placeholder="Email" v-model="association.coordinatorEmail"/>
             </b-field>
           </b-field>
         </div>
         <div class="field">
           <b-field>
-            <b-button type="is-primary" @click="infoMessage('Unimplemented')" expanded>Save</b-button>
-            <b-button type="is-text" @click="infoMessage('Unimplemented')">Cancel</b-button>
+            <b-button type="is-primary" @click="handleAssociationSave" expanded>
+              {{ association.id ? "Update" :"Save" }}
+            </b-button>
+            <b-button type="is-text" @click="loadData">Cancel</b-button>
           </b-field>
         </div>
       </div>
+        <pre v-if="debug">{{association}}</pre>
     </b-collapse><!-- /ASSOCIATION -->
   </div>
 </template>
@@ -244,7 +246,8 @@
 </style>
 <script>
 import Referee from "../store/models/RefereeClass";
-import { infoMessage, warningMessage } from '../utils/notificationUtils';
+import Association from "../store/models/Association";
+import { infoMessage, warningMessage, successMessage } from '../utils/notificationUtils';
 import CourceConductor from "./CourceConductor";
 export default {
   components: {
@@ -254,11 +257,13 @@ export default {
     return {
       isOpen: this.$route.params.category || 'profile',
       referee: new Referee(),
+      association: new Association(),
       newEmail: "",
       currentPassword: "",
       newPassword: "",
       confirmPassword: "",
       countryQuery: "",
+      associationCountry: "",
       genders: [
         { key: "m", gender: "Male" },
         { key: "f", gender: "Female" },
@@ -340,17 +345,60 @@ export default {
         });
       }
     },
+    selectAssociation(country) {
+      if(!country) {
+        return;
+      }
+      let matches = this.$store.getters['referees/associationCountry'](country);
+      if (matches.length) {
+        console.log("Found a match!", {country});
+        this.association = new Association(matches[0]);
+      } else {
+        console.log("No match, setting new", {country});
+        this.association = new Association({ country });
+      }
+    },
+    handleAssociationSave() {
+      let action = this.association.id 
+        ? "referees/updateAssociation"
+        : "referees/createAssociation";
+
+      this.$store.dispatch(action, {
+        association: this.association,
+        onSuccess: (updated) => {
+          console.log({action, updated});
+          this.association.id = updated.id;
+          if (this.referee.associationId != updated.id) {
+            this.referee.associationId = updated.id;
+            this.handleProfileSave();
+          } else {
+            successMessage("Updated");
+          }
+        }
+      });
+    },
+
     getCountries: function(name) {
       return name
         ? this.$store.getters['countries/byName'](name)
         : [];
     },
     loadData: function() {
+      if (this.referee.id) {
+        return; //Prevent double-loading
+      }
       this.referee = new Referee(this.$store.getters["referees/current"]);
-      console.log('Loaded data', this.referee)
+      if (this.referee.associationId) {
+        this.association = this.$store.getters['referees/association'](this.referee.associationId);
+      } else if (this.referee.country) {
+        let matches = this.$store.getters['referees/associationCountry'](this.referee.country);
+        this.association = matches ? matches[0] : this.association;
+        this.referee.associationId = this.association.id;
+      }
       this.countryQuery = this.referee.country;
+      this.associationCountry = this.association.country;
       this.newEmail = this.referee.email;
-    }
+    },
   },
   watch: {
     original: function() {

@@ -15,15 +15,7 @@ export const getReferee = /* GraphQL */ `
         date
         conductor
       }
-      association {
-        country
-        name
-        address
-        email
-        coordinator
-        coordinatorEmail
-        updatedAt
-      }
+      associationId
       createdAt
       updatedAt
     }
@@ -102,6 +94,7 @@ export const listTournaments = /* GraphQL */ `
 export const getAssociation = /* GraphQL */ `
   query GetAssociation($id: ID!) {
     getAssociation(id: $id) {
+      id
       country
       name
       address
@@ -121,6 +114,7 @@ export const listAssociations = /* GraphQL */ `
   ) {
     listAssociations(filter: $filter, limit: $limit, nextToken: $nextToken) {
       items {
+        id
         country
         name
         address

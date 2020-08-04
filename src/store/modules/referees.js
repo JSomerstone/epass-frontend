@@ -1,12 +1,13 @@
 import Referee from "../models/RefereeClass";
+import Association from "../models/Association";
 import { successMessage, notifyException } from "../../utils/notificationUtils";
 import { createReferee, updateReferee, createAssociation, updateAssociation } from "../../graphql/mutations";
-import { listReferees, getReferee } from "../../graphql/queries";
+import { listReferees, getReferee, listAssociations } from "../../graphql/queries";
 import { API } from "aws-amplify";
 const courseConductors = require("../../assets/course-conductors.json");
 
 const state = {
-  loading: false,
+  loading: 0,
   referees: [],
   queryResult: [],
   current: {},
@@ -18,18 +19,34 @@ const state = {
 const mutationTypes = {
   SET_LOADING: "set-loading",
   SET_REFEREES: "set-referees",
-  SET_CURRENT: "set-current",
-  QUERY_RESULT: "set-query-result",
   ADD_REFEREE: "add-referee",
   UPDATE_REFEREE: "update-referee",
+  SET_CURRENT: "set-current",
+  SET_ASSOCIATIONS: "set-associations",
+  ADD_ASSOCIATION: "add-association",
+  UPDATE_ASSOCIATION: "update-association",
+  QUERY_RESULT: "set-query-result",
 };
 
 const mutations = {
   [mutationTypes.SET_LOADING](state, loading) {
-    state.loading = loading;
+    state.loading = state.loading + (loading ? 1 : -1);
+    if (state.loading < 0) {
+      state.loading = 0;
+    }
   },
   [mutationTypes.SET_REFEREES](state, referees) {
     state.referees = referees;
+  },
+  [mutationTypes.SET_ASSOCIATIONS](state, list) {
+    state.associations = list;
+  },
+  [mutationTypes.ADD_ASSOCIATION](state, item) {
+    state.associations.push(item);
+  },
+  [mutationTypes.UPDATE_ASSOCIATION](state, item) {
+    const index = state.associations.find(r => r.id == item.id);
+    state.associations[index] = item;
   },
   [mutationTypes.ADD_REFEREE](state, referee) {
     state.referees.push(referee);
@@ -135,25 +152,39 @@ const actions = {
         commit(mutationTypes.SET_LOADING, false);
       });
   },
-  async createAssociation({ commit }, { association, onSuccess = () => { } }) {
+  async loadAssociations({ commit }) {
     commit(mutationTypes.SET_LOADING, true);
     API.graphql({
-        query: createAssociation,
-        variables: {  input: association }
-      }).then(result => {
-        onSuccess(result.data.createAssociation);
-      }).catch(notifyException)
+      query: listAssociations
+    }).then(result => {
+      commit(mutationTypes.SET_ASSOCIATIONS, result.data.listAssociations.items)
+    }).catch(notifyException)
       .finally(() => {
         commit(mutationTypes.SET_LOADING, false);
-      });
+    })
+  },
+  async createAssociation({ commit }, { association, onSuccess = () => { } }) {
+    commit(mutationTypes.SET_LOADING, true);
+    delete association.id;
+    API.graphql({
+        query: createAssociation,
+        variables: {  input: new Association(association) }
+    }).then(result => {
+      onSuccess(result.data.createAssociation);
+      commit(mutationTypes.ADD_ASSOCIATION, result.data.createAssociation);
+    }).catch(notifyException)
+    .finally(() => {
+      commit(mutationTypes.SET_LOADING, false);
+    });
   },
   async updateAssociation({ commit }, { association, onSuccess = () => { } }) {
     commit(mutationTypes.SET_LOADING, true);
     API.graphql({
         query: updateAssociation,
-        variables: { input: association }
+        variables: { input: new Association(association) }
       }).then(result => {
-        onSuccess(result.data.createAssociation);
+        onSuccess(result.data.updateAssociation);
+        commit(mutationTypes.UPDATE_ASSOCIATION, result.data.updateAssociation);
       })
       .catch(notifyException)
       .finally(() => {
@@ -167,7 +198,7 @@ const referees = {
   state,
   getters: {
     debug: (state) => state.debug,
-    loading: (state) => state.loading,
+    loading: (state) => state.loading > 0,
     all: (state) => state.referees,
     current: (state) => state.current,
     search: (state) => (query) => {
@@ -193,6 +224,14 @@ const referees = {
     },
     conductors: state => state.conductors,
     nationalAssociations: state => state.associations,
+    association: (state) => (id) => {
+      return state.associations.find((r) => r.id === id);
+    },
+    associationCountry: (state) => (country) => {
+      return state.associations.filter(
+        a => a.country.toLowerCase().includes(country.toLowerCase())
+      );
+    }
   },
   mutations,
   actions,

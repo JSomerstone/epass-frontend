@@ -4,10 +4,7 @@
     <div class="columns">
       <div class="column"></div>
       <div class="column is-half">
-        <div v-if="loading" class="loading">
-          Loading...
-        </div>
-        <settings v-else />
+        <settings/>
       </div>
       <div class="column"></div>
     </div>
@@ -33,6 +30,9 @@ export default {
     loadData: function() {
       if (!this.$store.getters["referees/all"].length) {
         this.$store.dispatch("referees/load");
+      }
+      if (!this.$store.getters["referees/nationalAssociations"].length) {
+        this.$store.dispatch("referees/loadAssociations");
       }
     }
   },

@@ -18,16 +18,7 @@ export const createReferee = /* GraphQL */ `
         date
         conductor
       }
-      association {
-        country
-        name
-        address
-        email
-        coordinator
-        coordinatorEmail
-        createdAt
-        updatedAt
-      }
+      associationId
       createdAt
       updatedAt
     }
@@ -50,16 +41,7 @@ export const updateReferee = /* GraphQL */ `
         date
         conductor
       }
-      association {
-        country
-        name
-        address
-        email
-        coordinator
-        coordinatorEmail
-        createdAt
-        updatedAt
-      }
+      associationId
       createdAt
       updatedAt
     }
@@ -82,16 +64,7 @@ export const deleteReferee = /* GraphQL */ `
         date
         conductor
       }
-      association {
-        country
-        name
-        address
-        email
-        coordinator
-        coordinatorEmail
-        createdAt
-        updatedAt
-      }
+      associationId
       createdAt
       updatedAt
     }
@@ -178,6 +151,7 @@ export const createAssociation = /* GraphQL */ `
     $condition: ModelAssociationConditionInput
   ) {
     createAssociation(input: $input, condition: $condition) {
+      id
       country
       name
       address
@@ -195,6 +169,7 @@ export const updateAssociation = /* GraphQL */ `
     $condition: ModelAssociationConditionInput
   ) {
     updateAssociation(input: $input, condition: $condition) {
+      id
       country
       name
       address
@@ -212,6 +187,7 @@ export const deleteAssociation = /* GraphQL */ `
     $condition: ModelAssociationConditionInput
   ) {
     deleteAssociation(input: $input, condition: $condition) {
+      id
       country
       name
       address

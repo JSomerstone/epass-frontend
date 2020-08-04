@@ -1,5 +1,3 @@
-import Association from "./Association";
-
 export default class Referee {
   constructor(rawData = {}) {
     const {
@@ -14,9 +12,7 @@ export default class Referee {
         date: null,
         conductor: ""
       },
-      association = {
-        country: ""
-      },
+      associationId = null,
     } = rawData;
 
     this.id = id;
@@ -30,8 +26,7 @@ export default class Referee {
     if (this.clinic.date != null) {
       this.clinic.date = new Date(this.clinic.date);
     }
-    console.log({ association });
-    this.association = new Association(association || {});
+    this.associationId = associationId;
   }
   isValid() {
     return this.firstName && this.lastName && this.email && this.country;
