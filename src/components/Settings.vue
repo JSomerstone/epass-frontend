@@ -221,8 +221,8 @@
         <div class="field">
           <b-field label="Referee Coordinator" >
             <b-field>
-              <b-input placeholder="Name" v-model="association.coordinator" />
-              <b-input placeholder="Email" v-model="association.coordinatorEmail"/>
+              <b-input placeholder="Name" v-model="association.coordinator"  expanded/>
+              <b-input placeholder="Email" v-model="association.coordinatorEmail" expanded/>
             </b-field>
           </b-field>
         </div>
@@ -351,10 +351,8 @@ export default {
       }
       let matches = this.$store.getters['referees/associationCountry'](country);
       if (matches.length) {
-        console.log("Found a match!", {country});
         this.association = new Association(matches[0]);
       } else {
-        console.log("No match, setting new", {country});
         this.association = new Association({ country });
       }
     },
@@ -366,7 +364,6 @@ export default {
       this.$store.dispatch(action, {
         association: this.association,
         onSuccess: (updated) => {
-          console.log({action, updated});
           this.association.id = updated.id;
           if (this.referee.associationId != updated.id) {
             this.referee.associationId = updated.id;
