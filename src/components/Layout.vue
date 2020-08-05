@@ -34,7 +34,7 @@
         <p>
           <strong>ePass</strong> by <a href="https://github.com/JSomerstone">JSomerstone</a>
           |
-          The source code is licensed under <a href="http://www.apache.org/licenses/">Apache Lisence v. 2</a>.
+          The source code is licensed under <a href="http://www.apache.org/licenses/">Apache Licence v. 2</a>.
         </p>
       </div>
     </footer>

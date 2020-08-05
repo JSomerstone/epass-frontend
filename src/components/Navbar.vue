@@ -23,6 +23,11 @@
                   {{ year }}
               </b-navbar-item>
           </b-navbar-dropdown>
+          <b-navbar-item v-if="isLoggedIn">
+            <router-link :to="{ name: 'statistics', params: { year }}">
+              Statistics
+            </router-link>
+          </b-navbar-item>
           <b-navbar-item v-else>
             <router-link :to="{ name: 'about'}">
               About

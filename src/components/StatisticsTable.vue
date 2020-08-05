@@ -1,38 +1,77 @@
 <template>
   <div class="statistics">
-    <h2>International</h2>
+    <h2>Certification maintanance, level {{ referee.level }}</h2>
     <p>
-      <strong>{{ statistics.tournaments.international }}</strong> 
-      / x tournaments
+      <b-icon
+        :icon="iconInternationalGames()"
+        :type="iconType(minInternationalGames, statistics.games.international)">
+      </b-icon>
+      <span class="large"><strong>{{ statistics.games.international }}</strong> 
+      / {{ minInternationalGames }}</span> international games as referee
     </p>
     <p>
-      <strong>{{ statistics.games.international }}</strong> 
-      / x games as referee
+      <b-icon
+        :icon="iconTotalGames()"
+        :type="iconType(minTotalGames, statistics.games.total)">
+      </b-icon>
+      <span class="large"><strong>{{ statistics.games.total }}</strong> 
+      / {{ minTotalGames }}</span> total games as referee
     </p>
-    <p>
-      <strong>{{ statistics.tenSeconds.international }}</strong> 
-      games as 10s timer / table official
-    </p>
-    <h2>National</h2>
-    <p>
-      <strong>{{ statistics.tournaments.national }}</strong> 
-      / x tournaments
-    </p>
-    <p>
-      <strong>{{ statistics.games.national }}</strong> 
-      / x games as referee
-    </p>
-    <p>
-      <strong>{{ statistics.tenSeconds.national }}</strong> 
-      games as 10s timer / table official
-    </p>
-    <pre>{{ statistics }}</pre>
+    <table>
+        <tr>
+          <th></th>
+          <th>Tournaments</th>
+          <th>Games</th>
+          <th>10s / table official</th>
+        </tr>
+        <tr>
+          <td>International</td>
+          <td>{{ statistics.tournaments.international }}</td>
+          <td>{{ statistics.games.international }}</td>
+          <td>{{ statistics.tenSeconds.international }}</td>
+        </tr>
+        <tr>
+          <td>National</td>
+          <td>{{ statistics.tournaments.national }}</td>
+          <td>{{ statistics.games.national }}</td>
+          <td>{{ statistics.tenSeconds.national }}</td>
+        </tr>
+
+        <tr>
+          <td>Total</td>
+          <td>{{ statistics.tournaments.total }}</td>
+          <td>{{ statistics.games.total }}</td>
+          <td>{{ statistics.tenSeconds.total }}</td>
+        </tr>
+    </table>
   </div>
 </template>
+<style>
+span.large {
+  font-size: xx-large;
+}
+</style>
 <script>
 export default {
   props: ["year", "tournaments", "referee"],
-  
+  data() {
+    return {
+      requirements: {
+        lvl1: {
+          total: 8,
+          international: 0
+        },
+        lvl2: {
+          total: 12,
+          international: 4
+        },
+        lvl3: {
+          total: 18,
+          international: 10
+        },
+      }
+    }
+  },
   computed: {
     statistics: function() {
       const { id } = this.referee;
@@ -50,17 +89,47 @@ export default {
             ? 'international' 
             : 'national';
           stats.games[type] += games;
+          stats.games.total += games;
           stats.tenSeconds[type] += tenSeconds;
-          stats.tournaments[type] += 1;
+          stats.tenSeconds.total += tenSeconds;
+          stats.tournaments[type]++;
+          stats.tournaments.total++;
           return stats;
         },
         {
-          games: { international: 0, national: 0 },
-          tenSeconds: { international: 0, national: 0 },
-          tournaments: { international: 0, national: 0 },
+          games: { international: 0, national: 0, total: 0 },
+          tenSeconds: { international: 0, national: 0, total: 0 },
+          tournaments: { international: 0, national: 0, total: 0 },
         }
       );
     },
-  }
+    minInternationalGames: function() {
+      return (this.referee.level) 
+        ? this.requirements[`lvl${this.referee.level}`].international
+        : 0
+    },
+    minTotalGames: function() {
+      return (this.referee.level) 
+        ? this.requirements[`lvl${this.referee.level}`].total
+        : 0
+    }
+  },
+  methods: {
+    iconInternationalGames: function() {
+      return (this.statistics.games.international >= this.minInternationalGames)
+        ? 'check-circle'
+        : 'alert-circle-outline'
+    },
+    iconTotalGames: function() {
+      return (this.statistics.games.total >= this.minTotalGames)
+        ? 'check-circle'
+        : 'alert-circle-outline'
+    },
+    iconType: function(expected, actual) {
+      return (expected <= actual)
+        ? 'is-success'
+        : 'is-warning'
+    }
+  },
 }
 </script>
