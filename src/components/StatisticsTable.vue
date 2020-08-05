@@ -1,22 +1,24 @@
 <template>
   <div class="statistics">
-    <h2>Certification maintanance, level {{ referee.level }}</h2>
-    <p>
-      <b-icon
-        :icon="iconInternationalGames()"
-        :type="iconType(minInternationalGames, statistics.games.international)">
-      </b-icon>
-      <span class="large"><strong>{{ statistics.games.international }}</strong> 
-      / {{ minInternationalGames }}</span> international games as referee
-    </p>
-    <p>
-      <b-icon
-        :icon="iconTotalGames()"
-        :type="iconType(minTotalGames, statistics.games.total)">
-      </b-icon>
-      <span class="large"><strong>{{ statistics.games.total }}</strong> 
-      / {{ minTotalGames }}</span> total games as referee
-    </p>
+    <div v-if="referee.level > 0">
+      <h2>Certification maintanance, level {{ referee.level }}</h2>
+      <p>
+        <b-icon
+          :icon="iconInternationalGames()"
+          :type="iconType(minInternationalGames, statistics.games.international)">
+        </b-icon>
+        <span class="large"><strong>{{ statistics.games.international }}</strong> 
+        / {{ minInternationalGames }}</span> international games as a referee
+      </p>
+      <p>
+        <b-icon
+          :icon="iconTotalGames()"
+          :type="iconType(minTotalGames, statistics.games.total)">
+        </b-icon>
+        <span class="large"><strong>{{ statistics.games.total }}</strong> 
+        / {{ minTotalGames }}</span> total games as a referee
+      </p>
+    </div>
     <table>
         <tr>
           <th></th>
