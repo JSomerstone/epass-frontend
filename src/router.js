@@ -8,6 +8,7 @@ import TournamentPage from "./views/TournamentPage.vue";
 import Tournaments from "./views/Tournaments.vue";
 import Signup from "./views/Signup.vue";
 import Settings from "./views/Settings.vue";
+import Statistics from "./views/Statistics.vue";
 import Privacy from "./views/Privacy.vue";
 import ForgotPassword from "./views/ForgotPassword.vue";
 
@@ -37,6 +38,11 @@ const router = new Router({
       name: "tournaments",
       component: Tournaments,
       meta: { title: "Tournaments" },
+    },
+    {
+      path: "/statistics/:year?",
+      name: "statistics",
+      component: Statistics,
     },
     {
       path: "/tournament/:id/",
