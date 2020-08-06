@@ -5,35 +5,6 @@ import Amplify, { Auth } from 'aws-amplify';
 import awsconfig from "../../aws-exports";
 Amplify.configure(awsconfig);
 
-const AUTH_KEYS = {
-  META: "authMetaData",
-  USER: "LastAuthUser",
-  USER_DATA: "userData"
-};
-
-let userInfo = { email: "", userId: "", email_verified: false };
-const localLoad = (key, defaultValue = null) => JSON.parse(localStorage.getItem(key)) || defaultValue;
-const localSave = (key, value) => localStorage.setItem(key, JSON.stringify(value));
-
-const authMeta = localLoad(AUTH_KEYS.META);
-if (authMeta) {
-  try {
-    // There has been a login -> Load from Local Storage
-    let userId = localStorage.getItem(authMeta.userKey);
-    const userData = localLoad(authMeta.userDataKey);
-    userInfo = {
-      userId,
-      email_verified: Boolean(userData.UserAttributes.find(
-        (attr) => attr.Name == "email_verified"
-      ).Value),
-      email: userData.UserAttributes.find((attr) => attr.Name == "email").Value,
-    };
-  } catch (error) {
-    errorMessage("Error while loading user data from localStorage", error);
-  }
-}
-
-
 const signupSteps = {
   auth: 0,
   verify: 1,
@@ -44,13 +15,12 @@ const signupSteps = {
 const state = {
   debug: false,
   loading: false,
-  userInfo,
+  userInfo: { email: "", userId: "", email_verified: false },
   signupStep: signupSteps.auth,
   signupEmail: "",
   signupUserId: "",
 };
 
-/*
 Auth.currentAuthenticatedUser()
   .then(user => {
     state.userInfo = {
@@ -59,8 +29,7 @@ Auth.currentAuthenticatedUser()
       email: user.attributes.email
     };
   })
-  .catch(err => console.log(err));
-*/
+  .catch(err => errorMessage("Unable to get current user", err));
 
 const mutationTypes = {
   SET_LOADING: "set-loading",
@@ -78,13 +47,7 @@ const mutations = {
   [mutationTypes.SET_USER_INFO](state, user) {
     if (user == null) {
       state.userInfo = { userId: "", email: "", email_verified: false };
-      localStorage.removeItem(AUTH_KEYS.META);
     } else {
-      localSave(AUTH_KEYS.META, {
-        keyPrefix: user.keyPrefix,
-        userKey: `${user.keyPrefix}.${AUTH_KEYS.USER}`,
-        userDataKey: `${user.keyPrefix}.${user.username}.${AUTH_KEYS.USER_DATA}`,
-      });
       const {
         attributes: { email = "", email_verified = false },
         username = "",
