@@ -24,7 +24,7 @@
               </b-navbar-item>
           </b-navbar-dropdown>
           <b-navbar-item v-if="isLoggedIn">
-            <router-link :to="{ name: 'statistics', params: { year }}">
+            <router-link :to="{ name: 'statistics', params: { year: now }}">
               Statistics
             </router-link>
           </b-navbar-item>
@@ -69,7 +69,8 @@
 export default {
   data() {
     return {
-      years: [2020, 2019]
+      years: [2020, 2019],
+      now: new Date().getFullYear()
     }
   },
   computed: {
