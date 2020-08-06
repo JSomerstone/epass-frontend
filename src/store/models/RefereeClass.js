@@ -8,10 +8,7 @@ export default class Referee {
       email = "",
       level = 1,
       userId = "",
-      clinic = {
-        date: null,
-        conductor: ""
-      },
+      clinic = null,
       associationId = null,
     } = rawData;
 
@@ -22,7 +19,10 @@ export default class Referee {
     this.email = email;
     this.level = level;
     this.userId = userId;
-    this.clinic = clinic;
+    this.clinic = clinic || {
+      date: null,
+      conductor: ""
+    };
     if (this.clinic.date != null) {
       this.clinic.date = new Date(this.clinic.date);
     }

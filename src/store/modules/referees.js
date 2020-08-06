@@ -100,6 +100,7 @@ const actions = {
   },
   create: async ({ commit, dispatch }, { referee, onSuccess = () => {} }) => {
     commit(mutationTypes.SET_LOADING, true);
+    delete referee.clinic;
     try {
       const result = await API.graphql({
         query: createReferee,
