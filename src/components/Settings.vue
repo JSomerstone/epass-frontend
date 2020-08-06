@@ -68,20 +68,7 @@
             </b-field>
           </div>
           <div class="field">
-            <b-field label="Referee Level" label-position="on-border">
-              <b-radio-button v-model="referee.level" :native-value="0" >
-                  National
-              </b-radio-button>
-              <b-radio-button v-model="referee.level" :native-value="1" >
-                  1
-              </b-radio-button>
-              <b-radio-button v-model="referee.level" :native-value="2" >
-                  2
-              </b-radio-button>
-              <b-radio-button v-model="referee.level" :native-value="3" >
-                  3
-              </b-radio-button>
-            </b-field>
+            <level v-model="referee.level" />
           </div>
           <div class="field">
             <b-field label="Previous clinic date" label-position="on-border">
@@ -249,9 +236,11 @@ import Referee from "../store/models/RefereeClass";
 import Association from "../store/models/Association";
 import { infoMessage, warningMessage, successMessage } from '../utils/notificationUtils';
 import CourceConductor from "./CourceConductor";
+import Level from "./field/Level"
 export default {
   components: {
-    CourceConductor
+    CourceConductor,
+    Level,
   },
   data() {
     return {

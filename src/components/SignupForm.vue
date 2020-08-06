@@ -71,20 +71,7 @@
             >
             </b-autocomplete>
           </b-field>
-          <b-field label="Level" label-position="on-border">
-            <b-radio-button v-model="referee.level" :native-value="1" >
-                1
-            </b-radio-button>
-            <b-radio-button v-model="referee.level" :native-value="2" >
-                2
-            </b-radio-button>
-            <b-radio-button v-model="referee.level" :native-value="3" >
-                3
-            </b-radio-button>
-            <b-radio-button v-model="referee.level" :native-value="0" >
-                National
-            </b-radio-button>
-          </b-field>
+          <level v-model="referee.level" />
           <b-field>
             <b-button
               @click="findExistingProfile"
@@ -128,17 +115,21 @@ input.center-text {
 }
 </style>
 <script>
-import Referee from "../store/models/RefereeClass"
+import Referee from "../store/models/RefereeClass";
+import Level from "./field/Level";
 import { infoMessage } from '../utils/notificationUtils';
-import { mapGetters } from 'vuex'
+import { mapGetters } from 'vuex';
   export default {
+    components: {
+      Level,
+    },
     data() {
       return {
         signupButton: "is-primary",
         verifyButton: "is-primary",
         profileButton: "is-primary",
         loginButton: "is-primary",
-        referee: new Referee({ id: null }),
+        referee: new Referee(),
         password: "",
         verification: "",
         countryQuery: "",

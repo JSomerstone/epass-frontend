@@ -37,20 +37,7 @@
       </b-field>
     </div>
     <div class="field">
-      <b-field label="Level" label-position="on-border">
-        <b-radio-button v-model="level" :native-value="1" >
-            1
-        </b-radio-button>
-        <b-radio-button v-model="level" :native-value="2" >
-            2
-        </b-radio-button>
-        <b-radio-button v-model="level" :native-value="3" >
-            3
-        </b-radio-button>
-        <b-radio-button v-model="level" :native-value="0" >
-            National
-        </b-radio-button>
-      </b-field>
+      <level v-model="level" />
     </div>
     <div class="field">
       <b-button type="is-info" outlined @click="handleSave" icon-left="account-plus" :disabled="!isReady">
@@ -66,8 +53,11 @@
 </style>
 <script>
 import Referee from "../store/models/RefereeClass";
-
+import Level from "./field/Level"
 export default {
+  components: {
+    Level
+  },
   props: {
     onSave: {
       type: Function,
