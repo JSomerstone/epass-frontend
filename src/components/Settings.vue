@@ -378,7 +378,9 @@ export default {
         this.association = this.$store.getters['referees/association'](this.referee.associationId);
       } else if (this.referee.country) {
         let matches = this.$store.getters['referees/associationCountry'](this.referee.country);
-        this.association = matches ? matches[0] : this.association;
+        this.association = matches.length ? matches[0] : new Association({
+          country: this.referee.country
+        });
         this.referee.associationId = this.association.id;
       }
       this.countryQuery = this.referee.country;
