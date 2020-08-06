@@ -68,16 +68,17 @@
                   <div class="field">
                       <b-field label="Dates" label-position="on-border">
                           <b-datepicker
-                              icon="calendar-today"
-                              trap-focus
-                              range
-                              inline
-                              v-model="t.dates"
-                              placeholder="Pick tournament dates"
-                              :required="true"
-                              :min-date="minDate"
-                              :max-date="maxDate"
-                              :first-day-of-week="1"
+                            icon="calendar-today"
+                            trap-focus
+                            range
+                            inline
+                            v-model="t.dates"
+                            placeholder="Pick tournament dates"
+                            :required="true"
+                            :min-date="minDate"
+                            :max-date="maxDate"
+                            :first-day-of-week="1"
+                             @input="onDateChange" 
                           >
                           </b-datepicker>
                       </b-field>
@@ -251,12 +252,11 @@ export default {
     }
   },
   data(){
-    const today = new Date();
     return {
       ...defaults,
       t: new Tournament({year: this.year }),
-      minDate: new Date(`${today.getFullYear()-1}-01-01`),
-      maxDate: today,
+      minDate: new Date(`${this.year-1}-01-01`),
+      maxDate: new Date(`${this.year+1}-12-31`),
       showAddTdForm: false,
       showAddRefereeForm: false,
     }
@@ -286,6 +286,9 @@ export default {
     },
     getRefereeById(id) {
       return this.$store.getters['referees/byId'](id);
+    },
+    onDateChange(value) {
+      this.t.year = value[0].getFullYear();
     },
     handleSave() {
       if (this.t.id) {

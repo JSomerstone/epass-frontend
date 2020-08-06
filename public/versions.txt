@@ -1,0 +1,12 @@
+v 0.1.3 2020-08-05
+- Adding future tournaments enabled
+
+v 0.1.2 2020-08-05
+- Statistics -view
+- National associations -settings
+- Previous Clinic -settings
+- New field for adding teams to tournament
+- Bug fixes 
+
+v 0.1.0 2020-07-21
+- Initial version
