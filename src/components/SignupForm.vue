@@ -55,6 +55,37 @@
           </b-field>
         </b-step-item> <!--/Verification -->
         <b-step-item label="Profile" step="3"  :clickable="false">
+          <div v-if="!emailMatch">
+            <p>
+              See if you 
+              <b-tooltip 
+                label="Someone may have added you to a tournament. In that case you already have a profile." 
+                dashed
+                multilined
+                position="is-bottom"
+              >
+                already have a profile
+              </b-tooltip>
+            </p>
+            <b-autocomplete
+              v-model="profileQuery"
+              :data="filteredReferees"
+              placeholder="Search by your name"
+              keep-first
+              @select="selectExistingProfile"
+              icon="account-search"
+            >
+              <template slot-scope="props">
+                {{ props.option.firstName }} {{ props.option.lastName }} 
+                &lt;{{ props.option.email || "email-missing"}}&gt;
+              </template>
+              <template slot="empty">
+                No profile for <b>{{profileQuery}}</b>, please use the form below.
+              </template>
+            </b-autocomplete>
+            <p>Or create a new one:</p>
+            <hr />
+          </div>
           <b-field label="Name" label-position="on-border">
             <b-input v-model="referee.firstName" required expanded placeholder="Given name" />
             <b-input v-model="referee.lastName" required expanded placeholder="Family name" />
@@ -82,7 +113,6 @@
             <b-button 
               v-bind:type="profileButton" 
               @click="handleSaveProfile"
-              v-bind:loading="isLoading"
               icon-left="card-account-details"
               expanded
               v-bind:disabled="!profileReady"
@@ -117,7 +147,7 @@ input.center-text {
 <script>
 import Referee from "../store/models/RefereeClass";
 import Level from "./field/Level";
-import { infoMessage, successMessage } from '../utils/notificationUtils';
+import { infoMessage } from '../utils/notificationUtils';
 import { mapGetters } from 'vuex';
   export default {
     components: {
@@ -133,6 +163,8 @@ import { mapGetters } from 'vuex';
         password: "",
         verification: "",
         countryQuery: "",
+        profileQuery: "",
+        emailMatch: false,
       }
     },
     methods: {
@@ -174,12 +206,8 @@ import { mapGetters } from 'vuex';
         });
       },
 
-      loadUnauthenticated() {
-        this.$store.dispatch('referees/loadUnauthenticated', { 
-          onSuccess: items => {
-            successMessage(`Found ${items.length} unautenticated referees`);
-          }
-        });
+      loadProfiles() {
+        this.$store.dispatch('referees/load');
       },
 
       findExistingProfile() {
@@ -189,14 +217,22 @@ import { mapGetters } from 'vuex';
         });
       },
 
+      selectExistingProfile(referee) {
+        this.referee = new Referee({
+          ...referee,
+          email: this.referee.email
+        });
+        this.referee.userId = this.userId;
+        this.countryQuery = this.referee.country;
+      },
+
       preFillProfile(results = []) {
         if (!results || results.length < 1) {
           return;
         } else {
-          infoMessage("Profile found");
-          this.referee = new Referee(results[0]);
-          this.referee.userId = this.userId;
-          this.countryQuery = this.referee.country;
+          infoMessage("Profile found by email");
+          this.emailMatch = true;
+          this.selectExistingProfile(results[0]);
         }
       },
 
@@ -233,7 +269,13 @@ import { mapGetters } from 'vuex';
         isLoading: "auth/loading",
         loggedIn: "auth/loggedIn",
         unauthenticated: "referees/unauthenticated",
-      })
+      }),
+      filteredReferees: function() {
+        return this.$store.getters['referees/search'](
+          this.profileQuery,
+          { userId: "" }
+        );
+      },
     },
     watch: {
       signupEmail: function(email) {
@@ -241,6 +283,10 @@ import { mapGetters } from 'vuex';
       },
       userId: function(userId) {
         this.referee.userId = userId;
+      },
+      step: function(s) {
+        // On Profile-step, load unautenticated referees
+        (s == 2) && this.loadProfiles();
       }
     }
   }
