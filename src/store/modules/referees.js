@@ -191,6 +191,11 @@ const actions = {
       .finally(() => {
         commit(mutationTypes.SET_LOADING, false);
       });
+  },
+  reset({ commit }) {
+    commit(mutationTypes.SET_REFEREES, []);
+    commit(mutationTypes.SET_CURRENT, {});
+    commit(mutationTypes.SET_ASSOCIATIONS, []);
   }
 };
 

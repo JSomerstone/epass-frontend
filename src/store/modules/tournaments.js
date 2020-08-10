@@ -168,6 +168,11 @@ const actions = {
     commit(mutationTypes.SET_FILTER, filter);
     dispatch("filter");
   },
+  reset: ({ commit }) => {
+    commit(mutationTypes.SET_TOURNAMENTS, []);
+    commit(mutationTypes.SET_FILTERED, []);
+    commit(mutationTypes.SET_WIP, {});
+  },
 };
 
 const tournaments = {

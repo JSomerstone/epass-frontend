@@ -156,6 +156,8 @@ const actions = {
     Auth.signOut()
       .then(() => {
         commit(mutationTypes.SET_USER_INFO, null);
+        dispatch("referees/reset", {}, { root: true });
+        dispatch("tournaments/reset", {}, { root: true });
         Toast.open({
           message: "Logged out, bye! 👋",
           type: "is-success",
