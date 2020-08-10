@@ -86,7 +86,7 @@
               </div>
               <div class="column is-half">
                   <div class="field" id="td-field">
-                      <b-field label="Technical Delegate TD">
+                      <b-field label="Tournament Director / TD">
                         <div class="columns">
                           <div class="column is-full" v-if="!t.td.id && !showAddTdForm">
                             <b-field>
@@ -165,15 +165,15 @@
                           <b-button @click="addCurrent" type="is-info" icon-left="account-plus" title="Add yourself">
                           </b-button>
                         </b-field>
-                      </b-field>
-                      <b-field label="Add referee"  v-if="showAddRefereeForm" label-position="on-border">
-                        <referee-form 
-                          :onSave="addReferee" 
-                          :onCancel="() => showAddRefereeForm = false"
-                          :emailRequired="false"
-                          :countryRequired="false"
-                          :levelRequired="false"
-                        />
+                        <b-field label="Add referee"
+                          class="referee-form" 
+                          v-if="showAddRefereeForm"
+                        >
+                          <referee-form
+                            :onSave="addReferee"
+                            :onCancel="() => showAddRefereeForm = false"
+                          />
+                        </b-field>
                       </b-field>
                       <referee-table 
                         v-model="t.referees"
@@ -213,6 +213,10 @@
 .panel-block > form{
     margin: 24px;
 }
+
+.referee-form {
+  padding: 20px;
+}
 </style>
 <script>
 import RefereeForm from "./RefereeForm";
@@ -223,7 +227,6 @@ import { infoMessage, warningMessage } from "../utils/notificationUtils";
 
 const defaults = {
   countryQuery: "",
-  tdEmail: "",
   tdQuery: "",
   ref: "",
 };

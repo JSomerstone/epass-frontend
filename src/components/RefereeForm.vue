@@ -1,11 +1,11 @@
 <template>
   <div class="referee-form">
     <div class="field">
-      <b-field>
+      <b-field label="Name*" label-position="on-border">
         <b-input 
           v-model="firstName" 
           :required="true" 
-          placeholder="Given name" 
+          placeholder="Given name"
           :expanded="true"
         ></b-input>
         <b-input 
@@ -18,17 +18,16 @@
     </div>
     <div class="field">
       <b-field label="Email" label-position="on-border">
-        <b-input type="email" v-model="email" placeholder="@" required></b-input>
+        <b-input type="email" v-model="email" placeholder="@"></b-input>
       </b-field>
     </div>
     <div class="field">
-      <b-field :label="countryTitle" label-position="on-border" :required="countryRequired">
+      <b-field label="Nationality" label-position="on-border">
         <b-autocomplete
             v-model="countryQuery"
             placeholder="As in passport"
             icon="passport"
             :keep-first="true"
-            :required="countryRequired"
             :data="getCountries(countryQuery)"
             :expanded="true"
             @select="option => country = option"
@@ -46,11 +45,6 @@
     </div>
   </div>
 </template>
-<style lang="css">
-.referee-form {
-  padding: 20px;
-}
-</style>
 <script>
 import Referee from "../store/models/RefereeClass";
 import Level from "./field/Level"
@@ -66,14 +60,6 @@ export default {
     onCancel: {
       type: Function,
       default: () => {}
-    },
-    countryRequired: {
-      type: Boolean,
-      default: true
-    },
-    levelRequired: {
-      type: Boolean,
-      default: true
     },
     prefilled: {
       type: String,
@@ -120,14 +106,9 @@ export default {
     }
   },
   computed: {
-    countryTitle: function() {
-      return this.countryQuery 
-        ? "Nationality"
-        : "Nationality (optional)";
-    },
     isReady: function() {
       return (
-        this.firstName && this.lastName && this.email && (this.country || !this.countryRequired)
+        this.firstName && this.lastName
       )
     }
   },
