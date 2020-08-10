@@ -9,6 +9,7 @@ const courseConductors = require("../../assets/course-conductors.json");
 const state = {
   loading: 0,
   referees: [],
+  unauthenticated: [],
   queryResult: [],
   current: {},
   conductors: courseConductors,
@@ -19,6 +20,7 @@ const state = {
 const mutationTypes = {
   SET_LOADING: "set-loading",
   SET_REFEREES: "set-referees",
+  SET_UNAUTHENTICATED: "set-unauthenticated",
   ADD_REFEREE: "add-referee",
   UPDATE_REFEREE: "update-referee",
   SET_CURRENT: "set-current",
@@ -37,6 +39,9 @@ const mutations = {
   },
   [mutationTypes.SET_REFEREES](state, referees) {
     state.referees = referees;
+  },
+  [mutationTypes.SET_UNAUTHENTICATED](state, referees) {
+    state.unauthenticated = referees;
   },
   [mutationTypes.SET_ASSOCIATIONS](state, list) {
     state.associations = list;
@@ -132,6 +137,23 @@ const actions = {
       .finally(() => {
         commit(mutationTypes.setLoading, false)
       });
+  },
+  loadUnauthenticated: async ({ commit }, { onSuccess = () => { } }) => {
+    commit(mutationTypes.SET_LOADING, true);
+    API.graphql({
+      query: listReferees,
+      variables: {
+        filter: { userId: { eq: "" }, },
+      }
+    })
+      .then(result => {
+        const { items } = result.data.listReferees;
+        console.log(items);
+        commit(mutationTypes.SET_UNAUTHENTICATED, items);
+        onSuccess(items);
+      })
+      .catch(notifyException)
+      .finally(() => { commit(mutationTypes.SET_LOADING, false); } );
   },
   create: async ({ commit, dispatch }, { referee, onSuccess = () => {} }) => {
     commit(mutationTypes.SET_LOADING, true);
@@ -241,6 +263,7 @@ const referees = {
     debug: (state) => state.debug,
     loading: (state) => state.loading > 0,
     all: (state) => state.referees,
+    unauthenticated: (state) => state.unauthenticated,
     current: (state) => state.current,
     search: (state) => (query) => {
       const all = state.referees;

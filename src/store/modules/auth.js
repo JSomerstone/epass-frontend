@@ -5,6 +5,10 @@ import Amplify, { Auth } from 'aws-amplify';
 import awsconfig from "../../aws-exports";
 Amplify.configure(awsconfig);
 
+const USER_INFO_KEY = "previous-user";
+let userInfo = JSON.parse(localStorage.getItem(USER_INFO_KEY))
+  || { email: "", userId: "", email_verified: false };
+
 const signupSteps = {
   auth: 0,
   verify: 1,
@@ -15,21 +19,26 @@ const signupSteps = {
 const state = {
   debug: false,
   loading: false,
-  userInfo: { email: "", userId: "", email_verified: false },
+  userInfo,
   signupStep: signupSteps.auth,
   signupEmail: "",
   signupUserId: "",
 };
-
-Auth.currentAuthenticatedUser()
-  .then(user => {
-    state.userInfo = {
-      userId: user.username,
-      email_verified: user.attributes.email_verified,
-      email: user.attributes.email
-    };
-  })
-  .catch(err => errorMessage("Unable to get current user", err));
+if (!state.userInfo.userId) {
+  Auth.currentAuthenticatedUser()
+    .then(user => {
+      state.userInfo = {
+        userId: user.username,
+        email_verified: user.attributes.email_verified,
+        email: user.attributes.email
+      };
+      localStorage.setItem(
+        USER_INFO_KEY,
+        JSON.stringify(state.userInfo)
+      );
+    })
+    .catch(err => errorMessage("Unable to get current user", err));
+}
 
 const mutationTypes = {
   SET_LOADING: "set-loading",
@@ -47,12 +56,14 @@ const mutations = {
   [mutationTypes.SET_USER_INFO](state, user) {
     if (user == null) {
       state.userInfo = { userId: "", email: "", email_verified: false };
+      localStorage.removeItem(USER_INFO_KEY);
     } else {
       const {
         attributes: { email = "", email_verified = false },
         username = "",
       } = user;
       state.userInfo = { email, userId: username, email_verified };
+      localStorage.setItem(USER_INFO_KEY, JSON.stringify(state.userInfo));
     }
   },
 

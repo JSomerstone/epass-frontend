@@ -117,7 +117,7 @@ input.center-text {
 <script>
 import Referee from "../store/models/RefereeClass";
 import Level from "./field/Level";
-import { infoMessage } from '../utils/notificationUtils';
+import { infoMessage, successMessage } from '../utils/notificationUtils';
 import { mapGetters } from 'vuex';
   export default {
     components: {
@@ -174,6 +174,14 @@ import { mapGetters } from 'vuex';
         });
       },
 
+      loadUnauthenticated() {
+        this.$store.dispatch('referees/loadUnauthenticated', { 
+          onSuccess: items => {
+            successMessage(`Found ${items.length} unautenticated referees`);
+          }
+        });
+      },
+
       findExistingProfile() {
         this.$store.dispatch('referees/findByEmail', { 
           email: this.referee.email,
@@ -224,6 +232,7 @@ import { mapGetters } from 'vuex';
         signupEmail: "auth/signupEmail",
         isLoading: "auth/loading",
         loggedIn: "auth/loggedIn",
+        unauthenticated: "referees/unauthenticated",
       })
     },
     watch: {
