@@ -36,6 +36,7 @@
       loggedIn: function(loggedIn) {
         if (loggedIn) {
           if (!this.$store.getters['auth/signupOngoing']) {
+            this.$store.dispatch("referees/loadCurrent");
             this.$router.push({ name: "frontpage" });
           }
         } else {

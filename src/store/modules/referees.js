@@ -1,6 +1,6 @@
 import Referee from "../models/RefereeClass";
 import Association from "../models/Association";
-import { successMessage, notifyException } from "../../utils/notificationUtils";
+import { successMessage, notifyException, warningMessage } from "../../utils/notificationUtils";
 import { createReferee, updateReferee, createAssociation, updateAssociation } from "../../graphql/mutations";
 import { listReferees, getReferee, listAssociations } from "../../graphql/queries";
 import { API } from "aws-amplify";
@@ -84,19 +84,54 @@ const actions = {
         commit(mutationTypes.SET_LOADING, false);
       });
   },
-  load: async ({ commit, dispatch, rootGetters }) => {
+  load: async ({ commit }) => {
     commit(mutationTypes.SET_LOADING, true);
-    const result = await API.graphql({
+    API.graphql({
       query: listReferees,
-    });
-    const referees = result.data.listReferees.items;
-    commit(mutationTypes.SET_REFEREES, referees);
+    }).then(
+      result => {
+        const referees = result.data.listReferees.items;
+        commit(mutationTypes.SET_REFEREES, referees);
+      }
+    )
+      .catch(notifyException)
+      .finally( () => { commit(mutationTypes.SET_LOADING, false); }
+    );
+  },
+  loadCurrent: async (
+    { commit, rootGetters },
+    { onSuccess = () => { }, onFailure = () => { } }
+  ) => {
     const { userId = null } = rootGetters["auth/user"];
-    if (userId) {
-      const { id } = referees.find((r) => r.userId == userId) || {};
-      dispatch('setCurrent', { id });
+    if (null == userId) {
+      warningMessage("Unable to load user profile");
+      onFailure();
+      return;
     }
-    commit(mutationTypes.SET_LOADING, false);
+    commit(mutationTypes.setLoading, true);
+    API.graphql({
+      query: listReferees,
+      variables: {
+        filter: {
+          userId: { eq: userId },
+        },
+      },
+    }).then(
+      result => {
+        const { items } = result.data.listReferees;
+        console.log({ items });
+        if (items.length == 0) {
+          onFailure();
+        } else {
+          commit(mutationTypes.SET_CURRENT, items[0]);
+          onSuccess(items[0]);
+        }
+      }
+    )
+      .catch(notifyException)
+      .finally(() => {
+        commit(mutationTypes.setLoading, false)
+      });
   },
   create: async ({ commit, dispatch }, { referee, onSuccess = () => {} }) => {
     commit(mutationTypes.SET_LOADING, true);
