@@ -54,17 +54,13 @@
           </div>
           <div class="field">
             <b-field label="Nationality" label-position="on-border">
-              <b-autocomplete
-                v-model="countryQuery"
+              <country-autocomplete
+                v-model="referee.country"
                 placeholder="As in passport"
                 icon="passport"
-                :keep-first="true"
                 required
-                expanded
-                :data="getCountries(countryQuery)"
-                @select="option => referee.country = option"
               >
-              </b-autocomplete>
+              </country-autocomplete>
             </b-field>
           </div>
           <div class="field">
@@ -237,10 +233,12 @@ import Association from "../store/models/Association";
 import { infoMessage, warningMessage, successMessage } from '../utils/notificationUtils';
 import CourceConductor from "./CourceConductor";
 import Level from "./field/Level"
+import CountryAutocomplete from "./field/CountryAutocomplete";
 export default {
   components: {
     CourceConductor,
     Level,
+    CountryAutocomplete,
   },
   data() {
     return {

@@ -83,7 +83,7 @@ export default {
         this.$refs.table.toggleDetails(row)
     },
     handleReload: function() {
-      this.$store.dispatch("tournaments/load", { year: this.year });
+      this.$store.dispatch("tournaments/load", { year: this.year, force: true });
     },
     formatDateRange(dates) {
       if (!dates) {
