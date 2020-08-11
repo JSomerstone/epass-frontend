@@ -9,6 +9,7 @@ import Tournaments from "./views/Tournaments.vue";
 import Signup from "./views/Signup.vue";
 import Settings from "./views/Settings.vue";
 import Statistics from "./views/Statistics.vue";
+import PrintEpass from "./views/PrintEpass.vue";
 import Privacy from "./views/Privacy.vue";
 import ForgotPassword from "./views/ForgotPassword.vue";
 
@@ -43,6 +44,11 @@ const router = new Router({
       path: "/statistics/:year?",
       name: "statistics",
       component: Statistics,
+    },
+    {
+      path: "/epass/:year?",
+      name: "print-epass",
+      component: PrintEpass,
     },
     {
       path: "/tournament/:id/",
