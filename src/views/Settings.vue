@@ -34,6 +34,9 @@ export default {
       if (!this.$store.getters["referees/nationalAssociations"].length) {
         this.$store.dispatch("referees/loadAssociations");
       }
+      if (!this.$store.getters["referees/current"].id) {
+        this.$store.dispatch("referees/loadCurrent");
+      }
     }
   },
   created() {

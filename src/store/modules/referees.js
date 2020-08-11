@@ -1,6 +1,6 @@
 import Referee from "../models/RefereeClass";
 import Association from "../models/Association";
-import { successMessage, notifyException, warningMessage } from "../../utils/notificationUtils";
+import { successMessage, notifyException, errorMessage } from "../../utils/notificationUtils";
 import { createReferee, updateReferee, createAssociation, updateAssociation } from "../../graphql/mutations";
 import { listReferees, getReferee, listAssociations } from "../../graphql/queries";
 import { API } from "aws-amplify";
@@ -103,17 +103,13 @@ const actions = {
       .finally( () => { commit(mutationTypes.SET_LOADING, false); }
     );
   },
-  loadCurrent: async (
-    { commit, rootGetters },
-    { onSuccess = () => { }, onFailure = () => { } }
-  ) => {
+  loadCurrent: async ({ commit, rootGetters }) => {
+    commit(mutationTypes.SET_LOADING, true);
     const { userId = null } = rootGetters["auth/user"];
-    if (null == userId) {
-      warningMessage("Unable to load user profile");
-      onFailure();
+    if (!userId) {
+      errorMessage("Unable to load user profile");
       return;
     }
-    commit(mutationTypes.setLoading, true);
     API.graphql({
       query: listReferees,
       variables: {
@@ -121,39 +117,13 @@ const actions = {
           userId: { eq: userId },
         },
       },
-    }).then(
-      result => {
-        const { items } = result.data.listReferees;
-        console.log({ items });
-        if (items.length == 0) {
-          onFailure();
-        } else {
-          commit(mutationTypes.SET_CURRENT, items[0]);
-          onSuccess(items[0]);
-        }
-      }
-    )
-      .catch(notifyException)
-      .finally(() => {
-        commit(mutationTypes.setLoading, false)
-      });
-  },
-  loadUnauthenticated: async ({ commit }, { onSuccess = () => { } }) => {
-    commit(mutationTypes.SET_LOADING, true);
-    API.graphql({
-      query: listReferees,
-      variables: {
-        filter: { userId: { eq: "" }, },
-      }
     })
       .then(result => {
         const { items } = result.data.listReferees;
-        console.log(items);
-        commit(mutationTypes.SET_UNAUTHENTICATED, items);
-        onSuccess(items);
+        items && commit(mutationTypes.SET_CURRENT, items[0]);
       })
       .catch(notifyException)
-      .finally(() => { commit(mutationTypes.SET_LOADING, false); } );
+      .finally(() => commit(mutationTypes.SET_LOADING, false));
   },
   create: async ({ commit, dispatch }, { referee, onSuccess = () => {} }) => {
     commit(mutationTypes.SET_LOADING, true);
