@@ -71,7 +71,6 @@
               v-model="profileQuery"
               :data="filteredReferees"
               placeholder="Search by your name"
-              keep-first
               @select="selectExistingProfile"
               icon="account-search"
             >
@@ -97,7 +96,7 @@
                 icon="passport"
                 keep-first
                 required
-                :data="getCountries(countryQuery)"
+                :data="getCountries"
                 @select="option => this.referee.country = option"
             >
             </b-autocomplete>
@@ -125,10 +124,10 @@
           <h2>Welcome {{referee.firstName}}</h2>
           <p>
             Your account is now set up and you can start filling your ePass from 
-            <router-link 
-              :to="{ path: '/' }"
-              class="button is-link"
-            >here</router-link>
+            <router-link  :to="{ path: '/' }" class="is-link">here</router-link>
+            or fill the rest of 
+            <router-link :to="{name: 'settings'}" class="is-link">
+            your profile.</router-link>
           </p>
         </b-step-item> <!--/Profile -->
       </b-steps>
@@ -243,12 +242,6 @@ import { mapGetters } from 'vuex';
       handleResend: function() {
         this.$store.dispatch('auth/resendVerification');
       },
-
-      getCountries: function(name) {
-        return name
-          ? this.$store.getters['countries/byName'](name)
-          : [];
-      }
     },
     computed: {
       authFormReady: function() {
@@ -276,6 +269,11 @@ import { mapGetters } from 'vuex';
           { userId: "" }
         );
       },
+      getCountries: function() {
+        return this.countryQuery
+          ? this.$store.getters['countries/byName'](this.countryQuery)
+          : this.$store.getters['countries/all'];
+      }
     },
     watch: {
       signupEmail: function(email) {

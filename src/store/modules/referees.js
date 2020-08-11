@@ -174,6 +174,9 @@ const actions = {
   },
   async update({ commit, dispatch }, { referee, onSuccess = () => {} }) {
     try {
+      if (!referee.clinic.date) {
+        delete referee.clinic;
+      }
       const result = await API.graphql({
         query: updateReferee,
         variables: {
@@ -272,7 +275,7 @@ const filters = {
     return Boolean(match);
   },
   byQuery: (query) => (referee) => {
-    if (query == "") {
+    if (!query) {
       return true;
     }
     let parts = query.split(" ");
