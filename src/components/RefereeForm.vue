@@ -23,16 +23,13 @@
     </div>
     <div class="field">
       <b-field label="Nationality" label-position="on-border">
-        <b-autocomplete
-            v-model="countryQuery"
+        <country-autocomplete
+            v-model="country"
             placeholder="As in passport"
             icon="passport"
-            :keep-first="true"
-            :data="getCountries(countryQuery)"
-            :expanded="true"
-            @select="option => country = option"
+            expanded
         >
-        </b-autocomplete>
+        </country-autocomplete>
       </b-field>
     </div>
     <div class="field">
@@ -47,10 +44,12 @@
 </template>
 <script>
 import Referee from "../store/models/RefereeClass";
-import Level from "./field/Level"
+import Level from "./field/Level";
+import CountryAutocomplete from "./field/CountryAutocomplete";
 export default {
   components: {
-    Level
+    Level,
+    CountryAutocomplete,
   },
   props: {
     onSave: {
@@ -72,7 +71,6 @@ export default {
       lastName: "",
       email: "",
       country: "",
-      countryQuery: "",
       level: 1
     }
   },
@@ -99,11 +97,6 @@ export default {
       this.country = "";
       this.level = 1;
     },
-    getCountries: function(name) {
-      return name
-        ? this.$store.getters['countries/byName'](name)
-        : [];
-    }
   },
   computed: {
     isReady: function() {

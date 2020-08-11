@@ -90,16 +90,13 @@
             <b-input v-model="referee.lastName" required expanded placeholder="Family name" />
           </b-field>
           <b-field label="Nationality" label-position="on-border">
-            <b-autocomplete
-                v-model="countryQuery"
-                placeholder="As in passport"
-                icon="passport"
-                keep-first
-                required
-                :data="getCountries"
-                @select="option => this.referee.country = option"
+            <country-autocomplete
+              v-model="this.referee.country"
+              placeholder="As in passport"
+              icon="passport"
+              required
             >
-            </b-autocomplete>
+            </country-autocomplete>
           </b-field>
           <level v-model="referee.level" />
           <b-field>
@@ -146,11 +143,13 @@ input.center-text {
 <script>
 import Referee from "../store/models/RefereeClass";
 import Level from "./field/Level";
+import CountryAutocomplete from "./field/CountryAutocomplete";
 import { infoMessage } from '../utils/notificationUtils';
 import { mapGetters } from 'vuex';
   export default {
     components: {
       Level,
+      CountryAutocomplete,
     },
     data() {
       return {
@@ -269,11 +268,6 @@ import { mapGetters } from 'vuex';
           { userId: "" }
         );
       },
-      getCountries: function() {
-        return this.countryQuery
-          ? this.$store.getters['countries/byName'](this.countryQuery)
-          : this.$store.getters['countries/all'];
-      }
     },
     watch: {
       signupEmail: function(email) {

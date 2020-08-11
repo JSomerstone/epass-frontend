@@ -360,11 +360,6 @@ export default {
       });
     },
 
-    getCountries: function(name) {
-      return name
-        ? this.$store.getters['countries/byName'](name)
-        : [];
-    },
     loadData: function() {
       if (this.referee.id) {
         return; //Prevent double-loading

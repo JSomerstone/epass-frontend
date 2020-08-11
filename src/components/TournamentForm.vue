@@ -53,16 +53,13 @@
                               :expanded="true"
                               icon="city"
                           ></b-input>
-                          <b-autocomplete
-                              v-model="countryQuery"
+                          <country-autocomplete
+                              v-model="t.country"
                               placeholder="Country"
                               icon="earth"
-                              :keep-first="true"
-                              :data="getCountries(countryQuery)"
-                              :expanded="true"
-                              @select="option => t.country = option"
+                              expanded
                           >
-                          </b-autocomplete>
+                          </country-autocomplete>
                       </b-field>
                   </div>
                   <div class="field">
@@ -222,6 +219,7 @@
 import RefereeForm from "./RefereeForm";
 import RefereeTable from "./EditableRefereeTable";
 import TeamsField from "./TeamsField";
+import CountryAutocomplete from "./field/CountryAutocomplete";
 import Tournament from "../store/models/Tournament";
 import { infoMessage, warningMessage } from "../utils/notificationUtils";
 
@@ -235,6 +233,7 @@ export default {
     TeamsField,
     RefereeForm,
     RefereeTable,
+    CountryAutocomplete,
   },
   props: {
     editable: {
@@ -349,11 +348,6 @@ export default {
       return this.userIsTd() //If user is the TD of the tournament -> "all"
         ? "all"
         : id || "none"; //Otherwise only the current users' own stats
-    },
-    getCountries: function(name) {
-        return name 
-            ? this.$store.getters['countries/byName'](name)
-            : [];
     },
     addReferee: function(referee) {
         this.$store.dispatch("referees/create", { 
