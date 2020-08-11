@@ -103,7 +103,10 @@ const actions = {
       .finally( () => { commit(mutationTypes.SET_LOADING, false); }
     );
   },
-  loadCurrent: async ({ commit, rootGetters }) => {
+  loadCurrent: async ({ commit, state, rootGetters }, { force = false }) => {
+    if (state.current.id && !force ) {
+      return;
+    }
     commit(mutationTypes.SET_LOADING, true);
     const { userId = null } = rootGetters["auth/user"];
     if (!userId) {
@@ -183,7 +186,10 @@ const actions = {
         commit(mutationTypes.SET_LOADING, false);
       });
   },
-  async loadAssociations({ commit }) {
+  async loadAssociations({ commit, state }, { force = false }) {
+    if (state.associations.length && !force) {
+      return;
+    }
     commit(mutationTypes.SET_LOADING, true);
     API.graphql({
       query: listAssociations

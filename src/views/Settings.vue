@@ -28,14 +28,9 @@ export default {
   },
   methods: {
     loadData: function() {
-      if (!this.$store.getters["referees/all"].length) {
-        this.$store.dispatch("referees/load");
-      }
+      this.$store.dispatch("referees/loadCurrent", { force: false });
       if (!this.$store.getters["referees/nationalAssociations"].length) {
-        this.$store.dispatch("referees/loadAssociations");
-      }
-      if (!this.$store.getters["referees/current"].id) {
-        this.$store.dispatch("referees/loadCurrent");
+        this.$store.dispatch("referees/loadAssociations", { force: false });
       }
     }
   },

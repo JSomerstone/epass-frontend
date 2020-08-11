@@ -44,9 +44,8 @@ export default {
       if (!this.$store.getters["referees/all"].length) {
         this.$store.dispatch("referees/load");
       }
-      if (!this.$store.getters["referees/nationalAssociations"].length) {
-        this.$store.dispatch("referees/loadAssociations");
-      }
+      
+      this.$store.dispatch("referees/loadAssociations", { force: false });
       this.$store.dispatch("tournaments/setFilter", { filter: { show: "own" } });
       this.$store.dispatch("tournaments/filter");
     }
