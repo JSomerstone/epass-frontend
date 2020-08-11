@@ -1,9 +1,7 @@
-// import axios from "axios";
 import { listTournaments, getTournament } from "../../graphql/queries";
 import { API } from "aws-amplify";
 import { createTournament, updateTournament } from '../../graphql/mutations';
 import { notifyException, successMessage } from '../../utils/notificationUtils';
-//import Tournament from '../models/Tournament';
 
 
 const state = {
