@@ -255,7 +255,36 @@ const actions = {
     commit(mutationTypes.SET_ASSOCIATIONS, []);
   }
 };
-
+const filters = {
+  byProperties: (props) => (referee) => {
+    if (!props) {
+      return true;
+    }
+    const match = Object.keys(props).find(
+      key => referee[key] === props[key]
+    );
+    return Boolean(match);
+  },
+  byKeyword: (keyword) => ({ firstName, lastName, country = "", email = "" }) => {
+    const match = [firstName, lastName, country, email].find(
+      prop => prop.toLowerCase().includes(keyword.toString().toLowerCase())
+    );
+    return Boolean(match);
+  },
+  byQuery: (query) => (referee) => {
+    if (query == "") {
+      return true;
+    }
+    let parts = query.split(" ");
+    let result = parts.reduce(
+      (match, keyword) => {
+        return (match && filters.byKeyword(keyword)(referee))
+      },
+      true
+    );
+    return result;
+  },
+};
 const referees = {
   namespaced: true,
   state,
@@ -265,33 +294,10 @@ const referees = {
     all: (state) => state.referees,
     unauthenticated: (state) => state.unauthenticated,
     current: (state) => state.current,
-    search: (state) => (query, props = {}) => {
-      const all = state.referees.filter(ref => {
-        console.log(props.userId, ref.userId);
-        if (props == {}) {
-          return true;
-        } else {
-          const match = Object.keys(props).find(
-            key => ref[key] === props[key]
-          );
-          return Boolean(match);
-        }
-      });
-      console.log({ query, props, results: all.length })
-      return query == ""
-      ? all
-      : all
-        .filter((ref) => {
-          let parts = query.split(" ");
-          const { firstName, lastName, country, email = "" } = ref;
-          const match = [firstName, lastName, country, email].find(
-            (prop) => parts.find(
-              part => prop.toLowerCase().includes(part.toString().toLowerCase())
-            )
-          );
-          return Boolean(match);
-      })
-      .sort((r0, r1) => r0.firstName > r1.firstName);
+    search: (state) => (query, props = null) => {
+      const all = state.referees.filter(filters.byProperties(props));
+      return all.filter(filters.byQuery(query))
+        .sort((r0, r1) => r0.firstName > r1.firstName);
     },
     byId: (state) => (id) => {
       return state.referees.find((r) => r.id === id);

@@ -136,7 +136,10 @@ const actions = {
         dispatch("setLoading", { loading: false });
       });
   },
-  async login({ commit, dispatch }, { email, password, onSuccess = () => {} }) {
+  async login(
+    { commit, dispatch },
+    { email, password, onSuccess = () => { } }
+  ) {
     dispatch("setLoading", { loading: true });
 
     Auth.signIn(email, password)
