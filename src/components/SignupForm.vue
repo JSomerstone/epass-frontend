@@ -91,7 +91,7 @@
           </b-field>
           <b-field label="Nationality" label-position="on-border">
             <country-autocomplete
-              v-model="this.referee.country"
+              v-model="referee.country"
               placeholder="As in passport"
               icon="passport"
               required
@@ -200,7 +200,10 @@ import { mapGetters } from 'vuex';
         const action = this.referee.id ? 'update' : 'create';
         this.$store.dispatch(`referees/${action}`, { 
           referee: this.referee,
-          onSuccess: this.nextStep
+          onSuccess: ({ id }) => {
+            this.$store.dispatch("auth/setRefereeId", { refereeId: id });
+            this.nextStep();
+          }
         });
       },
 

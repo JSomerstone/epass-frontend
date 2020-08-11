@@ -3,7 +3,7 @@ import Association from "../models/Association";
 import { successMessage, notifyException, errorMessage } from "../../utils/notificationUtils";
 import { createReferee, updateReferee, createAssociation, updateAssociation } from "../../graphql/mutations";
 import { listReferees, getReferee, listAssociations } from "../../graphql/queries";
-import { API } from "aws-amplify";
+import { API, Auth } from "aws-amplify";
 const courseConductors = require("../../assets/course-conductors.json");
 
 const state = {
@@ -140,9 +140,9 @@ const actions = {
         variables: { input: referee },
       });
       commit(mutationTypes.ADD_REFEREE, result.data.createReferee);
+      dispatch("setCurrent", result.data.createReferee);
       successMessage("Referee added");
       onSuccess(result.data.createReferee);
-      dispatch("load");
     } catch (err) {
       notifyException(err);
     }
@@ -159,10 +159,13 @@ const actions = {
           input: referee,
         },
       });
+      const cognitoUser = await Auth.currentAuthenticatedUser();
+      Auth.updateUserAttributes(cognitoUser, { "custom:refereeId": referee.id })
+        .then(result => console.log(result));
       commit(mutationTypes.UPDATE_REFEREE, result.data.updateReferee);
       onSuccess(result.data.updateReferee);
       successMessage("Updated");
-      dispatch('setCurrent', result.data.updateReferee);
+      dispatch("setCurrent", result.data.updateReferee);
     } catch (err) {
       notifyException(err);
     }
