@@ -64,7 +64,8 @@ const mutations = {
         attributes: { email = "", email_verified = false },
         username = "",
       } = user;
-      state.userInfo = { email, userId: username, email_verified };
+      const refereeId = user.attributes["custom:refereeId"] || "";
+      state.userInfo = { email, userId: username, email_verified, refereeId };
       localStorage.setItem(USER_INFO_KEY, JSON.stringify(state.userInfo));
     }
   },
