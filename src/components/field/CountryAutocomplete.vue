@@ -7,21 +7,48 @@
     :required="required"
     :expanded="expanded"
     :data="getCountries"
-    @select="onSelect"
+    @select="selectChanged"
   >
   </b-autocomplete>
 </template>
 <script>
 export default {
-  props: ["value", "icon", "required", "expanded", "placeholder"],
+  //props: ["value", "icon", "required", "expanded", "placeholder"],
+  props: {
+    value: {
+      type: String,
+      default: ""
+    },
+    icon: {
+      type: String,
+      default: "earth"
+    },
+    required: {
+      type: Boolean,
+      default: false
+    },
+    expanded: {
+      type: Boolean,
+      default: false
+    },
+    placeholder: {
+      type: String,
+      default: ""
+    },
+    onSelect: {
+      type: Function,
+      default: () => {}
+    }
+  },
   data() {
     return {
       country: this.value || "",
     }
   },
   methods: {
-    onSelect: function(option) {
+    selectChanged: function(option) {
       this.$emit('input', option);
+      this.onSelect(option);
     }
   },
   computed: {

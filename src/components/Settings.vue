@@ -185,17 +185,15 @@
       <div class="card-content">
         <div class="field">
           <b-field label="Country">
-            <b-autocomplete
+            <country-autocomplete
               v-model="associationCountry"
               placeholder="Country"
               icon="earth"
-              :keep-first="true"
               required
               expanded
-              :data="getCountries(associationCountry)"
-              @select="option => selectAssociation(option)"
+              :onSelect="selectAssociation"
             >
-            </b-autocomplete>
+            </country-autocomplete>
           </b-field>
         </div>
         <div class="field"><b-field label="Name" ><b-input v-model="association.name" /></b-field></div>
@@ -332,7 +330,7 @@ export default {
         });
       }
     },
-    selectAssociation(country) {
+    selectAssociation: function(country) {
       if(!country) {
         return;
       }
