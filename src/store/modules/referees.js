@@ -89,7 +89,10 @@ const actions = {
         commit(mutationTypes.SET_LOADING, false);
       });
   },
-  load: async ({ commit }) => {
+  load: async ({ commit, state }, { force = false }) => {
+    if (state.referees.length && !force) {
+      return;
+    }
     commit(mutationTypes.SET_LOADING, true);
     API.graphql({
       query: listReferees,

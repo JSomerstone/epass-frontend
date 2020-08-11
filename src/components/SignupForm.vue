@@ -206,7 +206,7 @@ import { mapGetters } from 'vuex';
       },
 
       loadProfiles() {
-        this.$store.dispatch('referees/load');
+        this.$store.dispatch('referees/load', { force: true });
       },
 
       findExistingProfile() {

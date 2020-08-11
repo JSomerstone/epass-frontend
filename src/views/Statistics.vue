@@ -38,13 +38,8 @@ export default {
   },
   methods: {
     loadData: function() {
-      if (!this.$store.getters["tournaments/all"].length) {
-        this.$store.dispatch("tournaments/load", { year: this.year });
-      }
-      if (!this.$store.getters["referees/all"].length) {
-        this.$store.dispatch("referees/load");
-      }
-      
+      this.$store.dispatch("tournaments/load", { year: this.year });
+      this.$store.dispatch("referees/load", { force: false });
       this.$store.dispatch("referees/loadAssociations", { force: false });
       this.$store.dispatch("tournaments/setFilter", { filter: { show: "own" } });
       this.$store.dispatch("tournaments/filter");

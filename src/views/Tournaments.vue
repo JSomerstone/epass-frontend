@@ -55,7 +55,7 @@ export default {
   },
   methods: {
     fetchData: function() {
-      this.$store.dispatch("referees/load");
+      this.$store.dispatch("referees/load", { force: false });
       this.$store.dispatch("tournaments/loadTeams");
       this.$store.dispatch("tournaments/load", { year: this.year });
     },

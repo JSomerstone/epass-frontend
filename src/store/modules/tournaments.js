@@ -70,7 +70,10 @@ const actions = {
   setLoading({ commit }, { loading }) {
     commit(mutationTypes.SET_LOADING, loading);
   },
-  load: async ({ commit, dispatch }, { year }) => {
+  load: async ({ commit, dispatch, state }, { year, force = false }) => {
+    if (state.tournaments.length && state.tournaments[0].year == year && !force) {
+      return;
+    }
     commit(mutationTypes.SET_LOADING, true);
     try {
       const result = await API.graphql({

@@ -43,6 +43,10 @@
           this.$router.push({ name: "login" });
         }
       }
+    },
+    created() {
+      this.$store.getters['auth/loggedIn'] 
+        && this.$store.dispatch("referees/loadCurrent", { force: false });
     }
   }
 </script>
