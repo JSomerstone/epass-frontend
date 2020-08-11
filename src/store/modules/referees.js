@@ -106,30 +106,22 @@ const actions = {
       .finally( () => { commit(mutationTypes.SET_LOADING, false); }
     );
   },
-  loadCurrent: async ({ commit, state, rootGetters }, { force = false }) => {
+  loadCurrent: ({ dispatch, state, rootGetters }, { force = false }) => {
     if (state.current.id && !force ) {
       return;
     }
-    commit(mutationTypes.SET_LOADING, true);
-    const { userId = null } = rootGetters["auth/user"];
-    if (!userId) {
+    let { userId = null, refereeId = null } = rootGetters["auth/user"];
+    let referee = state.referees.find(r => userId && r.userId == userId);
+    if (!refereeId && !referee) { // Cannot find refereeID from state (auth nor among referees)
       errorMessage("Unable to load user profile");
       return;
+    } else if (!refereeId) {
+      // refereeId not stored to auth -> use the referee found by userId
+      refereeId = referee.id;
+      // also, store refereeId to CognitoUser
+      dispatch("auth/setRefereeId", { refereeId }, { root: true });
     }
-    API.graphql({
-      query: listReferees,
-      variables: {
-        filter: {
-          userId: { eq: userId },
-        },
-      },
-    })
-      .then(result => {
-        const { items } = result.data.listReferees;
-        items && commit(mutationTypes.SET_CURRENT, items[0]);
-      })
-      .catch(notifyException)
-      .finally(() => commit(mutationTypes.SET_LOADING, false));
+    dispatch("setCurrent", { id: refereeId });
   },
   create: async ({ commit, dispatch }, { referee, onSuccess = () => {} }) => {
     commit(mutationTypes.SET_LOADING, true);
