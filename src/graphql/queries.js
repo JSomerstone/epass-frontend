@@ -34,7 +34,7 @@ export const listReferees = /* GraphQL */ `
         lastName
         country
         email
-        userId
+        associationId
       }
       nextToken
     }

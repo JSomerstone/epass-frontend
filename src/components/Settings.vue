@@ -186,7 +186,7 @@
         <div class="field">
           <b-field label="Country">
             <country-autocomplete
-              v-model="associationCountry"
+              v-model="association.country"
               placeholder="Country"
               icon="earth"
               required
@@ -359,10 +359,12 @@ export default {
         }
       });
     },
-
     loadData: function() {
       if (this.referee.id) {
         return; //Prevent double-loading
+      } else if (this.isLoading) {
+        setTimeout( this.loadData, 500 );
+        return;
       }
       this.referee = new Referee(this.$store.getters["referees/current"]);
       if (this.referee.associationId) {
@@ -374,8 +376,6 @@ export default {
         });
         this.referee.associationId = this.association.id;
       }
-      this.countryQuery = this.referee.country;
-      this.associationCountry = this.association.country;
       this.newEmail = this.referee.email;
     },
   },
