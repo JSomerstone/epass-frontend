@@ -67,6 +67,11 @@
           <td>{{ item.teams.join(', ') }}</td>
         </tr>
       </table>
+      <div class="updated-info">
+        <i>Updated {{ new Date() | yyyymmdd }}</i>
+      </div>
+    </section>
+    <section class="footer no-print">
       <b-button 
         type="is-info" 
         outlined 
@@ -74,6 +79,15 @@
         @click="initPrint"
       >Print
       </b-button>
+
+      <b-button 
+        type="is-info"
+        outlined 
+        icon-left="clipboard-text-outline"
+        @click="copyLink"
+      >Copy link to this page
+      </b-button>
+      <input id="direct-link" class="hidden" :value="linkToPage" />
     </section>
   </div>
 </template>
@@ -88,7 +102,7 @@ h1 {
 .hero>h1, .content>h2, .content>h3 {
   margin-bottom: 1em;
 }
-.content table.bordered {
+.content table.bordered, .updated-info {
   margin-bottom: 2em !important;
 }
 .bordered {
@@ -97,10 +111,16 @@ h1 {
 .content table td:not(:last-of-type) {
   width: 30%
 }
+@media print {
+   .no-print {
+      visibility: hidden;
+   }
+}
 </style>
 <script>
 const ymd = v => new Date(v).toISOString().split("T")[0];
 import Referee from "../store/models/RefereeClass";
+import { successMessage, warningMessage } from '../utils/notificationUtils';
 
 export default {
   components: {
@@ -126,6 +146,14 @@ export default {
       return this.$store.getters["referees/nationalAssociations"].find(
         a => a.id == associationId
       ) || null;
+    },
+    linkToPage() {
+      const domain = location.protocol+'//'+location.hostname+(location.port ? ':'+location.port: '');
+      const path = this.$router.resolve({ 
+        name: 'print-epass', 
+        params: { refereeId: this.referee.id, year: this.year }
+      })
+      return `${domain}${path.href}`;
     }
   },
   methods: {
@@ -137,6 +165,16 @@ export default {
     },
     initPrint() {
       window.print();
+    },
+    copyLink() {
+      var copyText = document.querySelector("#direct-link");
+      copyText.select();
+      try{
+        document.execCommand("copy");
+        successMessage("Copied");
+      } catch (e) {
+        warningMessage("Could not copy");
+      }
     },
     getReferee(id){
       return this.$store.getters['referees/byId'](id) || null;
