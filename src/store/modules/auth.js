@@ -1,5 +1,3 @@
-// import axios from "axios";
-import { ToastProgrammatic as Toast } from 'buefy'
 import { successMessage, errorMessage, notifyException, infoMessage } from "../../utils/notificationUtils";
 import Amplify, { Auth } from 'aws-amplify';
 import awsconfig from "../../aws-exports";
@@ -183,10 +181,7 @@ const actions = {
         commit(mutationTypes.SET_USER_INFO, null);
         dispatch("referees/reset", {}, { root: true });
         dispatch("tournaments/reset", {}, { root: true });
-        Toast.open({
-          message: "Logged out, bye! 👋",
-          type: "is-success",
-        });
+        successMessage("Logged out, bye! 👋");
       })
       .catch(notifyException)
       .finally(() => {
@@ -194,14 +189,13 @@ const actions = {
       });
   },
 
-  async changePassword({ commit }, { oldPassword, newPassword }) {
+  async changePassword({ commit }, { oldPassword, newPassword, onSuccess = () => {} }) {
     commit(mutationTypes.SET_LOADING, true);
     Auth.currentAuthenticatedUser()
-      .then((user) => {
-        return Auth.changePassword(user, oldPassword, newPassword);
-      })
+      .then( user => Auth.changePassword(user, oldPassword, newPassword))
       .then(() => {
         successMessage("Password updated");
+        onSuccess();
       })
       .catch(notifyException)
       .finally(() => {
@@ -211,8 +205,8 @@ const actions = {
 
   async changeEmail({ commit }, { email, onSuccess = () => {} }) {
     commit(mutationTypes.SET_LOADING, true);
-    let user = await Auth.currentAuthenticatedUser();
-    Auth.updateUserAttributes(user, { email })
+    Auth.currentAuthenticatedUser()
+      .then(user => Auth.updateUserAttributes(user, { email }))
       .then(onSuccess)
       .catch(notifyException)
       .finally(() => {
@@ -252,9 +246,11 @@ const actions = {
       .finally(() => commit(mutationTypes.SET_LOADING, false));
   },
 
-  async setRefereeId( { commit }, { refereeId }) {
-    const cognitoUser = await Auth.currentAuthenticatedUser();
-    Auth.updateUserAttributes(cognitoUser, { "custom:refereeId": refereeId })
+  async setRefereeId({ commit }, { refereeId }) {
+    Auth.currentAuthenticatedUser()
+      .then(user => {
+        return Auth.updateUserAttributes(user, { "custom:refereeId": refereeId });
+      })
       .then(() => {
         commit(mutationTypes.UPDATE_USER_INFO, { refereeId });
       })
