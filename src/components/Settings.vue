@@ -37,7 +37,7 @@
               ></b-input>
             </b-field>
           </div>
-          <div class="field">
+          <div class="field" v-if="false">
             <b-field label="Birth year and gender (relevant?)" label-position="on-border">
               <b-input expanded placeholder="Birth year" disabled 
               ></b-input>
@@ -211,7 +211,7 @@
         <div class="field">
           <b-field>
             <b-button type="is-primary" @click="handleAssociationSave" expanded>
-              {{ association.id ? "Update" :"Save" }}
+              Save
             </b-button>
             <b-button type="is-text" @click="loadData">Cancel</b-button>
           </b-field>
@@ -353,9 +353,9 @@ export default {
       this.$store.dispatch(action, {
         association: this.association,
         onSuccess: (updated) => {
-          this.association.id = updated.id;
           if (this.referee.associationId != updated.id) {
             this.referee.associationId = updated.id;
+            infoMessage("Updating profile...");
             this.handleProfileSave();
           } else {
             successMessage("Updated");

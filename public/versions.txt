@@ -1,6 +1,7 @@
-v 0.1.5 
+v 0.1.5 2020-08-12
 - Printable version of E-passport
 - Password strength meter
+- bugfix: Saving national association info links it to referee
 
 v 0.1.4 2020-08-11
 - Referees email to optional
