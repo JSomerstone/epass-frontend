@@ -124,14 +124,11 @@
           </a>
       </div>
       <div class="card-content">
-        <form>
           <div class="field">
             <b-field label="Email">
               <b-input type="email" v-model="newEmail" required/>
             </b-field>
           </div>
-        </form>
-        <form>
           <b-field label="Change password"></b-field>
           <div class="field">
             <b-field label="Current" label-position="on-border">
@@ -144,22 +141,26 @@
             </b-field>
           </div>
           <div class="field">
+            <b-field>
+              <password v-model="newPassword" strength-meter-only />
+            </b-field>
+          </div>
+          <div class="field">
             <b-field label="Confirm new" label-position="on-border">
               <b-input type="password" v-model="confirmPassword" required/>
             </b-field>
           </div>
-        </form>
         <div class="field">
-          <b-button 
-            @click="handleSecuritySave" 
-            type="is-primary" 
-            icon-left="account-check"
-          >Update
-          </b-button>
-        </div>
-        <hr />
-        <div>
-          Placeholder for 2FA settings
+          <b-field>
+            <b-button 
+              @click="handleSecuritySave" 
+              type="is-primary" 
+              icon-left="account-check"
+              expanded
+            >Update
+            </b-button>
+            <b-button type="is-text" @click="resetSecurityForm">Cancel</b-button>
+          </b-field>
         </div>
       </div>
     </b-collapse><!-- /SERCURITY -->
@@ -232,11 +233,13 @@ import { infoMessage, warningMessage, successMessage } from '../utils/notificati
 import CourceConductor from "./CourceConductor";
 import Level from "./field/Level"
 import CountryAutocomplete from "./field/CountryAutocomplete";
+import Password from 'vue-password-strength-meter';
 export default {
   components: {
     CourceConductor,
     Level,
     CountryAutocomplete,
+    Password,
   },
   data() {
     return {
@@ -326,7 +329,8 @@ export default {
       } else{
         this.$store.dispatch("auth/changePassword", {
           oldPassword: this.currentPassword,
-          newPassword: this.newPassword
+          newPassword: this.newPassword,
+          onSuccess: this.resetSecurityForm,
         });
       }
     },
@@ -378,6 +382,12 @@ export default {
       }
       this.newEmail = this.referee.email;
     },
+    resetSecurityForm: function() {
+      this.newEmail = "";
+      this.currentPassword = "";
+      this.newPassword = "";
+      this.confirmPassword = "";
+    }
   },
   watch: {
     original: function() {

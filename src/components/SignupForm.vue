@@ -11,16 +11,19 @@
             <b-input type="password" v-model="password" placeholder="********" required></b-input>
           </b-field>
           <b-field>
-          <b-button 
-            @click="handleSignup" 
-            v-bind:type="signupButton" 
-            expanded 
-            icon-left="clipboard-check"
-            v-bind:loading="isLoading"
-            v-bind:disabled="!authFormReady"
-          >Signup
-          </b-button>
-        </b-field>
+            <password v-model="password" strength-meter-only />
+          </b-field>
+          <b-field>
+            <b-button 
+              @click="handleSignup" 
+              v-bind:type="signupButton" 
+              expanded 
+              icon-left="clipboard-check"
+              v-bind:loading="isLoading"
+              v-bind:disabled="!authFormReady"
+            >Signup
+            </b-button>
+          </b-field>
         </b-step-item> <!--/Authentication -->
 
         <b-step-item label="Verification" step="2"  :clickable="false">
@@ -144,12 +147,14 @@ input.center-text {
 import Referee from "../store/models/RefereeClass";
 import Level from "./field/Level";
 import CountryAutocomplete from "./field/CountryAutocomplete";
+import Password from 'vue-password-strength-meter';
 import { infoMessage } from '../utils/notificationUtils';
 import { mapGetters } from 'vuex';
   export default {
     components: {
       Level,
       CountryAutocomplete,
+      Password,
     },
     data() {
       return {
