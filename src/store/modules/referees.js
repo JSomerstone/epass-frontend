@@ -145,7 +145,7 @@ const actions = {
       .catch(notifyException)
       .finally(() => commit(mutationTypes.SET_LOADING, false));
   },
-  create: async ({ commit, dispatch }, { referee, onSuccess = () => {} }) => {
+  create: async ({ commit }, { referee, onSuccess = () => {} }) => {
     commit(mutationTypes.SET_LOADING, true);
     delete referee.clinic;
     try {
@@ -154,7 +154,6 @@ const actions = {
         variables: { input: referee },
       });
       commit(mutationTypes.ADD_REFEREE, result.data.createReferee);
-      dispatch("setCurrent", result.data.createReferee);
       successMessage("Referee added");
       onSuccess(result.data.createReferee);
     } catch (err) {

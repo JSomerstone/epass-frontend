@@ -181,7 +181,7 @@ const actions = {
       });
       commit(mutationTypes.UPDATE_TOURNAMENT, result.data.updateTournament);
       commit(mutationTypes.SET_WIP, null);
-      dispatch("load", { year: tournament.year });
+      dispatch("load", { year: tournament.year, force: true });
       successMessage("Tournament updated");
       onSuccess(result.data.updateTournament);
     } catch (err) {
