@@ -7,10 +7,19 @@
       :tournaments="tournaments"
       :referee="referee"
     />
+    <router-link 
+      class="spaced"
+      :to="{ name: 'print-epass', params: { refereeId: referee.id, year }}" 
+      target="_blank"
+    >
+      <b-button icon-right="printer">Print E-passport</b-button>
+    </router-link>
   </layout>
 </template>
-<style lang="scss">
-
+<style lang="css" >
+.statistics {
+  margin-bottom: 2em;
+}
 </style>
 <script>
 import Layout from "../components/Layout"

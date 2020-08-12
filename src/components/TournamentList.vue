@@ -44,6 +44,11 @@
     </b-table>
   </div>
 </template>
+<style>
+.tournament-list {
+  margin-bottom: 2em;
+}
+</style>
 <script>
 import TournamentDetailRow from "./TournamentDetailRow";
 

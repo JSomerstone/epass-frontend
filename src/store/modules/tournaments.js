@@ -8,6 +8,7 @@ const state = {
   loading: false,
   tournaments: [],
   filteredTournaments: [],
+  selectedTournaments: [],
   filter: { show: "own" },
   wip: null,
   showTournamentForm: false,
@@ -20,6 +21,7 @@ const mutationTypes = {
   NEW_TOURNAMENT: "create-tournament",
   UPDATE_TOURNAMENT: "update-tournament",
   SET_TOURNAMENTS: "set-tournaments",
+  SET_SELECTED_TOURNAMENTS: "set-selected-tournaments",
   SET_WIP: "set-wip",
   SET_SHOW_FORM: "set-show-form",
   SET_TEAMS: "set-teams",
@@ -37,10 +39,13 @@ const mutations = {
   },
   [mutationTypes.UPDATE_TOURNAMENT](state, tournament) {
     const index = state.tournaments.findIndex(t => t.id === tournament.id);
-    state.tournaments[index] = tournament
+    state.tournaments[index] = tournament;
   },
   [mutationTypes.SET_TOURNAMENTS](state, tournaments) {
     state.tournaments = tournaments;
+  },
+  [mutationTypes.SET_SELECTED_TOURNAMENTS](state, tournaments) {
+    state.selectedTournaments = tournaments;
   },
   [mutationTypes.SET_FILTERED](state, tournaments) {
     state.filteredTournaments = tournaments;
@@ -61,7 +66,7 @@ const mutations = {
   },
   [mutationTypes.SET_FILTER](state, show) {
     state.filter = show;
-  }
+  },
 };
 
 const actions = {
@@ -89,6 +94,25 @@ const actions = {
       notifyException(error);
     }
     commit(mutationTypes.SET_LOADING, false);
+  },
+  loadRefereesTournaments: async ({ commit }, { refereeId, year }) => {
+    commit(mutationTypes.SET_LOADING, true);
+    API.graphql({
+      query: listTournaments,
+      variables: {
+        filter: { year: { eq: year } },
+      },
+    })
+      .then(
+        result => result.data.listTournaments.items.filter(
+          t => t.td == refereeId || t.referees.find(r => r.id == refereeId)
+        )
+      )
+      .then(
+        tournaments => commit(mutationTypes.SET_SELECTED_TOURNAMENTS, tournaments)
+    )
+      .catch(notifyException)
+      .finally(() => commit(mutationTypes.SET_LOADING, false));
   },
   loadTournament: ({ commit }, { id, onSuccess = () => {} }) => {
     commit(mutationTypes.SET_LOADING, true);
@@ -182,6 +206,7 @@ const tournaments = {
   getters: {
     loading: state => state.loading,
     all: state => state.filteredTournaments,
+    refereesTournaments: state => state.selectedTournaments,
     byId: state => id => state.tournaments.find( t => t.id == id ),
     teams: state => state.teams,
     showForm: state => state.showTournamentForm,

@@ -1,3 +1,7 @@
+v 0.1.5 
+- Printable version of E-passport
+- Password strength meter
+
 v 0.1.4 2020-08-11
 - Referees email to optional
 - Possibility to search for pre-existing profile during signup

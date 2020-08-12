@@ -14,6 +14,14 @@
       :items="tournaments"
       :year="year"
     />
+    <router-link 
+      v-if="year == 2020"
+      class="spaced"
+      :to="{ name: 'print-epass', params: { refereeId: currentRef.id, year }}" 
+      target="_blank"
+    >
+      <b-button icon-right="printer">Print E-passport</b-button>
+    </router-link>
     <pre v-if="debug">{{ tournaments }}</pre>
   </layout>
 </template>

@@ -46,7 +46,7 @@ const router = new Router({
       component: Statistics,
     },
     {
-      path: "/epass/:year?",
+      path: "/epass/:refereeId/:year?",
       name: "print-epass",
       component: PrintEpass,
     },
