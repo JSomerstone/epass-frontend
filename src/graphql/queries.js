@@ -22,24 +22,28 @@ export const getReferee = /* GraphQL */ `
   }
 `;
 export const listReferees = /* GraphQL */ `
-  query ListReferees(
-    $filter: ModelRefereeFilterInput
-    $limit: Int
-    $nextToken: String
-  ) {
-    listReferees(filter: $filter, limit: $limit, nextToken: $nextToken) {
-      items {
-        id
-        firstName
-        lastName
-        country
-        email
-        associationId
-      }
-      nextToken
-    }
-  }
-`;
+         query ListReferees(
+           $filter: ModelRefereeFilterInput
+           $limit: Int
+           $nextToken: String
+         ) {
+           listReferees(filter: $filter, limit: $limit, nextToken: $nextToken) {
+             items {
+               id
+               firstName
+               lastName
+               country
+               email
+               associationId
+               clinic {
+                 date
+                 conductor
+               }
+             }
+             nextToken
+           }
+         }
+       `;
 export const getTournament = /* GraphQL */ `
   query GetTournament($id: ID!) {
     getTournament(id: $id) {

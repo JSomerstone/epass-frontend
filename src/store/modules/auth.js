@@ -1,5 +1,3 @@
-// import axios from "axios";
-import { ToastProgrammatic as Toast } from 'buefy'
 import { successMessage, errorMessage, notifyException, infoMessage } from "../../utils/notificationUtils";
 import Amplify, { Auth } from 'aws-amplify';
 import awsconfig from "../../aws-exports";
@@ -7,7 +5,7 @@ Amplify.configure(awsconfig);
 
 const USER_INFO_KEY = "previous-user";
 let userInfo = JSON.parse(localStorage.getItem(USER_INFO_KEY))
-  || { email: "", userId: "", email_verified: false };
+  || { email: "", userId: "", email_verified: false, refereeId: "" };
 
 const signupSteps = {
   auth: 0,
@@ -30,7 +28,8 @@ if (!state.userInfo.userId) {
       state.userInfo = {
         userId: user.username,
         email_verified: user.attributes.email_verified,
-        email: user.attributes.email
+        email: user.attributes.email,
+        refereeId: user.attributes['custom:refereeId'],
       };
       localStorage.setItem(
         USER_INFO_KEY,
@@ -43,6 +42,7 @@ if (!state.userInfo.userId) {
 const mutationTypes = {
   SET_LOADING: "set-loading",
   SET_USER_INFO: "set-user",
+  UPDATE_USER_INFO: "update-user-info",
   SIGNUP_STEP: "set-signup-step",
   SET_SIGNUP_EMAIL: "set-signup-email",
   SET_SIGNUP_USERID: "set-signup-userid",
@@ -55,16 +55,25 @@ const mutations = {
 
   [mutationTypes.SET_USER_INFO](state, user) {
     if (user == null) {
-      state.userInfo = { userId: "", email: "", email_verified: false };
+      state.userInfo = { userId: "", email: "", email_verified: false, refereeId: "" };
       localStorage.removeItem(USER_INFO_KEY);
     } else {
       const {
         attributes: { email = "", email_verified = false },
         username = "",
       } = user;
-      state.userInfo = { email, userId: username, email_verified };
+      const refereeId = user.attributes["custom:refereeId"] || "";
+      state.userInfo = { email, userId: username, email_verified, refereeId };
       localStorage.setItem(USER_INFO_KEY, JSON.stringify(state.userInfo));
     }
+  },
+
+  [mutationTypes.UPDATE_USER_INFO](state, userInfo) {
+    state.userInfo = {
+      ...state.userInfo,
+      ...userInfo
+    };
+    localStorage.setItem(USER_INFO_KEY, JSON.stringify(state.userInfo));
   },
 
   [mutationTypes.SIGNUP_STEP](state, step) {
@@ -172,10 +181,7 @@ const actions = {
         commit(mutationTypes.SET_USER_INFO, null);
         dispatch("referees/reset", {}, { root: true });
         dispatch("tournaments/reset", {}, { root: true });
-        Toast.open({
-          message: "Logged out, bye! 👋",
-          type: "is-success",
-        });
+        successMessage("Logged out, bye! 👋");
       })
       .catch(notifyException)
       .finally(() => {
@@ -183,14 +189,13 @@ const actions = {
       });
   },
 
-  async changePassword({ commit }, { oldPassword, newPassword }) {
+  async changePassword({ commit }, { oldPassword, newPassword, onSuccess = () => {} }) {
     commit(mutationTypes.SET_LOADING, true);
     Auth.currentAuthenticatedUser()
-      .then((user) => {
-        return Auth.changePassword(user, oldPassword, newPassword);
-      })
+      .then( user => Auth.changePassword(user, oldPassword, newPassword))
       .then(() => {
         successMessage("Password updated");
+        onSuccess();
       })
       .catch(notifyException)
       .finally(() => {
@@ -200,8 +205,8 @@ const actions = {
 
   async changeEmail({ commit }, { email, onSuccess = () => {} }) {
     commit(mutationTypes.SET_LOADING, true);
-    let user = await Auth.currentAuthenticatedUser();
-    Auth.updateUserAttributes(user, { email })
+    Auth.currentAuthenticatedUser()
+      .then(user => Auth.updateUserAttributes(user, { email }))
       .then(onSuccess)
       .catch(notifyException)
       .finally(() => {
@@ -239,6 +244,17 @@ const actions = {
       .then(onSuccess)
       .catch(notifyException)
       .finally(() => commit(mutationTypes.SET_LOADING, false));
+  },
+
+  async setRefereeId({ commit }, { refereeId }) {
+    Auth.currentAuthenticatedUser()
+      .then(user => {
+        return Auth.updateUserAttributes(user, { "custom:refereeId": refereeId });
+      })
+      .then(() => {
+        commit(mutationTypes.UPDATE_USER_INFO, { refereeId });
+      })
+      .catch(notifyException);
   },
 };
 

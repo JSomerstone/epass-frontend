@@ -29,9 +29,7 @@ export default {
   methods: {
     loadData: function() {
       this.$store.dispatch("referees/loadCurrent", { force: false });
-      if (!this.$store.getters["referees/nationalAssociations"].length) {
-        this.$store.dispatch("referees/loadAssociations", { force: false });
-      }
+      this.$store.dispatch("referees/loadAssociations", { force: false });
     }
   },
   created() {
