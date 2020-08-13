@@ -78,6 +78,17 @@ export const onCreateTournament = /* GraphQL */ `
         id
       }
       teams
+      comments {
+        items {
+          id
+          refereeID
+          created
+          message
+          createdAt
+          updatedAt
+        }
+        nextToken
+      }
       createdAt
       updatedAt
     }
@@ -100,6 +111,17 @@ export const onUpdateTournament = /* GraphQL */ `
         id
       }
       teams
+      comments {
+        items {
+          id
+          refereeID
+          created
+          message
+          createdAt
+          updatedAt
+        }
+        nextToken
+      }
       createdAt
       updatedAt
     }
@@ -122,6 +144,116 @@ export const onDeleteTournament = /* GraphQL */ `
         id
       }
       teams
+      comments {
+        items {
+          id
+          refereeID
+          created
+          message
+          createdAt
+          updatedAt
+        }
+        nextToken
+      }
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const onCreateComment = /* GraphQL */ `
+  subscription OnCreateComment {
+    onCreateComment {
+      id
+      tournament {
+        id
+        name
+        international
+        city
+        country
+        year
+        dates
+        td
+        referees {
+          games
+          tenSeconds
+          id
+        }
+        teams
+        comments {
+          nextToken
+        }
+        createdAt
+        updatedAt
+      }
+      refereeID
+      created
+      message
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const onUpdateComment = /* GraphQL */ `
+  subscription OnUpdateComment {
+    onUpdateComment {
+      id
+      tournament {
+        id
+        name
+        international
+        city
+        country
+        year
+        dates
+        td
+        referees {
+          games
+          tenSeconds
+          id
+        }
+        teams
+        comments {
+          nextToken
+        }
+        createdAt
+        updatedAt
+      }
+      refereeID
+      created
+      message
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const onDeleteComment = /* GraphQL */ `
+  subscription OnDeleteComment {
+    onDeleteComment {
+      id
+      tournament {
+        id
+        name
+        international
+        city
+        country
+        year
+        dates
+        td
+        referees {
+          games
+          tenSeconds
+          id
+        }
+        teams
+        comments {
+          nextToken
+        }
+        createdAt
+        updatedAt
+      }
+      refereeID
+      created
+      message
       createdAt
       updatedAt
     }

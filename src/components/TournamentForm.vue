@@ -80,6 +80,35 @@
                           </b-datepicker>
                       </b-field>
                   </div>
+                  <div class="field">
+                    <b-field label="Add a note" label-position="on-border">
+                      <b-input 
+                        v-model="comment" 
+                        type="textarea"
+                        :rows="commentFieldRows"
+                        maxlength="256"
+                        has-counter
+                        expanded
+                      />
+                      <b-button icon-left="plus" type="is-info" @click="handleAddComment">
+                        Add
+                      </b-button>
+                    </b-field>
+                    <div class="notes" v-if="t.comments.items.length">
+                      <b-field label="Notes" />
+                      <b-message v-for="(note, index) in t.comments.items" :key="index">
+                        <i>{{ note.refereeID | refereeName(allReferees) }}, {{ note.created | datetime }}:</i>
+                        <b-button 
+                          size="small" 
+                          type="is-text" 
+                          icon-left="close" 
+                          @click="handleRemoveComment(note, index)"
+                          :disabled="isLoading"
+                        />
+                        <pre>{{ note.message }}</pre>
+                      </b-message>
+                    </div>
+                  </div>
               </div>
               <div class="column is-half">
                   <div class="field" id="td-field">
@@ -107,7 +136,7 @@
                                   </template>
                               </b-autocomplete>
                               <b-button 
-                                @click="t.td = getCurrent()" 
+                                @click="t.td = referee" 
                                 type="is-info" 
                                 icon-left="account-plus" 
                                 title="Set yourself as TD">
@@ -214,6 +243,12 @@
 .referee-form {
   padding: 20px;
 }
+.notes .media-content pre {
+  padding: 0px 1em;
+}
+.notes .message-body {
+  padding: 0.25em 0.5em;
+}
 </style>
 <script>
 import RefereeForm from "./RefereeForm";
@@ -221,12 +256,14 @@ import RefereeTable from "./EditableRefereeTable";
 import TeamsField from "./TeamsField";
 import CountryAutocomplete from "./field/CountryAutocomplete";
 import Tournament from "../store/models/Tournament";
-import { infoMessage, warningMessage } from "../utils/notificationUtils";
+import Comment from "../store/models/Comment";
+import { infoMessage, warningMessage, successMessage } from "../utils/notificationUtils";
 
 const defaults = {
   countryQuery: "",
   tdQuery: "",
   ref: "",
+  comment: "",
 };
 export default {
   components: {
@@ -277,8 +314,14 @@ export default {
     allReferees: function() {
         return this.$store.getters['referees/all'] || [];
     },
+    referee() {
+      return this.$store.getters["referees/current"] || {};
+    },
     debug: function() {
       return this.$store.getters["tournaments/debug"];
+    },
+    commentFieldRows: function() {
+      return this.comment.split("\n").length;
     }
   },
   methods: {
@@ -315,6 +358,32 @@ export default {
       }
       warningMessage("Cancelled");
     },
+    handleAddComment() {
+      const comment = new Comment({
+        commentTournamentId: this.t.id,
+        refereeID: this.referee.id,
+        message: this.comment.trim()
+      });
+      this.$store.dispatch('tournaments/addComment', {
+        comment,
+        onSuccess: this.addComment
+      });
+    },
+    addComment(comment){
+      this.t.comments.items.push(comment);
+      this.comment = "";
+      successMessage("Note added");
+    },
+    handleRemoveComment(comment, index) {
+      const { id } = comment;
+      this.$store.dispatch('tournaments/deleteComment', {
+        id,
+        onSuccess: () => {
+          warningMessage("Removed");
+          this.t.comments.items.splice(index, 1);
+        }
+      });
+    },
     confirmRemoveTd() {
       this.$buefy.dialog.confirm({
         message: 'Are you sure to remove the TD?',
@@ -333,18 +402,15 @@ export default {
           }
       },
     addCurrent() {
-      const current = this.getCurrent();
+      const current = this.referee;
       current.id && this.selectReferee(current);
     },
-    getCurrent() {
-      return this.$store.getters["referees/current"] || {};
-    },
     userIsTd() {
-      const { id = null } = this.getCurrent();
+      const { id = null } = this.referee;
       return id == this.t.td.id;
     },
     getEditableReferee() {
-      const { id = null } = this.getCurrent();
+      const { id = null } = this.referee;
       return this.userIsTd() //If user is the TD of the tournament -> "all"
         ? "all"
         : id || "none"; //Otherwise only the current users' own stats
@@ -372,7 +438,7 @@ export default {
         city: "Helsinki",
         country: "Finland",
         dates: ["2020-07-16","2020-07-16"],
-        td: this.getCurrent(),
+        td: this.referee,
         referees: [
           {
             "id": "e901993c-6021-4533-bae3-6a171726517d",
@@ -391,6 +457,19 @@ export default {
       this.noOfTenSeconds = 10;
       this.noOfGames = 6;
     },
+  },
+  filters: {
+    datetime: date => {
+      let dateTime = new Date(date);
+      return [
+        dateTime.toLocaleDateString(),
+        dateTime.toLocaleTimeString([], {timeStyle: 'short'})
+      ].join(" ");
+    },
+    refereeName: (id, refereeList) => {
+      const referee = refereeList.find( r => r.id == id);
+      return referee ? `${referee.firstName} ${referee.lastName}` : id;
+    }
   },
   watch: {
     tournament: function(tournament) {

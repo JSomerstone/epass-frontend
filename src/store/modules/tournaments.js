@@ -1,6 +1,6 @@
 import { listTournaments, getTournament } from "../../graphql/queries";
 import { API } from "aws-amplify";
-import { createTournament, updateTournament } from '../../graphql/mutations';
+import { createTournament, updateTournament, createComment, deleteComment } from '../../graphql/mutations';
 import { notifyException, successMessage } from '../../utils/notificationUtils';
 
 
@@ -26,6 +26,8 @@ const mutationTypes = {
   SET_SHOW_FORM: "set-show-form",
   SET_TEAMS: "set-teams",
   ADD_TEAM: "add-team",
+  ADD_COMMENT: "add-comment",
+  DELETE_COMMENT: "delete-comment",
   SET_FILTER: "set-filter",
   SET_FILTERED: "set-filtered",
 };
@@ -58,6 +60,15 @@ const mutations = {
     state.teams.sort();
     localStorage.setItem("teams", JSON.stringify(state.teams));
   },
+  [mutationTypes.ADD_COMMENT](state, comment) {
+    console.log({ wip: state.wip, comment });
+  },
+  [mutationTypes.DELETE_COMMENT](state, comment) {
+    const index = state.wip.comments.findIndex(
+      c => c.id == comment.id
+    );
+    state.wip.comments.splice(index, 1);
+  },
   [mutationTypes.SET_WIP](state, tournament) {
     state.wip = tournament;
   },
@@ -72,6 +83,31 @@ const mutations = {
 const actions = {
   setLoading({ commit }, { loading }) {
     commit(mutationTypes.SET_LOADING, loading);
+  },
+  addComment: async ({ commit }, { comment, onSuccess = () => { } } ) => {
+    API.graphql({
+      query: createComment,
+      variables: { input: comment },
+    })
+      .then(result => {
+        commit(mutationTypes.ADD_COMMENT, result.data.createComment);
+        console.log({ action: 'AddComment', ...result.data.createComment });
+        onSuccess(result.data.createComment);
+      })
+      .catch(notifyException);
+  },
+  deleteComment: async ({ commit }, { id, onSuccess = () => { } }) => {
+    commit(mutationTypes.SET_LOADING, true);
+    API.graphql({
+      query: deleteComment,
+      variables: { input: { id } },
+    })
+      .then(result => {
+        console.log({ action: 'RemoveComment', ...result.data });
+        onSuccess(result);
+      })
+      .catch(notifyException)
+      .finally(() => commit(mutationTypes.SET_LOADING, false));
   },
   load: async ({ commit, dispatch, state }, { year, force = false }) => {
     if (state.tournaments.length && state.tournaments[0].year == year && !force) {

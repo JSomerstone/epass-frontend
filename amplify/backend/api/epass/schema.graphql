@@ -18,15 +18,24 @@ type Tournament @model @key(name: "byYear", fields: ["year", "id"]) {
   country: String!
   year: Int!
   dates: [String]!
-  td: String!
-  referees: [Entry]!
-  teams: [String]!
+  td: String
+  referees: [Entry]
+  teams: [String]
+  comments: [Comment] @connection(name: "TournamentComment")
 }
 
 type Entry {
   games: Int!
   tenSeconds: Int!
   id: ID!
+}
+
+type Comment @model {
+  id: ID!
+  tournament: Tournament! @connection(name: "TournamentComment")
+  refereeID: ID!
+  created: AWSDateTime!
+  message: String!
 }
 
 type Clinic {

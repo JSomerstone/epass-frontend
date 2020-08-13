@@ -1,3 +1,4 @@
+import Comment from "./Comment";
 
 export default class Tournament {
   constructor(rawData = {}, refereeList = []) {
@@ -12,6 +13,7 @@ export default class Tournament {
       td = {},
       referees = [],
       teams = [],
+      comments = { items: [] },
     } = rawData;
 
     this.id = id;
@@ -30,6 +32,9 @@ export default class Tournament {
         }
       }
     );
+    this.comments = {
+      items: comments.items.map(c => new Comment(c))
+    }
     this.teams = teams;
   }
   getRef(id, refereeList) {
@@ -67,6 +72,7 @@ export default class Tournament {
         }
       ),
       teams: this.teams,
+      //comments: this.comments,
     };
   }
 

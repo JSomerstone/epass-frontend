@@ -22,28 +22,23 @@ export const getReferee = /* GraphQL */ `
   }
 `;
 export const listReferees = /* GraphQL */ `
-         query ListReferees(
-           $filter: ModelRefereeFilterInput
-           $limit: Int
-           $nextToken: String
-         ) {
-           listReferees(filter: $filter, limit: $limit, nextToken: $nextToken) {
-             items {
-               id
-               firstName
-               lastName
-               country
-               email
-               associationId
-               clinic {
-                 date
-                 conductor
-               }
-             }
-             nextToken
-           }
-         }
-       `;
+  query ListReferees(
+    $filter: ModelRefereeFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    listReferees(filter: $filter, limit: $limit, nextToken: $nextToken) {
+      items {
+        id
+        firstName
+        lastName
+        country
+        email
+      }
+      nextToken
+    }
+  }
+`;
 export const getTournament = /* GraphQL */ `
   query GetTournament($id: ID!) {
     getTournament(id: $id) {
@@ -61,6 +56,17 @@ export const getTournament = /* GraphQL */ `
         id
       }
       teams
+      comments {
+        items {
+          id
+          refereeID
+          created
+          message
+          createdAt
+          updatedAt
+        }
+        nextToken
+      }
       createdAt
       updatedAt
     }
@@ -88,6 +94,28 @@ export const listTournaments = /* GraphQL */ `
           id
         }
         teams
+        createdAt
+        updatedAt
+      }
+      nextToken
+    }
+  }
+`;
+export const listComments = /* GraphQL */ `
+  query ListComments(
+    $filter: ModelCommentFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    listComments(filter: $filter, limit: $limit, nextToken: $nextToken) {
+      items {
+        id
+        tournament {
+          id
+        }
+        refereeID
+        created
+        message
         createdAt
         updatedAt
       }

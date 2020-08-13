@@ -90,6 +90,17 @@ export const createTournament = /* GraphQL */ `
         id
       }
       teams
+      comments {
+        items {
+          id
+          refereeID
+          created
+          message
+          createdAt
+          updatedAt
+        }
+        nextToken
+      }
       createdAt
       updatedAt
     }
@@ -140,6 +151,60 @@ export const deleteTournament = /* GraphQL */ `
         id
       }
       teams
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const createComment = /* GraphQL */ `
+  mutation CreateComment(
+    $input: CreateCommentInput!
+    $condition: ModelCommentConditionInput
+  ) {
+    createComment(input: $input, condition: $condition) {
+      id
+      tournament {
+        id
+      }
+      refereeID
+      created
+      message
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const updateComment = /* GraphQL */ `
+  mutation UpdateComment(
+    $input: UpdateCommentInput!
+    $condition: ModelCommentConditionInput
+  ) {
+    updateComment(input: $input, condition: $condition) {
+      id
+      tournament {
+        id
+      }
+      refereeID
+      created
+      message
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const deleteComment = /* GraphQL */ `
+  mutation DeleteComment(
+    $input: DeleteCommentInput!
+    $condition: ModelCommentConditionInput
+  ) {
+    deleteComment(input: $input, condition: $condition) {
+      id
+      tournament {
+        id
+      }
+      refereeID
+      created
+      message
       createdAt
       updatedAt
     }
