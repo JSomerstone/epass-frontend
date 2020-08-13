@@ -81,33 +81,49 @@
                       </b-field>
                   </div>
                   <div class="field">
-                    <b-field label="Add a note" label-position="on-border">
+                    <label class="label">
+                      <b-button 
+                        :icon-right="showNotes ? 'menu-down' : 'menu-up'" 
+                        @click="showNotes = !showNotes" 
+                        type="is-text"
+                      >Notes ({{ notes.length }})
+                      </b-button>
+                    </label>
+                    <div class="notes" v-if="notes.length && showNotes">
+                      <b-message v-for="(note, index) in notes" :key="index" class="note">
+                        <i>{{ note.refereeID | refereeName(allReferees) }}, {{ note.created | datetime }}:</i>
+                        <b-tooltip label="Delete note">
+                          <b-button 
+                            size="small" 
+                            type="is-text" 
+                            icon-left="close"
+                            v-if="note.refereeID == referee.id"
+                            @click="handleRemoveComment(note, index)"
+                          />
+                        </b-tooltip>
+                        <pre>{{ note.message }}</pre>
+                      </b-message>
+                    </div>
+                    <b-field label="Add a note" label-position="on-border" >
                       <b-input 
                         v-model="comment" 
                         type="textarea"
+                        placeholder="Type a message"
                         :rows="commentFieldRows"
                         maxlength="256"
                         has-counter
                         expanded
+                        ref="noteField"
                       />
-                      <b-button icon-left="plus" type="is-info" @click="handleAddComment">
-                        Add
+                      <b-button 
+                        icon-left="pencil" 
+                        type="is-info"
+                        :disabled="isLoading"
+                        @click="handleAddComment"
+                      >Add
                       </b-button>
                     </b-field>
-                    <div class="notes" v-if="t.comments">
-                      <b-field label="Notes" />
-                      <b-message v-for="(note, index) in t.comments.items" :key="index">
-                        <i>{{ note.refereeID | refereeName(allReferees) }}, {{ note.created | datetime }}:</i>
-                        <b-button 
-                          size="small" 
-                          type="is-text" 
-                          icon-left="close" 
-                          @click="handleRemoveComment(note, index)"
-                          :disabled="isLoading"
-                        />
-                        <pre>{{ note.message }}</pre>
-                      </b-message>
-                    </div>
+                    <pre v-if="debug">{{ notes.map( n => n.created ) }}</pre>
                   </div>
               </div>
               <div class="column is-half">
@@ -235,19 +251,27 @@
         <pre v-if="debug">{{ t }}</pre>
     </b-collapse>
 </template>
-<style lang="css" scoped>
+<style lang="css">
 .panel-block > form{
     margin: 24px;
 }
-
 .referee-form {
   padding: 20px;
 }
 .notes .media-content pre {
-  padding: 0px 1em;
+  padding: 0em 0em 0em 1em;
+  overflow-x: auto;
+  white-space: pre-wrap;
+  white-space: -moz-pre-wrap;
+  white-space: -pre-wrap;
+  white-space: -o-pre-wrap;
+  word-wrap: break-word;
 }
-.notes .message-body {
+.notes .message.note .message-body {
   padding: 0.25em 0.5em;
+}
+.note:last-child {
+  margin-bottom: 1.5rem;
 }
 </style>
 <script>
@@ -264,6 +288,7 @@ const defaults = {
   tdQuery: "",
   ref: "",
   comment: "",
+  showNotes: false,
 };
 export default {
   components: {
@@ -322,6 +347,15 @@ export default {
     },
     commentFieldRows: function() {
       return this.comment.split("\n").length;
+    },
+    notes: function() {
+      if (!this.t.comments) {
+        return [];
+      }
+      let notes = this.t.comments.items;
+      return notes.sort(
+        (note, previous) => new Date(note.created) - new Date(previous.created)
+      );
     }
   },
   methods: {
@@ -382,6 +416,8 @@ export default {
     addComment(comment){
       this.t.comments.items.push(comment);
       this.comment = "";
+      this.showNotes = true;
+      this.$refs.noteField.focus();
     },
     handleRemoveComment(comment, index) {
       const { id } = comment;
@@ -391,6 +427,7 @@ export default {
         this.$store.dispatch('tournaments/deleteComment', {
           id,
           onSuccess: () => {
+            this.t.comments.items.splice(index, 1);
             warningMessage("Removed");
           }
         });
