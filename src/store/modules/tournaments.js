@@ -1,6 +1,6 @@
 import { listTournaments, getTournament } from "../../graphql/queries";
 import { API } from "aws-amplify";
-import { createTournament, updateTournament, createComment, deleteComment } from '../../graphql/mutations';
+import { createTournament, updateTournament, createComment, deleteComment, deleteTournament } from '../../graphql/mutations';
 import { notifyException, successMessage } from '../../utils/notificationUtils';
 
 
@@ -150,17 +150,23 @@ const actions = {
       .catch(notifyException)
       .finally(() => commit(mutationTypes.SET_LOADING, false));
   },
-  loadTournament: ({ commit }, { id, onSuccess = () => {} }) => {
+  loadTournament: ({ commit }, { id, onSuccess = () => {}, onFailure = () => {} }) => {
     commit(mutationTypes.SET_LOADING, true);
     API.graphql({
       query: getTournament,
       variables: { id },
     })
       .then((result) => {
+        if (!result.data.getTournament) {
+          throw { message: "Tournament not found!" };
+        }
         commit(mutationTypes.SET_WIP, result.data.getTournament);
         onSuccess(result.data.getTournament);
       })
-      .catch(notifyException)
+      .catch(e => {
+        notifyException(e);
+        onFailure();
+      })
       .finally(() => {
         commit(mutationTypes.SET_LOADING, false);
       });
@@ -232,6 +238,21 @@ const actions = {
       notifyException(err);
     }
     commit(mutationTypes.SET_LOADING, false);
+  },
+  delete: async ({ commit, dispatch }, { tournament, onSuccess = () => { } }) => {
+    commit(mutationTypes.SET_LOADING, true);
+    const { id, year } = tournament;
+    API.graphql({
+      query: deleteTournament,
+      variables: { input: { id } },
+    }).then(
+      result => {
+        dispatch("load", { year, force: true });
+        onSuccess(result);
+      }
+    )
+      .catch(notifyException)
+      .finally(() => commit(mutationTypes.SET_LOADING, false));
   },
   setFilter: ({ commit, dispatch }, { filter }) => {
     commit(mutationTypes.SET_FILTER, filter);

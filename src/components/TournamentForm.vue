@@ -244,6 +244,14 @@
             <b-button @click="handleCancel" type="is-light" icon-left="cancel" class="card-footer-item" >
                 Cancel
             </b-button>
+            <b-tooltip label="Delete tournament" type="is-danger" v-if="userIsTd() &&  t.id">
+              <b-button 
+                @click="handleDelete" 
+                type="is-danger" 
+                icon-left="delete" 
+                outlined
+              />
+            </b-tooltip>
             <b-button @click="handleFill" v-if="debug">
               Fill
             </b-button>
@@ -397,6 +405,38 @@ export default {
         this.loadTournamentForm(new Tournament({year: this.year }))
       }
       warningMessage("Cancelled");
+    },
+    handleDelete() {
+      this.$buefy.dialog.prompt({
+          message: "Are you sure you want to permanently delete this tournament? This action cannot be undone.",
+          icon: "alert-circle",
+          hasIcon: true,
+          confirmText: "Confirm",
+          inputAttrs: {
+              placeholder: "Type 'delete' to confirm",
+              maxlength: 6
+          },
+          trapFocus: true,
+          type: 'is-danger',
+          onConfirm: this.handleConfirmDelete
+      })
+    },
+    handleConfirmDelete(answer) {
+      if (answer !== "delete") {
+        infoMessage("Type 'delete' to confirm");
+      } else {
+        warningMessage("Deleting...");
+        this.$store.dispatch("tournaments/delete", {
+          tournament: this.t,
+          onSuccess: () => {
+            infoMessage("Tournament deleted");
+            this.$router.push({
+              name: "tournaments",
+              params: { year: this.t.year }
+            })
+          }
+        });
+      }
     },
     handleAddComment() {
       const comment = new Comment({

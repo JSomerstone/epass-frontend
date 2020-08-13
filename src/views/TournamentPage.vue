@@ -69,6 +69,9 @@ export default {
         id: this.tournamentId,
         onSuccess: (tournament) => {
           this.tournament = tournament;
+        },
+        onFailure: () => {
+          this.$router.push({ name: "error" });
         }
       });
     }
