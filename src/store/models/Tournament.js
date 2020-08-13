@@ -10,7 +10,7 @@ export default class Tournament {
       country = "",
       year = null,
       dates = [],
-      td = {},
+      td = null,
       referees = [],
       teams = [],
       comments = { items: [] },
@@ -23,7 +23,7 @@ export default class Tournament {
     this.country = country;
     this.dates = dates.map(d => new Date(d));
     this.year = year || new Date().getFullYear();
-    this.td = td.id ? td : this.getRef(td, refereeList);
+    this.td = td ? td : this.getRef(td, refereeList);
     this.referees = referees.map(
       r => {
         return {
@@ -72,7 +72,7 @@ export default class Tournament {
         }
       ),
       teams: this.teams,
-      //comments: this.comments,
+      comments: this.comments,
     };
   }
 

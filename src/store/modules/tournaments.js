@@ -194,14 +194,22 @@ const actions = {
   },
   create: async ({ commit, dispatch }, { tournament, onSuccess = () => { } }) => {
     commit(mutationTypes.SET_LOADING, true);
+    const { comments } = tournament;
+    delete tournament.comments;
     try {
       const result = await API.graphql({
         query: createTournament,
         variables: { input: tournament.toJson() },
       });
+      const { id } = result.data.createTournament;
       commit(mutationTypes.NEW_TOURNAMENT, result.data.createTournament);
       successMessage("Tournament saved");
-      dispatch("load", { year: tournament.year });
+      dispatch("load", { year: tournament.year, force: true });
+      comments.items.forEach(comment => {
+        dispatch("addComment", {
+          comment: { ...comment, commentTournamentId: id }
+        });
+      });
       onSuccess(result.data.createTournament);
     } catch (err) {
       notifyException(err);

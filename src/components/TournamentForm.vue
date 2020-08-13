@@ -94,7 +94,7 @@
                         Add
                       </b-button>
                     </b-field>
-                    <div class="notes" v-if="t.comments.items.length">
+                    <div class="notes" v-if="t.comments">
                       <b-field label="Notes" />
                       <b-message v-for="(note, index) in t.comments.items" :key="index">
                         <i>{{ note.refereeID | refereeName(allReferees) }}, {{ note.created | datetime }}:</i>
@@ -257,7 +257,7 @@ import TeamsField from "./TeamsField";
 import CountryAutocomplete from "./field/CountryAutocomplete";
 import Tournament from "../store/models/Tournament";
 import Comment from "../store/models/Comment";
-import { infoMessage, warningMessage, successMessage } from "../utils/notificationUtils";
+import { infoMessage, warningMessage } from "../utils/notificationUtils";
 
 const defaults = {
   countryQuery: "",
@@ -343,7 +343,13 @@ export default {
         infoMessage("Saving...");
         this.$store.dispatch(
           "tournaments/create", 
-          { tournament: this.t, onSuccess: (saved) => this.t.id = saved.id }
+          { 
+            tournament: this.t, 
+            onSuccess: ({id}) => this.$router.push({
+              name: "tournament",
+              params: { id }
+            }) 
+          }
         );
       }
     },
@@ -364,25 +370,31 @@ export default {
         refereeID: this.referee.id,
         message: this.comment.trim()
       });
-      this.$store.dispatch('tournaments/addComment', {
-        comment,
-        onSuccess: this.addComment
-      });
+      if (!this.t.id) {
+        this.addComment(comment);
+      } else {
+        this.$store.dispatch('tournaments/addComment', {
+          comment,
+          onSuccess: this.addComment
+        });
+      }
     },
     addComment(comment){
       this.t.comments.items.push(comment);
       this.comment = "";
-      successMessage("Note added");
     },
     handleRemoveComment(comment, index) {
       const { id } = comment;
-      this.$store.dispatch('tournaments/deleteComment', {
-        id,
-        onSuccess: () => {
-          warningMessage("Removed");
+      if (!id) {
           this.t.comments.items.splice(index, 1);
-        }
-      });
+      } else {
+        this.$store.dispatch('tournaments/deleteComment', {
+          id,
+          onSuccess: () => {
+            warningMessage("Removed");
+          }
+        });
+      }
     },
     confirmRemoveTd() {
       this.$buefy.dialog.confirm({
