@@ -1,5 +1,5 @@
 <template>
-  <b-table :data="referees" class="no-margin-on-control" hoverable>
+  <b-table :data="referees" class="no-margin-on-control referee-table" hoverable>
     <template slot-scope="props">
         <b-table-column field="name" label="Name">
             {{ props.row.firstName }}  {{ props.row.lastName }}

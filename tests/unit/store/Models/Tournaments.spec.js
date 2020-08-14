@@ -1,5 +1,4 @@
 import Tournament from "../../../../src/store/models/Tournament";
-import tournaments from "../../../../src/store/modules/tournaments";
 
 const today = new Date();
 const validTournament = {

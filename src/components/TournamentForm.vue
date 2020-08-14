@@ -151,12 +151,14 @@
                                       </a>
                                   </template>
                               </b-autocomplete>
-                              <b-button 
-                                @click="t.td = referee" 
-                                type="is-info" 
-                                icon-left="account-plus" 
-                                title="Set yourself as TD">
-                              </b-button>
+                              <b-tooltip label="Set yourself as the TD" type="is-info">
+                                <b-button 
+                                  @click="t.td = referee" 
+                                  type="is-info" 
+                                  icon-left="account-circle-outline" 
+                                  title="Set yourself as TD">
+                                </b-button>
+                              </b-tooltip>
                             </b-field>
                           </div>
                           <div class="column is-half" v-if="t.td.id">
@@ -182,45 +184,52 @@
                   </div><!-- /td-field -->
                   
                   <div class="field" id="referees-field">
-                      <b-field label="Referees">
-                        <b-field v-if="!showAddRefereeForm">
-                          <b-autocomplete
-                              v-model="ref"
-                              placeholder="Search by name, email or nationality"
-                              :keep-first="true"
-                              icon="magnify"
-                              :data="filteredReferees"
-                              @select="selectReferee"
-                              :clear-on-select="true"
-                              :expanded="true"
-                          >
-                              <template slot-scope="props">
-                                  {{ props.option.firstName }} {{ props.option.lastName }} [{{ props.option.country }}]
-                              </template>
-                              <template slot="empty">
-                                  No results for {{ref}}, 
-                                  <a @click="showAddRefereeForm = true">
-                                      <span> Add new... </span>
-                                  </a>
-                              </template>
-                          </b-autocomplete>
-                          <b-button @click="addCurrent" type="is-info" icon-left="account-plus" title="Add yourself">
-                          </b-button>
-                        </b-field>
-                        <b-field label="Add referee"
-                          class="referee-form" 
-                          v-if="showAddRefereeForm"
-                        >
-                          <referee-form
-                            :onSave="addReferee"
-                            :onCancel="() => showAddRefereeForm = false"
-                          />
-                        </b-field>
-                      </b-field>
-                      <referee-table 
+                    <b-field label="Referees" />
+                      <referee-table
+                        v-if="!showAddRefereeForm"
                         v-model="t.referees"
                         :editableItem="getEditableReferee()"
                       />
+                      <b-field v-if="!showAddRefereeForm" label="Add referee" label-position="on-border">
+                        <b-autocomplete
+                            v-model="ref"
+                            ref="refereeField"
+                            placeholder="Search by name, email or nationality"
+                            :keep-first="true"
+                            icon="magnify"
+                            :data="filteredReferees"
+                            @select="selectReferee"
+                            :clear-on-select="true"
+                            :expanded="true"
+                        >
+                            <template slot-scope="props">
+                                {{ props.option.firstName }} {{ props.option.lastName }} [{{ props.option.country }}]
+                            </template>
+                            <template slot="empty">
+                                No results for {{ref}}
+                                <b-button @click="showAddRefereeForm = true" icon-left="account-plus" type="is-text">
+                                  New referee
+                                </b-button> 
+                            </template>
+                        </b-autocomplete>
+                        <b-tooltip label="Add new referee to system" type="is-info">
+                          <b-button @click="showAddRefereeForm = !showAddRefereeForm" icon-left="account-plus" type="is-info" outlined>
+                            New referee
+                          </b-button> 
+                        </b-tooltip>
+                        <b-tooltip label="Add yourself as a referee"  type="is-info" v-if="!isReferee">
+                          <b-button @click="addCurrent" icon-left="account-circle-outline" type="is-info"/>
+                        </b-tooltip>
+                      </b-field>
+                      <b-field label="Add referee"
+                        class="referee-form" 
+                        v-if="showAddRefereeForm"
+                      >
+                        <referee-form
+                          :onSave="addReferee"
+                          :onCancel="() => showAddRefereeForm = false"
+                        />
+                      </b-field>
                   </div><!-- /referees-field -->
                 <div class="field"><!-- teams-field -->
                   <b-field label="Teams competing">
@@ -278,7 +287,7 @@
 .notes .message.note .message-body {
   padding: 0.25em 0.5em;
 }
-.note:last-child {
+.note:last-child, .referee-table {
   margin-bottom: 1.5rem;
 }
 </style>
@@ -349,6 +358,12 @@ export default {
     },
     referee() {
       return this.$store.getters["referees/current"] || {};
+    },
+    isReferee() {
+      const { id } = this.referee;
+      return Boolean(
+        this.t.referees.find( r => r.id == id )
+      );
     },
     debug: function() {
       return this.$store.getters["tournaments/debug"];
@@ -483,6 +498,7 @@ export default {
         if ( ! this.t.referees.find( r => r.id === referee.id)) {
           this.t.referees.push({ ...referee, games: 0, tenSeconds: 0 });
         }
+        this.$refs.refereeField.focus();
       },
       removeReferee: function (referee) {
           let index = this.t.referees.findIndex( ref => ref.id === referee.id );
@@ -491,8 +507,7 @@ export default {
           }
       },
     addCurrent() {
-      const current = this.referee;
-      current.id && this.selectReferee(current);
+      this.referee.id && this.selectReferee(this.referee);
     },
     userIsTd() {
       const { id = null } = this.referee;
