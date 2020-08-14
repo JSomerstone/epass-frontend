@@ -15,8 +15,8 @@
           <td>{{ referee.country }}{{ referee.country2 ? `, ${referee.country2}` : '' }}</td>
         </tr>
         <tr><td>Email</td><td>{{ referee.email }}</td></tr>
-        <tr><td>Level at January</td><td>{{ referee.level }}</td></tr>
-        <tr><td>Level at December</td><td>{{ referee.level }}</td></tr>
+        <tr><td>Level at January</td><td>{{ referee.levelHistory | latestSince(year-1, referee.level) }}</td></tr>
+        <tr><td>Level at December</td><td>{{ referee.levelHistory | latestSince(year, referee.level)}}</td></tr>
         <tr>
           <td>Last clinic</td>
           <td v-if="referee.clinic.date">
@@ -218,6 +218,12 @@ export default {
     },
     games: stats => stats.games,
     tenSeconds: stats => stats.tenSeconds,
+    latestSince: (history, year, fallback) => {
+      const key = Array(5).fill(0)
+        .map( (v,i) => `y${year-i}` )
+        .find( key => history[key] ? true : false );
+      return key ? history[key] : fallback;
+    }
   },
   created() {
     this.loadData();
