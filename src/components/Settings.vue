@@ -389,13 +389,13 @@ export default {
         return;
       }
       this.referee = new Referee(this.$store.getters["referees/current"]);
+      const { country } = this.referee;
+      const defaultAssociation = new Association({ country });
       if (this.referee.associationId) {
-        this.association = this.$store.getters['referees/association'](this.referee.associationId);
+        this.association = this.$store.getters['referees/association'](this.referee.associationId) || defaultAssociation;
       } else if (this.referee.country) {
         let matches = this.$store.getters['referees/associationCountry'](this.referee.country);
-        this.association = matches.length ? matches[0] : new Association({
-          country: this.referee.country
-        });
+        this.association = matches.length ? matches[0] : defaultAssociation;
         this.referee.associationId = this.association.id;
       }
       this.newEmail = this.referee.email;
@@ -425,8 +425,5 @@ export default {
       }
     }
   },
-  created() {
-    this.loadData();
-  }
 }
 </script>
