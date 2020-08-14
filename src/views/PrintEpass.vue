@@ -10,7 +10,10 @@
       <table class="bordered">
         <tr><td>Family name</td><td>{{ referee.lastName }}</td></tr>
         <tr><td>Given name</td><td>{{ referee.firstName }}</td></tr>
-        <tr><td>Nationality</td><td>{{ referee.country }}</td></tr>
+        <tr>
+          <td>Nationality</td>
+          <td>{{ referee.country }}{{ referee.country2 ? `, ${referee.country2}` : '' }}</td>
+        </tr>
         <tr><td>Email</td><td>{{ referee.email }}</td></tr>
         <tr><td>Level</td><td>{{ referee.level }}</td></tr>
         <tr>

@@ -3,6 +3,7 @@ type Referee @model {
   firstName: String!
   lastName: String!
   country: String
+  country2: String
   email: String
   level: Int
   userId: String

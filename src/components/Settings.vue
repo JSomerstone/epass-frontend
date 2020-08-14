@@ -61,8 +61,20 @@
                 required
               >
               </country-autocomplete>
+              <country-autocomplete
+                v-model="referee.country2"
+                placeholder="Second nationality"
+                icon="passport"
+                v-if="dualNational"
+              >
+              </country-autocomplete>
             </b-field>
           </div>
+          <b-field>
+            <b-switch v-model="dualNational">
+              Second nationality
+            </b-switch>
+          </b-field>
           <div class="field">
             <level v-model="referee.level" />
           </div>
@@ -381,6 +393,7 @@ export default {
         this.referee.associationId = this.association.id;
       }
       this.newEmail = this.referee.email;
+      this.dualNational = Boolean(this.referee.country2);
     },
     resetSecurityForm: function() {
       this.newEmail = "";
@@ -398,6 +411,11 @@ export default {
         name: 'settings',
         params: { category }
       });
+    },
+    dualNational: function(value) {
+      if (!value) {
+        this.referee.country2 = null;
+      }
     }
   },
   created() {

@@ -8,6 +8,7 @@ export const getReferee = /* GraphQL */ `
       firstName
       lastName
       country
+      country2
       email
       level
       userId

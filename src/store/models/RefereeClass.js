@@ -5,6 +5,7 @@ export default class Referee {
       firstName = "",
       lastName = "",
       country = "",
+      country2 = null,
       email = "",
       level = 1,
       userId = "",
@@ -16,6 +17,7 @@ export default class Referee {
     this.firstName = firstName;
     this.lastName = lastName;
     this.country = country;
+    this.country2 = country2;
     this.email = email;
     this.level = level;
     this.userId = userId;
