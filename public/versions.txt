@@ -1,5 +1,8 @@
 v 0.2.1 TBA
 - Dual nationality support for Referees
+- Original creator can fully edit / delete tournament
+- Tournament -form layout changes
+- Referees level-history is stored, showing level at beginning/end of year in /epass
 - bugfix: Sorting tournaments by date fixed
 
 v 0.2.0 2020-08-13
