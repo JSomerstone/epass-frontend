@@ -262,7 +262,7 @@ export default {
       currentPassword: "",
       newPassword: "",
       confirmPassword: "",
-      countryQuery: "",
+      dualNational: false,
       associationCountry: "",
       genders: [
         { key: "m", gender: "Male" },
@@ -294,7 +294,7 @@ export default {
       }
     },
     handleCancel: function() {
-      this.loadData();
+      this.loadData(true);
     },
     handleSecuritySave: function() {
       if (this.referee.email !== this.newEmail) {
@@ -375,8 +375,8 @@ export default {
         }
       });
     },
-    loadData: function() {
-      if (this.referee.id) {
+    loadData: function( force = false ) {
+      if (this.referee.id && !force) {
         return; //Prevent double-loading
       } else if (this.isLoading) {
         setTimeout( this.loadData, 500 );
