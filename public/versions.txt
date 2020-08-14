@@ -1,3 +1,6 @@
+v 0.2.1 TBA
+- bugfix: Sorting tournaments by date fixed
+
 v 0.2.0 2020-08-13
 - Notes can be added to Tournaments
 - TD can delete his/her Tournament

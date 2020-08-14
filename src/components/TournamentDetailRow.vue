@@ -9,8 +9,15 @@
       <div v-if="hasGames">
         <strong>Your statistics:</strong>
         <ul>
-            <li>{{ statistics.games }} Game(s) as referee</li>
-            <li>{{ statistics.tenSeconds }} Game(s) as table official / 10 sec timer</li>
+            <li>
+              {{ statistics.games }} 
+              {{ "Game" | plural(statistics.games, "Games") }} as referee
+            </li>
+            <li>
+              {{ statistics.tenSeconds }} 
+              {{ "Game" | plural(statistics.tenSeconds, "Games") }} 
+              as table official / 10 sec timer
+            </li>
         </ul>
       </div>
     </div>
@@ -80,5 +87,10 @@ export default {
       return this.tournament.referees.find( r => r.id == current.id );
     }
   },
+  filters: {
+    plural: (singular, count, plural) => {
+      return count == 1 ? singular : plural;
+    }
+  }
 }
 </script>

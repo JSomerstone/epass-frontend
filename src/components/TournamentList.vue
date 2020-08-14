@@ -19,7 +19,7 @@
           </a>
         </b-table-column>
         <b-table-column field="dates" label="Date" sortable :custom-sort="sortDates">
-          {{ formatDateRange(props.row.dates) }} 
+          {{ props.row.dates | dateRange }} 
         </b-table-column>
         <b-table-column field="international" label="Type" sortable>
           {{ props.row.international ? "International" : "National" }}
@@ -80,28 +80,15 @@ export default {
   },
   methods: {
     sortDates(rowA, rowB, isAsc) {
-      const dateA = new Date(rowA.dates[0]).getTime();
-      const dateB = new Date(rowB.dates[0]).getTime();
-      return (dateA > dateB) || !isAsc;
+      let diff = new Date(rowA.dates[0]).getTime() 
+        - new Date(rowB.dates[0]).getTime();
+      return isAsc ? diff : diff * -1;
     },
     toggle(row) {
         this.$refs.table.toggleDetails(row)
     },
     handleReload: function() {
       this.$store.dispatch("tournaments/load", { year: this.year, force: true });
-    },
-    formatDateRange(dates) {
-      if (!dates) {
-        return;
-      }
-      const formatted = dates.map(
-        d => new Date(d).toLocaleDateString()
-      );
-      if (formatted[0] == formatted[1]) {
-        return formatted[0]
-      } else {
-        return formatted.join(" - ");
-      }
     },
     getStatistics(tournament) {
       const current = this.$store.getters['referees/current'];
@@ -113,5 +100,18 @@ export default {
       return `${games} / ${tenSeconds}`;
     }
   },
+  filters: {
+    dateRange: (dates) => {
+      if (! dates) {
+        return;
+      } else if (dates[0] == dates[1]) {
+        return new Date(dates[0]).toLocaleDateString();
+      } else {
+        return dates.map(
+          d => new Date(d).toLocaleDateString()
+        ).join(" - ");
+      }
+    }
+  }
 }
 </script>
