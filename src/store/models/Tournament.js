@@ -14,6 +14,7 @@ export default class Tournament {
       referees = [],
       teams = [],
       comments = { items: [] },
+      createdBy = null,
     } = rawData;
 
     this.id = id;
@@ -36,6 +37,7 @@ export default class Tournament {
       items: comments.items.map(c => new Comment(c))
     }
     this.teams = teams;
+    this.createdBy = createdBy;
   }
   getRef(id, refereeList) {
     return refereeList.find(
@@ -71,7 +73,8 @@ export default class Tournament {
           return { id, games, tenSeconds };
         }
       ),
-      teams: this.teams
+      teams: this.teams,
+      createdBy: this.createdBy
     };
   }
 

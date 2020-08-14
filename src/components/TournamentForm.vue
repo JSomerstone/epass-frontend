@@ -253,7 +253,7 @@
             <b-button @click="handleCancel" type="is-light" icon-left="cancel" class="card-footer-item" >
                 Cancel
             </b-button>
-            <b-tooltip label="Delete tournament" type="is-danger" v-if="userIsTd() &&  t.id">
+            <b-tooltip label="Delete tournament" type="is-danger" v-if="allowedToDelete">
               <b-button 
                 @click="handleDelete" 
                 type="is-danger" 
@@ -379,6 +379,10 @@ export default {
       return notes.sort(
         (note, previous) => new Date(note.created) - new Date(previous.created)
       );
+    },
+    allowedToDelete: function() {
+      const { id } = this.referee;
+      return (id == this.t.td.id || id == this.t.createdBy );
     }
   },
   methods: {
@@ -515,7 +519,7 @@ export default {
     },
     getEditableReferee() {
       const { id = null } = this.referee;
-      return this.userIsTd() //If user is the TD of the tournament -> "all"
+      return this.allowedToDelete //If user is the TD/creator of the tournament -> "all"
         ? "all"
         : id || "none"; //Otherwise only the current users' own stats
     },

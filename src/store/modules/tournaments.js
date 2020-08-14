@@ -1,7 +1,7 @@
 import { listTournaments, getTournament } from "../../graphql/queries";
 import { API } from "aws-amplify";
 import { createTournament, updateTournament, createComment, deleteComment, deleteTournament } from '../../graphql/mutations';
-import { notifyException, successMessage } from '../../utils/notificationUtils';
+import { notifyException, successMessage, warningMessage } from '../../utils/notificationUtils';
 
 
 const state = {
@@ -198,11 +198,12 @@ const actions = {
       commit(mutationTypes.ADD_TEAM, team);
     }
   },
-  create: async ({ commit, dispatch }, { tournament, onSuccess = () => { } }) => {
+  create: async ({ commit, dispatch, rootGetters }, { tournament, onSuccess = () => { } }) => {
     commit(mutationTypes.SET_LOADING, true);
-    const { comments } = tournament;
-    delete tournament.comments;
     try {
+      tournament.createdBy = rootGetters["referees/current"].id || null;
+      const { comments } = tournament;
+      delete tournament.comments;
       const result = await API.graphql({
         query: createTournament,
         variables: { input: tournament.toJson() },
@@ -222,9 +223,12 @@ const actions = {
     }
     commit(mutationTypes.SET_LOADING, false);
   },
-  update: async ({ commit, dispatch }, { tournament, onSuccess = () => { } }) => {
+  update: async ({ commit, dispatch , rootGetters}, { tournament, onSuccess = () => { } }) => {
     commit(mutationTypes.SET_LOADING, true);
     try {
+      if (!tournament.createdBy) {
+        tournament.createdBy = rootGetters["referees/current"].id || null;
+      }
       const result = await API.graphql({
         query: updateTournament,
         variables: { input: tournament.toJson() },
@@ -239,9 +243,14 @@ const actions = {
     }
     commit(mutationTypes.SET_LOADING, false);
   },
-  delete: async ({ commit, dispatch }, { tournament, onSuccess = () => { } }) => {
+  delete: async ({ commit, dispatch, rootGetters }, { tournament, onSuccess = () => { } }) => {
+    const { id, year, createdBy, td } = tournament;
+    const refereeId = rootGetters["referees/current"].id || false;
+    if (createdBy !== refereeId && td !== refereeId) {
+      warningMessage("Only original creator or TD can delete a tournament");
+      return;
+    }
     commit(mutationTypes.SET_LOADING, true);
-    const { id, year } = tournament;
     API.graphql({
       query: deleteTournament,
       variables: { input: { id } },

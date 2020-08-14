@@ -70,6 +70,7 @@ export const getTournament = /* GraphQL */ `
         }
         nextToken
       }
+      createdBy
       createdAt
       updatedAt
     }
@@ -97,6 +98,7 @@ export const listTournaments = /* GraphQL */ `
           id
         }
         teams
+        createdBy
         createdAt
         updatedAt
       }

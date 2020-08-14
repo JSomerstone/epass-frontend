@@ -24,6 +24,7 @@ type Tournament @model @key(name: "byYear", fields: ["year", "id"]) {
   referees: [Entry]
   teams: [String]
   comments: [Comment] @connection(name: "TournamentComment")
+  createdBy: ID
 }
 
 type Entry {
