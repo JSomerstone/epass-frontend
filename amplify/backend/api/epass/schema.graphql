@@ -8,6 +8,7 @@ type Referee @model {
   level: Int
   userId: String
   clinic: Clinic
+  levelHistory: AWSJSON
   associationId: ID
 }
 
@@ -41,6 +42,7 @@ type Comment @model {
 
 type Clinic {
   date: String!
+  level: Int!
   conductor: String!
 }
 

@@ -15,11 +15,12 @@
           <td>{{ referee.country }}{{ referee.country2 ? `, ${referee.country2}` : '' }}</td>
         </tr>
         <tr><td>Email</td><td>{{ referee.email }}</td></tr>
-        <tr><td>Level</td><td>{{ referee.level }}</td></tr>
+        <tr><td>Level at January</td><td>{{ referee.level }}</td></tr>
+        <tr><td>Level at December</td><td>{{ referee.level }}</td></tr>
         <tr>
           <td>Last clinic</td>
           <td v-if="referee.clinic.date">
-            {{ referee.clinic.date | yyyymmdd }} by {{ referee.clinic.conductor }}
+            {{ referee.clinic.date | yyyymmdd }}, Level: {{ referee.clinic.level }} by {{ referee.clinic.conductor }}
           </td>
           <td v-else>-</td>
         </tr>

@@ -3,7 +3,7 @@ import Association from "../models/Association";
 import { successMessage, notifyException, errorMessage } from "../../utils/notificationUtils";
 import { createReferee, updateReferee, createAssociation, updateAssociation } from "../../graphql/mutations";
 import { listReferees, getReferee, listAssociations } from "../../graphql/queries";
-import { API, Auth } from "aws-amplify";
+import { API } from "aws-amplify";
 const courseConductors = require("../../assets/course-conductors.json");
 
 const state = {
@@ -84,7 +84,7 @@ const actions = {
       variables: { id },
     })
       .then(result => {
-        const referee = result.data.getReferee;
+        const referee = new Referee(result.data.getReferee);
         commit(mutationTypes.SET_CURRENT, referee);
       })
       .catch(notifyException)
@@ -138,8 +138,9 @@ const actions = {
     })
       .then(
         result => {
-          commit(mutationTypes.SET_SELECTED, result.data.getReferee);
-          onSuccess(result.data.getReferee);
+          const referee = new Referee(result.data.getReferee);
+          commit(mutationTypes.SET_SELECTED, referee);
+          onSuccess(referee);
         }
       )
       .catch(notifyException)
@@ -147,7 +148,12 @@ const actions = {
   },
   create: async ({ commit }, { referee, onSuccess = () => {} }) => {
     commit(mutationTypes.SET_LOADING, true);
-    delete referee.clinic;
+    if (!referee.clinic.date) {
+      delete referee.clinic;
+    } else {
+      referee.setClinic(referee.clinic);
+    }
+    referee.levelHistory = JSON.stringify(referee.levelHistory);
     try {
       const result = await API.graphql({
         query: createReferee,
@@ -163,27 +169,30 @@ const actions = {
   },
   async update({ commit, dispatch }, { referee, onSuccess = () => {} }) {
     try {
-      if (!referee.clinic.date) {
-        delete referee.clinic;
+      const current = new Referee(referee);
+      if (!current.clinic.date) {
+        delete current.clinic;
+      } else {
+        current.setClinic(referee.clinic);
       }
+      current.levelHistory = JSON.stringify(current.levelHistory);
       const result = await API.graphql({
         query: updateReferee,
         variables: {
-          input: referee,
+          input: current,
         },
       });
-      const cognitoUser = await Auth.currentAuthenticatedUser();
-      Auth.updateUserAttributes(cognitoUser, {
-        "custom:refereeId": referee.id,
-      }).then(result => console.log(result));
-      commit(mutationTypes.UPDATE_REFEREE, result.data.updateReferee);
-      onSuccess(result.data.updateReferee);
+      const updated = new Referee(result.data.updateReferee);
+      commit(mutationTypes.UPDATE_REFEREE, updated);
+      dispatch("setCurrent", updated);
+      dispatch("auth/setRefereeId", { refereeId: updated.id }, { root: true });
       successMessage("Updated");
-      dispatch("setCurrent", result.data.updateReferee);
+      onSuccess(updated);
     } catch (err) {
       notifyException(err);
     }
   },
+
   async findByEmail({ commit }, { email, onSuccess = () => {} }) {
     commit(mutationTypes.SET_LOADING, true);
     API.graphql({

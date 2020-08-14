@@ -14,8 +14,10 @@ export const getReferee = /* GraphQL */ `
       userId
       clinic {
         date
+        level
         conductor
       }
+      levelHistory
       associationId
       createdAt
       updatedAt

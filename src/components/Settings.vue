@@ -76,15 +76,21 @@
             </b-switch>
           </b-field>
           <div class="field">
-            <level v-model="referee.level" />
+            <level v-model="referee.level" label="Current level" />
           </div>
           <div class="field">
-            <b-field label="Previous clinic date" label-position="on-border">
+            <b-field label="Previous clinic"  />
+            <b-field label="Date" label-position="on-border">
               <b-datepicker
                 placeholder="Click to select..."
                 icon="calendar-today"
                 trap-focus
+                expanded
                 v-model="referee.clinic.date"
+              />
+              <level
+                v-model="referee.clinic.level"
+                hide-national
               />
             </b-field>
           </div>
@@ -404,6 +410,7 @@ export default {
   },
   watch: {
     original: function() {
+      console.log("State changed, updating form");
       this.loadData();
     },
     isOpen: function(category){
