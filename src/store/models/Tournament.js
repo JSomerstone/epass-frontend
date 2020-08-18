@@ -15,6 +15,8 @@ export default class Tournament {
       teams = [],
       comments = { items: [] },
       createdBy = null,
+      createdAt = null,
+      updatedAt = null,
       locked = false,
     } = rawData;
 
@@ -39,7 +41,9 @@ export default class Tournament {
     }
     this.teams = teams;
     this.createdBy = createdBy;
-    this.locked = locked;
+    this.createdAt = createdAt;
+    this.updatedAt = updatedAt;
+    this.locked = !!locked;
   }
   getRef(id, refereeList) {
     return refereeList.find(

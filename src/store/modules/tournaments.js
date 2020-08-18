@@ -245,8 +245,9 @@ const actions = {
     commit(mutationTypes.SET_LOADING, true);
     try {
       const { id = false } = rootGetters["referees/current"];
-      if (tournament.createdBy != id && tournament.td != id) {
+      if (tournament.createdBy != id && tournament.td.id != id) {
         warningMessage("Only original creator or TD are allowed to lock/unlock tournament");
+        commit(mutationTypes.SET_LOADING, false);
         return;
       }
       tournament.locked = lock;

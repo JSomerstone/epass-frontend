@@ -1,6 +1,6 @@
 <template>
   <div>
-    <b-field>
+    <b-field v-if="editable">
       <b-autocomplete
           v-model="name"
           v-if="editable"
@@ -17,7 +17,7 @@
         icon-left="plus" 
         @click="addTeam(name)" 
         type="is-info"
-        :disabled="name.length < 2 || !editable"
+        :disabled="name.length < 2"
       >
         Add
       </b-button>

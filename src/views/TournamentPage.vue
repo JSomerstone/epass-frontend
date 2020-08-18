@@ -9,8 +9,8 @@
           {{ tournament.country }},
           {{ tournament.dates | daterange }}
         </template>
-        <router-link :to="{ name: 'tournaments', params: { year: this.tournament.year }}" class="button is-link">
-          Back
+        <router-link :to="{ name: 'tournaments', params: { year: this.tournament.year }}">
+          <b-button outlined type="is-link is-light" icon-left="arrow-left">Back</b-button>
         </router-link>
         <tournament-form 
           class="tournament-form" 
@@ -18,6 +18,9 @@
           :editable="isEditable"
           open
         />
+        <router-link :to="{ name: 'tournaments', params: { year: this.tournament.year }}">
+          <b-button outlined type="is-link is-light" icon-left="arrow-left">Back</b-button>
+        </router-link>
     </layout>
   </div>
 </template>
