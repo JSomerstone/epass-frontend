@@ -255,6 +255,10 @@ const actions = {
     }).then(
       result => {
         dispatch("load", { year, force: true });
+        const { comments = {items: []}  } = result.data.deleteTournament;
+        comments.items.forEach(
+          comment => dispatch("deleteComment", comment)
+        );
         onSuccess(result);
       }
     )

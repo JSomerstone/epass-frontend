@@ -228,9 +228,6 @@ export const deleteComment = /* GraphQL */ `
   ) {
     deleteComment(input: $input, condition: $condition) {
       id
-      tournament {
-        id
-      }
       refereeID
       created
       message
