@@ -45,7 +45,7 @@
                     Sign up
                   </router-link>
                 </div>
-                <b-navbar-dropdown  v-else :label="username" :key="username">
+                <b-navbar-dropdown  v-else :label="username" :key="username" hoverable>
                   <b-navbar-item to="/settings" tag="router-link">
                       <b-icon icon="account-cog-outline"></b-icon> Settings
                   </b-navbar-item>

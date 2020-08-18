@@ -2,8 +2,8 @@
   <div class="columns">
     <div class="column is-one-third">
       <router-link :to="{ name: 'tournament', params: { id: tournament.id } }">
-        <b-button v-if="isEditable" outline type="is-info" icon-left="file-document-edit-outline">
-          Edit
+        <b-button v-if="isEditable" outline type="is-info" icon-left="folder-open-outline">
+          Open
         </b-button>
       </router-link>
       <div v-if="hasGames">
