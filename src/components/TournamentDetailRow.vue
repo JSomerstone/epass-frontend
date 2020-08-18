@@ -76,7 +76,7 @@ export default {
     getRefereeName: function(id) {
       const ref = this.$store.getters['referees/byId'](id);
       return ref
-        ? `${ref.firstName} ${ref.lastName} [${ref.country}]`
+        ? `${ref.firstName} ${ref.lastName}${ ref.country ? ` [${ref.country}]` : ''}`
         : id
     },
     getCurrentRef: function() {
