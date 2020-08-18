@@ -1,4 +1,4 @@
-import { listTournaments, getTournament } from "../../graphql/queries";
+import { listTournaments, tournamentsByYear, getTournament } from "../../graphql/queries";
 import { API } from "aws-amplify";
 import { createTournament, updateTournament, createComment, deleteComment, deleteTournament } from '../../graphql/mutations';
 import { notifyException, successMessage, warningMessage } from '../../utils/notificationUtils';
@@ -116,14 +116,12 @@ const actions = {
     commit(mutationTypes.SET_LOADING, true);
     try {
       const result = await API.graphql({
-        query: listTournaments,
+        query: tournamentsByYear,
         variables: {
-          filter: {
-            year: { eq: year },
-          },
+          year,
         },
       });
-      const tournaments = result.data.listTournaments.items;
+      const tournaments = result.data.tournamentsByYear.items;
       commit(mutationTypes.SET_TOURNAMENTS, tournaments);
       dispatch("filter");
     } catch (error) {

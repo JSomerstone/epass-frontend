@@ -11,13 +11,16 @@ export const createReferee = /* GraphQL */ `
       firstName
       lastName
       country
+      country2
       email
       level
       userId
       clinic {
         date
+        level
         conductor
       }
+      levelHistory
       associationId
       createdAt
       updatedAt
@@ -34,13 +37,16 @@ export const updateReferee = /* GraphQL */ `
       firstName
       lastName
       country
+      country2
       email
       level
       userId
       clinic {
         date
+        level
         conductor
       }
+      levelHistory
       associationId
       createdAt
       updatedAt
@@ -57,13 +63,16 @@ export const deleteReferee = /* GraphQL */ `
       firstName
       lastName
       country
+      country2
       email
       level
       userId
       clinic {
         date
+        level
         conductor
       }
+      levelHistory
       associationId
       createdAt
       updatedAt
@@ -101,6 +110,7 @@ export const createTournament = /* GraphQL */ `
         }
         nextToken
       }
+      createdBy
       createdAt
       updatedAt
     }
@@ -126,6 +136,18 @@ export const updateTournament = /* GraphQL */ `
         id
       }
       teams
+      comments {
+        items {
+          id
+          refereeID
+          created
+          message
+          createdAt
+          updatedAt
+        }
+        nextToken
+      }
+      createdBy
       createdAt
       updatedAt
     }
@@ -151,6 +173,13 @@ export const deleteTournament = /* GraphQL */ `
         id
       }
       teams
+      comments {
+        items {
+          id
+        }
+        nextToken
+      }
+      createdBy
       createdAt
       updatedAt
     }

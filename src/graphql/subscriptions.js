@@ -8,13 +8,16 @@ export const onCreateReferee = /* GraphQL */ `
       firstName
       lastName
       country
+      country2
       email
       level
       userId
       clinic {
         date
+        level
         conductor
       }
+      levelHistory
       associationId
       createdAt
       updatedAt
@@ -28,13 +31,16 @@ export const onUpdateReferee = /* GraphQL */ `
       firstName
       lastName
       country
+      country2
       email
       level
       userId
       clinic {
         date
+        level
         conductor
       }
+      levelHistory
       associationId
       createdAt
       updatedAt
@@ -48,13 +54,16 @@ export const onDeleteReferee = /* GraphQL */ `
       firstName
       lastName
       country
+      country2
       email
       level
       userId
       clinic {
         date
+        level
         conductor
       }
+      levelHistory
       associationId
       createdAt
       updatedAt
@@ -89,6 +98,7 @@ export const onCreateTournament = /* GraphQL */ `
         }
         nextToken
       }
+      createdBy
       createdAt
       updatedAt
     }
@@ -122,6 +132,7 @@ export const onUpdateTournament = /* GraphQL */ `
         }
         nextToken
       }
+      createdBy
       createdAt
       updatedAt
     }
@@ -155,6 +166,7 @@ export const onDeleteTournament = /* GraphQL */ `
         }
         nextToken
       }
+      createdBy
       createdAt
       updatedAt
     }
@@ -182,6 +194,7 @@ export const onCreateComment = /* GraphQL */ `
         comments {
           nextToken
         }
+        createdBy
         createdAt
         updatedAt
       }
@@ -215,6 +228,7 @@ export const onUpdateComment = /* GraphQL */ `
         comments {
           nextToken
         }
+        createdBy
         createdAt
         updatedAt
       }
@@ -248,6 +262,7 @@ export const onDeleteComment = /* GraphQL */ `
         comments {
           nextToken
         }
+        createdBy
         createdAt
         updatedAt
       }

@@ -12,7 +12,13 @@ type Referee @model {
   associationId: ID
 }
 
-type Tournament @model @key(name: "byYear", fields: ["year", "id"]) {
+type Tournament
+  @model
+  @key(
+    name: "tournamentsByYear"
+    fields: ["year"]
+    queryField: "tournamentsByYear"
+  ) {
   id: ID!
   name: String!
   international: Boolean!

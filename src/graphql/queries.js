@@ -165,3 +165,41 @@ export const listAssociations = /* GraphQL */ `
     }
   }
 `;
+export const tournamentsByYear = /* GraphQL */ `
+  query TournamentsByYear(
+    $year: Int
+    $sortDirection: ModelSortDirection
+    $filter: ModelTournamentFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    tournamentsByYear(
+      year: $year
+      sortDirection: $sortDirection
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+    ) {
+      items {
+        id
+        name
+        international
+        city
+        country
+        year
+        dates
+        td
+        referees {
+          games
+          tenSeconds
+          id
+        }
+        teams
+        createdBy
+        createdAt
+        updatedAt
+      }
+      nextToken
+    }
+  }
+`;
