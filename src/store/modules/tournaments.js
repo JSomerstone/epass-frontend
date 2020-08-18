@@ -241,6 +241,28 @@ const actions = {
     }
     commit(mutationTypes.SET_LOADING, false);
   },
+  lockTournament: async ({ commit, dispatch, rootGetters }, { tournament, lock, onSuccess = () => { } }) => {
+    commit(mutationTypes.SET_LOADING, true);
+    try {
+      const { id = false } = rootGetters["referees/current"];
+      if (tournament.createdBy != id && tournament.td != id) {
+        warningMessage("Only original creator or TD are allowed to lock/unlock tournament");
+        return;
+      }
+      tournament.locked = lock;
+      const result = await API.graphql({
+        query: updateTournament,
+        variables: { input: tournament.toJson() },
+      });
+      commit(mutationTypes.UPDATE_TOURNAMENT, result.data.updateTournament);
+      dispatch("load", { year: tournament.year, force: true });
+      successMessage(`Tournament ${ lock ? '' : 'Un' }locked`);
+      onSuccess(result.data.updateTournament);
+    } catch (err) {
+      notifyException(err);
+    }
+    commit(mutationTypes.SET_LOADING, false);
+  },
   delete: async ({ commit, dispatch, rootGetters }, { tournament, onSuccess = () => { } }) => {
     const { id, year, createdBy, td } = tournament;
     const refereeId = rootGetters["referees/current"].id || false;

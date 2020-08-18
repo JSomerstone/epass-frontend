@@ -5,6 +5,7 @@
     :icon="icon"
     keep-first
     :required="required"
+    :disalbed="disalbed"
     :expanded="expanded"
     :data="getCountries"
     @select="selectChanged"
@@ -34,6 +35,10 @@ export default {
     placeholder: {
       type: String,
       default: ""
+    },
+    disalbed: {
+      type: Boolean,
+      default: false
     },
     onSelect: {
       type: Function,

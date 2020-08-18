@@ -3,6 +3,7 @@
     <b-field>
       <b-autocomplete
           v-model="name"
+          v-if="editable"
           placeholder="Team name / Country"
           keep-first
           clear-on-select
@@ -11,18 +12,19 @@
           @keyup.native="onInput"
           @select="addTeam">
       </b-autocomplete>
+      <b-input disabled expanded v-else />
       <b-button 
         icon-left="plus" 
         @click="addTeam(name)" 
         type="is-info"
-        :disabled="name.length < 2"
+        :disabled="name.length < 2 || !editable"
       >
         Add
       </b-button>
     </b-field>
     <div class="team-list">
       <b-tag v-for="(team, index) in teams" v-bind:key="index"
-          closable
+          :closable="editable"
           aria-close-label="Remove team"
           size="is-medium"
           @close="removeTeam(index)"

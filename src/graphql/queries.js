@@ -36,7 +36,11 @@ export const listReferees = /* GraphQL */ `
         firstName
         lastName
         country
+        country2
         email
+        level
+        createdAt
+        updatedAt
       }
       nextToken
     }
@@ -71,6 +75,7 @@ export const getTournament = /* GraphQL */ `
         nextToken
       }
       createdBy
+      locked
       createdAt
       updatedAt
     }
@@ -99,6 +104,7 @@ export const listTournaments = /* GraphQL */ `
         }
         teams
         createdBy
+        locked
         createdAt
         updatedAt
       }
@@ -196,6 +202,7 @@ export const tournamentsByYear = /* GraphQL */ `
         }
         teams
         createdBy
+        locked
         createdAt
         updatedAt
       }

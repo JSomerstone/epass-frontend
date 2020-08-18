@@ -99,6 +99,7 @@ export const onCreateTournament = /* GraphQL */ `
         nextToken
       }
       createdBy
+      locked
       createdAt
       updatedAt
     }
@@ -133,6 +134,7 @@ export const onUpdateTournament = /* GraphQL */ `
         nextToken
       }
       createdBy
+      locked
       createdAt
       updatedAt
     }
@@ -167,6 +169,7 @@ export const onDeleteTournament = /* GraphQL */ `
         nextToken
       }
       createdBy
+      locked
       createdAt
       updatedAt
     }
@@ -195,6 +198,7 @@ export const onCreateComment = /* GraphQL */ `
           nextToken
         }
         createdBy
+        locked
         createdAt
         updatedAt
       }
@@ -229,6 +233,7 @@ export const onUpdateComment = /* GraphQL */ `
           nextToken
         }
         createdBy
+        locked
         createdAt
         updatedAt
       }
@@ -263,6 +268,7 @@ export const onDeleteComment = /* GraphQL */ `
           nextToken
         }
         createdBy
+        locked
         createdAt
         updatedAt
       }

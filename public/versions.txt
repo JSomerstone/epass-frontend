@@ -3,7 +3,9 @@ v 0.2.1 TBA
 - Original creator can fully edit / delete tournament
 - Tournament -form layout changes
 - Referees level-history is stored, showing level at beginning/end of year in /epass
+- Tournaments can be locked to prevent further modifications
 - bugfix: Sorting tournaments by date fixed
+- bugfix: Removing notes when tournament is removed
 
 v 0.2.0 2020-08-13
 - Notes can be added to Tournaments

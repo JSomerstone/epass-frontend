@@ -29,15 +29,15 @@
                     <div class="columns">
                       <div class="column is-half">
                         <b-field label="Name of tournament" label-position="on-border">
-                          <b-input v-model="t.name" :required="true" :expanded="true"></b-input>
+                          <b-input v-model="t.name" :required="true" :expanded="true" :disabled="locked"></b-input>
                         </b-field>
                       </div>
                       <div class="column is-half">
                         <b-field>
-                         <b-radio-button v-model="t.international" :native-value="true" expanded>
+                         <b-radio-button v-model="t.international" :native-value="true" expanded :disabled="locked">
                               International
                           </b-radio-button>
-                          <b-radio-button v-model="t.international" :native-value="false" expanded>
+                          <b-radio-button v-model="t.international" :native-value="false" expanded :disabled="locked">
                               National
                           </b-radio-button>
                         </b-field>
@@ -52,14 +52,17 @@
                               placeholder="City" 
                               :expanded="true"
                               icon="city"
+                              :disabled="locked"
                           ></b-input>
                           <country-autocomplete
                               v-model="t.country"
                               placeholder="Country"
                               icon="earth"
                               expanded
+                              v-if="!locked"
                           >
                           </country-autocomplete>
+                          <b-input v-model="t.country" disabled v-if="locked" expanded icon="earth" />
                       </b-field>
                   </div>
                   <div class="field">
@@ -75,7 +78,8 @@
                             :min-date="minDate"
                             :max-date="maxDate"
                             :first-day-of-week="1"
-                             @input="onDateChange" 
+                            @input="onDateChange"
+                            :disabled="locked"
                           >
                           </b-datepicker>
                       </b-field>
@@ -114,13 +118,14 @@
                         has-counter
                         expanded
                         ref="noteField"
+                        :disabled="locked"
                       />
                       <b-button 
-                        icon-left="pencil" 
+                        icon-left="comment-text-outline" 
                         type="is-info"
-                        :disabled="isLoading"
+                        :disabled="isLoading || locked"
                         @click="handleAddComment"
-                      >Add
+                      >Add note
                       </b-button>
                     </b-field>
                     <pre v-if="debug">{{ notes.map( n => n.created ) }}</pre>
@@ -139,6 +144,7 @@
                                   :data="filteredTd"
                                   icon="magnify"
                                   expanded
+                                  :disabled="locked"
                                   @select="option => t.td = option">
                               >
                                   <template slot-scope="props">
@@ -164,7 +170,7 @@
                           <div class="column is-half" v-if="t.td.id">
                               <b-tag 
                                 size="is-medium" 
-                                :closable="userIsTd() || !t.id"
+                                :closable="(userIsTd() || !t.id) && !locked"
                                 rounded
                                 :key="t.td.id"
                                 @close="confirmRemoveTd"
@@ -189,8 +195,9 @@
                         v-if="!showAddRefereeForm"
                         v-model="t.referees"
                         :editableItem="getEditableReferee()"
+                        :editable="!locked"
                       />
-                      <b-field v-if="!showAddRefereeForm" label="Add referee" label-position="on-border">
+                      <b-field v-if="!showAddRefereeForm && !locked" label="Add referee" label-position="on-border">
                         <b-autocomplete
                             v-model="ref"
                             ref="refereeField"
@@ -217,7 +224,7 @@
                             New referee
                           </b-button> 
                         </b-tooltip>
-                        <b-tooltip label="Add yourself as a referee"  type="is-info" v-if="!isReferee">
+                        <b-tooltip label="Add yourself as a referee"  type="is-info" v-if="!isReferee && !locked">
                           <b-button @click="addCurrent" icon-left="account-circle-outline" type="is-info"/>
                         </b-tooltip>
                       </b-field>
@@ -233,7 +240,7 @@
                   </div><!-- /referees-field -->
                 <div class="field"><!-- teams-field -->
                   <b-field label="Teams competing">
-                    <teams-field v-model="t.teams" />
+                    <teams-field v-model="t.teams" :editable="!locked"/>
                   </b-field>
                 </div><!-- /teams-field -->
               </div>
@@ -242,7 +249,7 @@
         <div class="card-footer" v-if="editable">
             <b-button 
               @click="handleSave" 
-              v-bind:disabled="isLoading || !t.isValid()"
+              v-bind:disabled="isLoading || !t.isValid() || locked"
               icon-left="check-circle-outline" 
               type="is-primary" 
               class="card-footer-item" 
@@ -253,7 +260,16 @@
             <b-button @click="handleCancel" type="is-light" icon-left="cancel" class="card-footer-item" >
                 Cancel
             </b-button>
-            <b-tooltip label="Delete tournament" type="is-danger" v-if="allowedToDelete">
+            <b-tooltip label="Unlock to allow modifications; Lock to prevent any further modifications to this tournament" type="is-warning">
+              <b-button 
+                @click="toggleLock"
+                v-if="t.id && allowedToDelete"
+                type="is-warning" 
+                :icon-left="t.locked ? 'lock' : 'lock-open-variant'"
+              >{{ t.locked ? "Unlock" : "Lock" }}
+              </b-button>
+            </b-tooltip>
+            <b-tooltip label="Delete tournament" type="is-danger" v-if="allowedToDelete && t.id">
               <b-button 
                 @click="handleDelete" 
                 type="is-danger" 
@@ -383,6 +399,9 @@ export default {
     allowedToDelete: function() {
       const { id } = this.referee;
       return (id == this.t.td.id || id == this.t.createdBy );
+    },
+    locked: function() {
+      return this.t.locked;
     }
   },
   methods: {
@@ -538,6 +557,14 @@ export default {
         });
         this.showAddTdForm = false;
         this.tdQuery = "";
+    },
+    toggleLock: function() {
+      infoMessage(`${this.locked ? 'Unlocking' : 'Locking'}...`);
+      this.$store.dispatch("tournaments/lockTournament", {
+        tournament: this.t,
+        lock: !this.t.locked,
+        onSuccess: ({locked}) => { this.t.locked = locked }
+      });
     },
     handleFill() {
       this.t = new Tournament({

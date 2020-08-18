@@ -17,6 +17,9 @@
           <a @click="toggle(props.row)">
             {{ props.row.name }}
           </a>
+          <b-tooltip label="Tournament is locked" v-if="props.row.locked" type="is-info">
+            <b-icon icon="lock" size="is-small"/>
+          </b-tooltip>
         </b-table-column>
         <b-table-column field="dates" label="Date" sortable :custom-sort="sortDates">
           {{ props.row.dates | dateRange }} 

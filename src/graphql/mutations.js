@@ -111,6 +111,7 @@ export const createTournament = /* GraphQL */ `
         nextToken
       }
       createdBy
+      locked
       createdAt
       updatedAt
     }
@@ -148,6 +149,7 @@ export const updateTournament = /* GraphQL */ `
         nextToken
       }
       createdBy
+      locked
       createdAt
       updatedAt
     }
@@ -180,6 +182,7 @@ export const deleteTournament = /* GraphQL */ `
         nextToken
       }
       createdBy
+      locked
       createdAt
       updatedAt
     }

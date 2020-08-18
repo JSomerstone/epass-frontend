@@ -15,6 +15,7 @@ export default class Tournament {
       teams = [],
       comments = { items: [] },
       createdBy = null,
+      locked = false,
     } = rawData;
 
     this.id = id;
@@ -38,6 +39,7 @@ export default class Tournament {
     }
     this.teams = teams;
     this.createdBy = createdBy;
+    this.locked = locked;
   }
   getRef(id, refereeList) {
     return refereeList.find(
@@ -49,7 +51,7 @@ export default class Tournament {
     const index = this.referees.findIndex(
       r => r.id === refereeId
     )
-    if (index < 0) {
+    if (this.locked || index < 0) {
       return;
     }
     Object.assign(
@@ -74,7 +76,8 @@ export default class Tournament {
         }
       ),
       teams: this.teams,
-      createdBy: this.createdBy
+      createdBy: this.createdBy,
+      locked: this.locked,
     };
   }
 
