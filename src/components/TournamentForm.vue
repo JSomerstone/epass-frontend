@@ -59,7 +59,7 @@
                               placeholder="Country"
                               icon="earth"
                               expanded
-                              v-if="isAdmin"
+                              v-if="!disabled"
                           >
                           </country-autocomplete>
                           <b-input v-model="t.country" disabled v-else expanded icon="earth" />
