@@ -134,7 +134,7 @@
                   <div class="field" id="td-field">
                       <b-field label="Tournament Director / TD">
                         <div class="columns">
-                          <div class="column is-full" v-if="!t.td.id && !showAddTdForm">
+                          <div class="column is-full" v-if="!t.td.id">
                             <b-field>
                               <b-autocomplete
                                   v-model="tdQuery"
@@ -150,7 +150,7 @@
                                       {{ props.option.firstName }} {{ props.option.lastName }} [{{ props.option.country }}]
                                   </template>
                                   <template slot="empty">
-                                      <a @click="showAddTdForm = true" title="">
+                                      <a @click="openAddTdForm">
                                           <b-icon icon="account-plus"></b-icon>
                                           Add TD...
                                       </a>
@@ -180,12 +180,6 @@
                           </div>
                         </div>
                       </b-field>
-                    <referee-form
-                        v-if="showAddTdForm"
-                        :onSave="addTd"
-                        :onCancel="() => { showAddTdForm = false }"
-                    >
-                    </referee-form>
                   </div><!-- /td-field -->
                   
                   <div class="field" id="referees-field">
@@ -332,6 +326,7 @@ import RefereeForm from "./RefereeForm";
 import RefereeTable from "./EditableRefereeTable";
 import TeamsField from "./TeamsField";
 import CountryAutocomplete from "./field/CountryAutocomplete";
+import RefereeModal from "./modal/NewRefereeModal";
 import Tournament from "../store/models/Tournament";
 import Comment from "../store/models/Comment";
 import { infoMessage, warningMessage } from "../utils/notificationUtils";
@@ -374,7 +369,6 @@ export default {
       t: new Tournament({year: this.year }),
       minDate: new Date(`${this.year-1}-01-01`),
       maxDate: new Date(`${this.year+1}-12-31`),
-      showAddTdForm: false,
       showAddRefereeForm: false,
     }
   },
@@ -418,7 +412,7 @@ export default {
         return true;
       }
       const { id } = this.referee;
-      return (id == this.t.td.id || id == this.t.createdBy );
+      return ((this.t.td && id == this.t.td.id) || id == this.t.createdBy );
     },
     disabled: function() {
       return (
@@ -566,7 +560,7 @@ export default {
     },
     userIsTd() {
       const { id = null } = this.referee;
-      return id == this.t.td.id;
+      return this.t.td && id == this.t.td.id;
     },
     getEditableReferee() {
       const { id = null } = this.referee;
@@ -575,20 +569,34 @@ export default {
         : id || "none"; //Otherwise only the current users' own stats
     },
     addReferee: function(referee) {
-        this.$store.dispatch("referees/create", { 
-          referee,
-          onSuccess: this.selectReferee
-        });
-        this.showAddRefereeForm = false;
-        this.ref = "";
+      this.$store.dispatch("referees/create", { 
+        referee,
+        onSuccess: this.selectReferee
+      });
+      this.showAddRefereeForm = false;
+      this.ref = "";
+      return true;
+    },
+    openAddTdForm() {
+      this.$buefy.modal.open({
+        parent : this,
+        component: RefereeModal,
+        props: {
+          title: "New Referee as TD",
+          onSave: this.addTd,
+        },
+        hasModalCard: true,
+        canCancel: ['x', 'escape'],
+        onCancel: () => { console.log('cancelled') },
+      });
     },
     addTd: function(referee) {
-        this.$store.dispatch("referees/create", { 
-          referee,
-          onSuccess: (td) => { this.t.td = td; } 
-        });
-        this.showAddTdForm = false;
-        this.tdQuery = "";
+      this.$store.dispatch("referees/create", { 
+        referee,
+        onSuccess: (td) => { this.t.td = td; } 
+      });
+      this.tdQuery = "";
+      return true;
     },
     toggleLock: function() {
       infoMessage(`${this.locked ? 'Unlocking' : 'Locking'}...`);

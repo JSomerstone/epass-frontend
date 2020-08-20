@@ -3,13 +3,13 @@
     <div class="field">
       <b-field label="Name*" label-position="on-border">
         <b-input 
-          v-model="firstName" 
+          v-model="referee.firstName" 
           :required="true" 
           placeholder="Given name"
           :expanded="true"
         ></b-input>
         <b-input 
-          v-model="lastName" 
+          v-model="referee.lastName" 
           :required="true" 
           placeholder="Family name" 
           :expanded="true"
@@ -18,13 +18,13 @@
     </div>
     <div class="field">
       <b-field label="Email" label-position="on-border">
-        <b-input type="email" v-model="email" placeholder="@"></b-input>
+        <b-input type="email" v-model="referee.email" placeholder="@"></b-input>
       </b-field>
     </div>
     <div class="field">
       <b-field label="Nationality" label-position="on-border">
         <country-autocomplete
-            v-model="country"
+            v-model="referee.country"
             placeholder="As in passport"
             icon="passport"
             expanded
@@ -33,12 +33,7 @@
       </b-field>
     </div>
     <div class="field">
-      <level v-model="level" />
-    </div>
-    <div class="field">
-      <b-button type="is-info" outlined @click="handleSave" icon-left="account-plus" :disabled="!isReady">
-        Add</b-button>
-      <button class="button is-text" @click="handleCancel">Cancel</button>
+      <level v-model="referee.level" />
     </div>
   </div>
 </template>
@@ -52,58 +47,20 @@ export default {
     CountryAutocomplete,
   },
   props: {
-    onSave: {
-      type: Function,
-      default: () => {}
-    },
-    onCancel: {
-      type: Function,
-      default: () => {}
-    },
-    prefilled: {
-      type: String,
-      default: ""
+    value: {
+      type: Object,
+      default: new Referee()
     }
   },
-  data: () => {
+  data() {
     return {
-      firstName: "",
-      lastName: "",
-      email: "",
-      country: "",
-      level: 1
+      referee: this.value
     }
   },
-  methods: {
-    handleSave: function() {
-      const referee = new Referee({
-        firstName: this.firstName,
-        lastName: this.lastName,
-        email: this.email,
-        country: this.country,
-        level: this.level
-      });
-      this.onSave(referee);
-      this.reset();
-    },
-    handleCancel: function() {
-      this.onCancel();
-      this.reset();
-    },
-    reset: function(){
-      this.firstName = "";
-      this.lastName = "";
-      this.email = "";
-      this.country = "";
-      this.level = 1;
-    },
-  },
-  computed: {
-    isReady: function() {
-      return (
-        this.firstName && this.lastName
-      )
+  watch: {
+    referee: function(v) {
+      this.$emit('value', v);
     }
-  },
+  }
 }
 </script>
