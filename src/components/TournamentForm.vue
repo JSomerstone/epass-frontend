@@ -213,7 +213,7 @@
                                 </b-button> 
                             </template>
                         </b-autocomplete>
-                        <b-tooltip label="Add new referee to system" type="is-info" v-if="isAdmin">
+                        <b-tooltip label="Add new referee to system" type="is-info">
                           <b-button @click="openAddRefereeForm" icon-left="account-plus" type="is-info" outlined>
                             New referee
                           </b-button>
