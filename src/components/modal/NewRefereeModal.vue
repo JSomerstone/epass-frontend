@@ -13,6 +13,7 @@
           type="is-info" 
           icon-left="account-plus" 
           expanded
+          :disabled="!referee.isValid()"
           @click="handleSave"
         >Save</b-button>
 

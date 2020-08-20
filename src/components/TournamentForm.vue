@@ -185,12 +185,11 @@
                   <div class="field" id="referees-field">
                     <b-field label="Referees" />
                       <referee-table
-                        v-if="!showAddRefereeForm"
                         v-model="t.referees"
                         :editableItem="getEditableReferee()"
                         :editable="!disabled"
                       />
-                      <b-field v-if="!showAddRefereeForm && !disabled" label="Add referee" label-position="on-border" >
+                      <b-field v-if="!disabled" label="Add referee" label-position="on-border" >
                         <b-autocomplete
                             v-model="ref"
                             ref="refereeField"
@@ -209,28 +208,19 @@
                             </template>
                             <template slot="empty">
                                 No results for {{ref}}
-                                <b-button @click="showAddRefereeForm = true" icon-left="account-plus" type="is-text">
+                                <b-button @click="openAddRefereeForm" icon-left="account-plus" type="is-text">
                                   New referee
                                 </b-button> 
                             </template>
                         </b-autocomplete>
                         <b-tooltip label="Add new referee to system" type="is-info" v-if="isAdmin">
-                          <b-button @click="showAddRefereeForm = !showAddRefereeForm" icon-left="account-plus" type="is-info" outlined>
+                          <b-button @click="openAddRefereeForm" icon-left="account-plus" type="is-info" outlined>
                             New referee
                           </b-button>
                         </b-tooltip>
                         <b-tooltip label="Add yourself as a referee"  type="is-info" v-if="!isReferee && !locked">
                           <b-button @click="addCurrent" icon-left="account-circle-outline" type="is-info"/>
                         </b-tooltip>
-                      </b-field>
-                      <b-field label="Add referee"
-                        class="referee-form" 
-                        v-if="showAddRefereeForm"
-                      >
-                        <referee-form
-                          :onSave="addReferee"
-                          :onCancel="() => showAddRefereeForm = false"
-                        />
                       </b-field>
                   </div><!-- /referees-field -->
                 <div class="field"><!-- teams-field -->
@@ -322,7 +312,6 @@
 }
 </style>
 <script>
-import RefereeForm from "./RefereeForm";
 import RefereeTable from "./EditableRefereeTable";
 import TeamsField from "./TeamsField";
 import CountryAutocomplete from "./field/CountryAutocomplete";
@@ -341,7 +330,6 @@ const defaults = {
 export default {
   components: {
     TeamsField,
-    RefereeForm,
     RefereeTable,
     CountryAutocomplete,
   },
@@ -369,7 +357,6 @@ export default {
       t: new Tournament({year: this.year }),
       minDate: new Date(`${this.year-1}-01-01`),
       maxDate: new Date(`${this.year+1}-12-31`),
-      showAddRefereeForm: false,
     }
   },
   computed: {
@@ -573,9 +560,22 @@ export default {
         referee,
         onSuccess: this.selectReferee
       });
-      this.showAddRefereeForm = false;
       this.ref = "";
       return true;
+    },
+
+    openAddRefereeForm() {
+      this.$buefy.modal.open({
+        parent : this,
+        component: RefereeModal,
+        props: {
+          title: "New Referee",
+          onSave: this.addReferee,
+        },
+        hasModalCard: true,
+        canCancel: ['x', 'escape'],
+        onCancel: () => { console.log('cancelled') },
+      });
     },
     openAddTdForm() {
       this.$buefy.modal.open({
