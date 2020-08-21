@@ -3,7 +3,7 @@
 exports[`Tournaments-view renders complete view when mounted 1`] = `
 <div>
   <section class="header">
-    <b-navbar-stub><template></template> <template></template> <template></template></b-navbar-stub>
+    <b-navbar-stub closeonclick="true" mobileburger="true"><template></template> <template></template> <template></template></b-navbar-stub>
   </section>
   <section class="hero">
     <div class="hero-body">
@@ -14,10 +14,10 @@ exports[`Tournaments-view renders complete view when mounted 1`] = `
     </div>
   </section>
   <section class="content">
-    <b-loading-stub></b-loading-stub>
+    <b-loading-stub isfullpage="true" animation="fade" oncancel="function _default() {}"></b-loading-stub>
     <div class="container">
       <h1></h1>
-      <b-collapse-stub aria-id="newEntryForm" animation="slide" class="card tournament-form">
+      <b-collapse-stub animation="slide" ariaid="newEntryForm" position="is-top" class="card tournament-form">
         <div role="button" class="card-header"><span class="card-header-title"><span>Add new tournament</span></span> <a class="card-header-icon">
             <b-icon-stub icon="menu-up"></b-icon-stub>
           </a></div>
@@ -27,16 +27,16 @@ exports[`Tournaments-view renders complete view when mounted 1`] = `
               <div class="field">
                 <div class="columns">
                   <div class="column is-half">
-                    <b-field-stub label="Name of tournament" label-position="on-border">
-                      <b-input-stub required="true" expanded="true" value=""></b-input-stub>
+                    <b-field-stub label="Name of tournament" addons="true" labelposition="on-border">
+                      <b-input-stub expanded="true" usehtml5validation="true" value="" type="text" hascounter="true" customclass="" required="true"></b-input-stub>
                     </b-field-stub>
                   </div>
                   <div class="column is-half">
-                    <b-field-stub>
-                      <b-radio-button-stub native-value="true" expanded="" value="true">
+                    <b-field-stub addons="true">
+                      <b-radio-button-stub value="true" nativevalue="true" type="is-primary" expanded="true">
                         International
                       </b-radio-button-stub>
-                      <b-radio-button-stub expanded="" value="true">
+                      <b-radio-button-stub value="true" type="is-primary" expanded="true">
                         National
                       </b-radio-button-stub>
                     </b-field-stub>
@@ -44,24 +44,42 @@ exports[`Tournaments-view renders complete view when mounted 1`] = `
                 </div>
               </div>
               <div class="field">
-                <b-field-stub label="Place of the tournament" label-position="on-border">
-                  <b-input-stub required="true" placeholder="City" expanded="true" icon="city" value=""></b-input-stub>
-                  <b-autocomplete-stub placeholder="Country" icon="earth" keep-first="" expanded="true" value=""></b-autocomplete-stub>
+                <b-field-stub label="Place of the tournament" addons="true" labelposition="on-border">
+                  <b-input-stub expanded="true" icon="city" usehtml5validation="true" value="" type="text" hascounter="true" customclass="" required="true" placeholder="City"></b-input-stub>
+                  <b-autocomplete-stub expanded="true" icon="earth" usehtml5validation="true" value="" data="" field="value" keepfirst="true" dropdownposition="auto" placeholder="Country"></b-autocomplete-stub>
                 </b-field-stub>
               </div>
               <div class="field">
-                <b-field-stub label="Dates" label-position="on-border">
-                  <b-datepicker-stub icon="calendar-today" trap-focus="" range="" inline="" placeholder="Pick tournament dates" required="true" min-date="Tue Jan 01 2019 02:00:00 GMT+0200 (Eastern European Standard Time)" max-date="Fri Dec 31 2021 02:00:00 GMT+0200 (Eastern European Standard Time)" first-day-of-week="1" value=""></b-datepicker-stub>
+                <b-field-stub label="Dates" addons="true" labelposition="on-border">
+                  <b-datepicker-stub icon="calendar-today" usehtml5validation="true" value="" daynames="Su,M,Tu,W,Th,F,S" monthnames="January,February,March,April,May,June,July,August,September,October,November,December" firstdayofweek="1" inline="true" mindate="Tue Jan 01 2019 02:00:00 GMT+0200 (Eastern European Standard Time)" maxdate="Fri Dec 31 2021 02:00:00 GMT+0200 (Eastern European Standard Time)" placeholder="Pick tournament dates" dateformatter="function _default(date, vm) {
+        if (typeof __chunk_2.config.defaultDateFormatter === 'function') {
+          return __chunk_2.config.defaultDateFormatter(date);
+        } else {
+          return defaultDateFormatter(date, vm);
+        }
+      }" dateparser="function _default(date, vm) {
+        if (typeof __chunk_2.config.defaultDateParser === 'function') {
+          return __chunk_2.config.defaultDateParser(date);
+        } else {
+          return defaultDateParser(date, vm);
+        }
+      }" datecreator="function _default() {
+        if (typeof __chunk_2.config.defaultDateCreator === 'function') {
+          return __chunk_2.config.defaultDateCreator();
+        } else {
+          return new Date();
+        }
+      }" mobilenative="true" indicators="dots" iconprev="chevron-left" iconnext="chevron-right" yearsrange="-100,3" nearbymonthdays="true" rulesforfirstweek="4" range="true" closeonclick="true" mobilemodal="true" focusable="true" trapfocus="true" required="true"></b-datepicker-stub>
                 </b-field-stub>
               </div>
               <div class="field"><label class="label">
-                  <b-button-stub icon-right="menu-up" type="is-text">Notes (0)
+                  <b-button-stub type="is-text" iconright="menu-up" nativetype="button" tag="button">Notes (0)
                   </b-button-stub>
                 </label>
                 <!---->
-                <b-field-stub label="Add a note" label-position="on-border">
-                  <b-input-stub type="textarea" placeholder="Type a message" rows="1" maxlength="256" has-counter="" expanded="" value=""></b-input-stub>
-                  <b-button-stub icon-left="comment-text-outline" type="is-info">Add note
+                <b-field-stub label="Add a note" addons="true" labelposition="on-border">
+                  <b-input-stub expanded="true" maxlength="256" usehtml5validation="true" value="" type="textarea" hascounter="true" customclass="" placeholder="Type a message" rows="1"></b-input-stub>
+                  <b-button-stub type="is-info" iconleft="comment-text-outline" nativetype="button" tag="button">Add note
                   </b-button-stub>
                 </b-field-stub>
                 <!---->
@@ -69,15 +87,15 @@ exports[`Tournaments-view renders complete view when mounted 1`] = `
             </div>
             <div class="column is-half">
               <div id="td-field" class="field">
-                <b-field-stub label="Tournament Director / TD">
+                <b-field-stub label="Tournament Director / TD" addons="true">
                   <div class="columns">
                     <div class="column is-full">
-                      <b-field-stub>
-                        <b-autocomplete-stub placeholder="Search by name or email" keep-first="true" icon="magnify" expanded="" value="">
+                      <b-field-stub addons="true">
+                        <b-autocomplete-stub expanded="true" icon="magnify" usehtml5validation="true" value="" data="" field="value" keepfirst="true" dropdownposition="auto" placeholder="Search by name or email">
                           &gt;
                           <template></template></b-autocomplete-stub>
-                        <b-tooltip-stub label="Set yourself as the TD" type="is-info">
-                          <b-button-stub type="is-info" icon-left="account-circle-outline" title="Set yourself as TD"></b-button-stub>
+                        <b-tooltip-stub active="true" type="is-info" label="Set yourself as the TD" position="is-top" size="is-medium">
+                          <b-button-stub type="is-info" iconleft="account-circle-outline" nativetype="button" tag="button" title="Set yourself as TD"></b-button-stub>
                         </b-tooltip-stub>
                       </b-field-stub>
                     </div>
@@ -86,26 +104,26 @@ exports[`Tournaments-view renders complete view when mounted 1`] = `
                 </b-field-stub>
               </div>
               <div id="referees-field" class="field">
-                <b-field-stub label="Referees"></b-field-stub>
+                <b-field-stub label="Referees" addons="true"></b-field-stub>
                 <referee-table-stub editableitem="all" editable="true" value=""></referee-table-stub>
-                <b-field-stub label="Add referee" label-position="on-border">
-                  <b-autocomplete-stub placeholder="Search by name, email or nationality" keep-first="true" icon="magnify" clear-on-select="true" expanded="true" value=""> <template></template></b-autocomplete-stub>
-                  <b-tooltip-stub label="Add new referee to system" type="is-info">
-                    <b-button-stub icon-left="account-plus" type="is-info" outlined="">
+                <b-field-stub label="Add referee" addons="true" labelposition="on-border">
+                  <b-autocomplete-stub expanded="true" icon="magnify" usehtml5validation="true" value="" data="" field="value" keepfirst="true" clearonselect="true" dropdownposition="auto" placeholder="Search by name, email or nationality"> <template></template></b-autocomplete-stub>
+                  <b-tooltip-stub active="true" type="is-info" label="Add new referee to system" position="is-top" size="is-medium">
+                    <b-button-stub type="is-info" iconleft="account-plus" outlined="true" nativetype="button" tag="button">
                       New referee
                     </b-button-stub>
                   </b-tooltip-stub>
-                  <b-tooltip-stub label="Add yourself as a referee" type="is-info">
-                    <b-button-stub icon-left="account-circle-outline" type="is-info"></b-button-stub>
+                  <b-tooltip-stub active="true" type="is-info" label="Add yourself as a referee" position="is-top" size="is-medium">
+                    <b-button-stub type="is-info" iconleft="account-circle-outline" nativetype="button" tag="button"></b-button-stub>
                   </b-tooltip-stub>
                 </b-field-stub>
               </div>
               <div class="field">
-                <b-field-stub label="Teams competing">
+                <b-field-stub label="Teams competing" addons="true">
                   <div>
-                    <b-field-stub>
-                      <b-autocomplete-stub placeholder="Team name / Country" keep-first="" clear-on-select="" expanded="" data="" value=""></b-autocomplete-stub>
-                      <b-button-stub icon-left="plus" type="is-info" disabled="true">
+                    <b-field-stub addons="true">
+                      <b-autocomplete-stub expanded="true" usehtml5validation="true" value="" data="" field="value" keepfirst="true" clearonselect="true" dropdownposition="auto" placeholder="Team name / Country"></b-autocomplete-stub>
+                      <b-button-stub type="is-info" iconleft="plus" nativetype="button" tag="button" disabled="true">
                         Add
                       </b-button-stub>
                     </b-field-stub>
@@ -120,29 +138,37 @@ exports[`Tournaments-view renders complete view when mounted 1`] = `
           <!---->
         </div>
         <div class="card-footer">
-          <b-button-stub disabled="true" icon-left="check-circle-outline" type="is-primary" outlined="" class="card-footer-item">
+          <b-button-stub type="is-primary" iconleft="check-circle-outline" outlined="true" nativetype="button" tag="button" disabled="true" class="card-footer-item">
             Save
           </b-button-stub>
-          <b-button-stub type="is-light" icon-left="cancel" class="card-footer-item">
+          <b-button-stub type="is-light" iconleft="cancel" nativetype="button" tag="button" class="card-footer-item">
             Cancel
           </b-button-stub>
           <!---->
         </div>
         <!---->
       </b-collapse-stub>
-      <b-field-stub>
-        <b-radio-button-stub native-value="own" type="is-info" value="own">
+      <b-field-stub addons="true">
+        <b-radio-button-stub value="own" nativevalue="own" type="is-info">
           <b-icon-stub icon="account-circle-outline"></b-icon-stub> <span>Your tournaments</span>
         </b-radio-button-stub>
-        <b-radio-button-stub native-value="all" type="is-info" value="own">
+        <b-radio-button-stub value="own" nativevalue="all" type="is-info">
           <b-icon-stub icon="earth"></b-icon-stub> <span>All tournaments</span>
         </b-radio-button-stub>
       </b-field-stub>
       <div class="tournament-list">
-        <b-table-stub data="[object Object]" striped="true" hoverable="true" default-sort="name" default-sort-direction="asc" detailed="" detail-key="id"> <template></template></b-table-stub>
+        <b-table-stub data="[object Object]" columns="" striped="true" hoverable="true" detailed="true" headercheckable="true" checkboxposition="left" isrowselectable="function _default() {
+        return true;
+      }" isrowcheckable="function _default() {
+        return true;
+      }" checkedrows="" mobilecards="true" defaultsort="name" defaultsortdirection="asc" sorticon="arrow-up" sorticonsize="is-small" sortmultipledata="" currentpage="1" perpage="20" showdetailicon="true" paginationposition="bottom" rowclass="function _default() {
+        return '';
+      }" openeddetailed="" hasdetailedvisible="function _default() {
+        return true;
+      }" detailkey="id" total="0" filtersevent=""> <template></template></b-table-stub>
       </div>
       <router-link-stub to="[object Object]" target="_blank" class="spaced">
-        <b-button-stub icon-right="printer">Print E-passport</b-button-stub>
+        <b-button-stub iconright="printer" nativetype="button" tag="button">Print E-passport</b-button-stub>
       </router-link-stub>
       <!---->
     </div>
@@ -172,7 +198,7 @@ exports[`Tournaments-view renders correctly with empty list 1`] = `
   <tournament-filter-stub></tournament-filter-stub>
   <tournament-list-stub items="[object Object]" year="2020"></tournament-list-stub>
   <router-link-stub to="[object Object]" target="_blank" class="spaced">
-    <b-button-stub icon-right="printer">Print E-passport</b-button-stub>
+    <b-button-stub iconright="printer" nativetype="button" tag="button">Print E-passport</b-button-stub>
   </router-link-stub>
   <!---->
 </layout-stub>

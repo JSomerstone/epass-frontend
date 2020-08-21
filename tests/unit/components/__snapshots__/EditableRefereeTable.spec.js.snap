@@ -1,0 +1,250 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`EditableRefereeTable Is able to remove an item from it's list 1`] = `
+<div class="b-table no-margin-on-control referee-table">
+  <!---->
+  <!---->
+  <div class="table-wrapper has-mobile-cards">
+    <table class="table is-hoverable">
+      <thead>
+        <tr>
+          <!---->
+          <!---->
+          <th class="">
+            <div class="th-wrap">Name
+              <!---->
+            </div>
+          </th>
+          <th class="" style="width: 140px;">
+            <div class="th-wrap is-centered">Games as referee
+              <!---->
+            </div>
+          </th>
+          <th class="" style="width: 140px;">
+            <div class="th-wrap is-centered">Games as 10s / official
+              <!---->
+            </div>
+          </th>
+          <th class="">
+            <div class="th-wrap">
+              <!---->
+            </div>
+          </th>
+          <!---->
+        </tr>
+        <!---->
+        <!---->
+      </thead>
+      <tbody>
+        <tr draggable="false" class="">
+          <!---->
+          <!---->
+          <td data-label="Name" class="">
+            John Connor
+          </td>
+          <td data-label="Games as referee" class="has-text-centered"><span>1</span></td>
+          <td data-label="Games as 10s / official" class="has-text-centered"><span>2</span></td>
+          <td class=""></td>
+          <!---->
+        </tr>
+        <!---->
+        <!---->
+      </tbody>
+      <!---->
+    </table>
+  </div>
+  <!---->
+</div>
+`;
+
+exports[`EditableRefereeTable Renders all referees as editable 1`] = `
+<div class="b-table no-margin-on-control referee-table">
+  <!---->
+  <!---->
+  <div class="table-wrapper has-mobile-cards">
+    <table class="table is-hoverable">
+      <!---->
+      <tbody>
+        <tr draggable="false" class="">
+          <!---->
+          <!---->
+          <td data-label="Name" class="">
+            John Connor
+          </td>
+          <td data-label="Games as referee" class="has-text-centered">
+            <div class="b-numberinput field has-addons">
+              <p class="control"><button type="button" class="button is-primary"><span class="icon"><i class="mdi mdi-minus mdi-24px"></i></span></button></p>
+              <div class="control is-clearfix"><input type="number" autocomplete="on" step="1" class="input">
+                <!---->
+                <!---->
+                <!---->
+              </div>
+              <p class="control"><button type="button" class="button is-primary"><span class="icon"><i class="mdi mdi-plus mdi-24px"></i></span></button></p>
+            </div>
+          </td>
+          <td data-label="Games as 10s / official" class="has-text-centered">
+            <div class="b-numberinput field has-addons">
+              <p class="control"><button type="button" class="button is-primary"><span class="icon"><i class="mdi mdi-minus mdi-24px"></i></span></button></p>
+              <div class="control is-clearfix"><input type="number" autocomplete="on" step="1" class="input">
+                <!---->
+                <!---->
+                <!---->
+              </div>
+              <p class="control"><button type="button" class="button is-primary"><span class="icon"><i class="mdi mdi-plus mdi-24px"></i></span></button></p>
+            </div>
+          </td>
+          <td class=""><span data-label="Remove referee from tournament" class="is-danger is-bottom is-medium b-tooltip" style="transition-delay: 0ms;"><button type="button" class="button is-danger is-outlined"><span class="icon is-small"><i class="mdi mdi-close"></i></span>
+            <!---->
+            <!----></button></span></td>
+          <!---->
+        </tr>
+        <!---->
+        <!---->
+        <tr draggable="false" class="">
+          <!---->
+          <!---->
+          <td data-label="Name" class="">
+            Sarah Connor
+          </td>
+          <td data-label="Games as referee" class="has-text-centered">
+            <div class="b-numberinput field has-addons">
+              <p class="control"><button type="button" class="button is-primary"><span class="icon"><i class="mdi mdi-minus mdi-24px"></i></span></button></p>
+              <div class="control is-clearfix"><input type="number" autocomplete="on" step="1" class="input">
+                <!---->
+                <!---->
+                <!---->
+              </div>
+              <p class="control"><button type="button" class="button is-primary"><span class="icon"><i class="mdi mdi-plus mdi-24px"></i></span></button></p>
+            </div>
+          </td>
+          <td data-label="Games as 10s / official" class="has-text-centered">
+            <div class="b-numberinput field has-addons">
+              <p class="control"><button type="button" class="button is-primary"><span class="icon"><i class="mdi mdi-minus mdi-24px"></i></span></button></p>
+              <div class="control is-clearfix"><input type="number" autocomplete="on" step="1" class="input">
+                <!---->
+                <!---->
+                <!---->
+              </div>
+              <p class="control"><button type="button" class="button is-primary"><span class="icon"><i class="mdi mdi-plus mdi-24px"></i></span></button></p>
+            </div>
+          </td>
+          <td class=""><span data-label="Remove referee from tournament" class="is-danger is-bottom is-medium b-tooltip" style="transition-delay: 0ms;"><button type="button" class="button is-danger is-outlined"><span class="icon is-small"><i class="mdi mdi-close"></i></span>
+            <!---->
+            <!----></button></span></td>
+          <!---->
+        </tr>
+        <!---->
+        <!---->
+      </tbody>
+      <!---->
+    </table>
+  </div>
+  <!---->
+</div>
+`;
+
+exports[`EditableRefereeTable Renders correct referee as editable 1`] = `
+<div class="b-table no-margin-on-control referee-table">
+  <!---->
+  <!---->
+  <div class="table-wrapper has-mobile-cards">
+    <table class="table is-hoverable">
+      <!---->
+      <tbody>
+        <tr draggable="false" class="">
+          <!---->
+          <!---->
+          <td data-label="Name" class="">
+            John Connor
+          </td>
+          <td data-label="Games as referee" class="has-text-centered"><span>1</span></td>
+          <td data-label="Games as 10s / official" class="has-text-centered"><span>2</span></td>
+          <td class=""></td>
+          <!---->
+        </tr>
+        <!---->
+        <!---->
+        <tr draggable="false" class="">
+          <!---->
+          <!---->
+          <td data-label="Name" class="">
+            Sarah Connor
+          </td>
+          <td data-label="Games as referee" class="has-text-centered">
+            <div class="b-numberinput field has-addons">
+              <p class="control"><button type="button" class="button is-primary"><span class="icon"><i class="mdi mdi-minus mdi-24px"></i></span></button></p>
+              <div class="control is-clearfix"><input type="number" autocomplete="on" step="1" class="input">
+                <!---->
+                <!---->
+                <!---->
+              </div>
+              <p class="control"><button type="button" class="button is-primary"><span class="icon"><i class="mdi mdi-plus mdi-24px"></i></span></button></p>
+            </div>
+          </td>
+          <td data-label="Games as 10s / official" class="has-text-centered">
+            <div class="b-numberinput field has-addons">
+              <p class="control"><button type="button" class="button is-primary"><span class="icon"><i class="mdi mdi-minus mdi-24px"></i></span></button></p>
+              <div class="control is-clearfix"><input type="number" autocomplete="on" step="1" class="input">
+                <!---->
+                <!---->
+                <!---->
+              </div>
+              <p class="control"><button type="button" class="button is-primary"><span class="icon"><i class="mdi mdi-plus mdi-24px"></i></span></button></p>
+            </div>
+          </td>
+          <td class=""><span data-label="Remove referee from tournament" class="is-danger is-bottom is-medium b-tooltip" style="transition-delay: 0ms;"><button type="button" class="button is-danger is-outlined"><span class="icon is-small"><i class="mdi mdi-close"></i></span>
+            <!---->
+            <!----></button></span></td>
+          <!---->
+        </tr>
+        <!---->
+        <!---->
+      </tbody>
+      <!---->
+    </table>
+  </div>
+  <!---->
+</div>
+`;
+
+exports[`EditableRefereeTable Renders list of referees when non-editable 1`] = `
+<div class="b-table no-margin-on-control referee-table">
+  <!---->
+  <!---->
+  <div class="table-wrapper has-mobile-cards">
+    <table class="table is-hoverable">
+      <!---->
+      <tbody>
+        <tr draggable="false" class="">
+          <!---->
+          <!---->
+          <td data-label="Name" class="">
+            John Connor
+          </td>
+          <td data-label="Games as referee" class="has-text-centered"><span>1</span></td>
+          <td data-label="Games as 10s / official" class="has-text-centered"><span>2</span></td>
+          <!---->
+          <!---->
+        </tr>
+        <!---->
+        <!---->
+        <tr draggable="false" class="">
+          <!---->
+          <!---->
+          <td data-label="Name" class="">
+            Sarah Connor
+          </td>
+          <td data-label="Games as referee" class="has-text-centered"><span>3</span></td>
+          <td data-label="Games as 10s / official" class="has-text-centered"><span>4</span></td>
+          <!---->
+          <!---->
+        </tr>
+        <!---->
+        <!---->
+      </tbody>
+      <!---->
+    </table>
+  </div>
+  <!---->
+</div>
+`;
