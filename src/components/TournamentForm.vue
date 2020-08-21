@@ -8,7 +8,6 @@
     >
         <div 
             slot="trigger" 
-            slot-scope="props"
             class="card-header"
             role="button"
         >
@@ -18,7 +17,7 @@
             </span>
             <a class="card-header-icon">
                 <b-icon
-                    :icon="props.open ? 'menu-down' : 'menu-up'">
+                    :icon="open ? 'menu-down' : 'menu-up'">
                 </b-icon>
             </a>
         </div>

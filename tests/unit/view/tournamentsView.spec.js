@@ -1,4 +1,4 @@
-import { shallowMount } from "@vue/test-utils";
+import { shallowMount, mount } from "@vue/test-utils";
 import Vuex from "vuex";
 import localVue from "../localVue";
 import Tournaments from "../../../src/views/Tournaments.vue";
@@ -8,14 +8,14 @@ import VueRouter from "vue-router";
 import routes from "@/routes";
 import Referee from "@/store/models/RefereeClass";
 import referees from "../../data/referee.json";
+import stubs from "../../stubs";
 
 describe("Tournaments-view", () => {
   let state, store, route;
   let router = new VueRouter({ routes });
-  let mockAction = jest.fn();
   route = {
     params: { year: 2020 },
-    query: {}
+    query: { open: true }
   }
   state = {
     tournaments: tournamentModule.state,
@@ -31,10 +31,13 @@ describe("Tournaments-view", () => {
             all: () => [],
             loading: () => false,
             debug: () => false,
+            filter: () => state.tournaments.filter,
+            teams: () => [],
           },
           actions: {
-            load: mockAction,
-            loadTeams: mockAction,
+            load: jest.fn(),
+            loadTeams: jest.fn(),
+            addTeam: jest.fn(),
           }
         },
         referees: {
@@ -42,9 +45,11 @@ describe("Tournaments-view", () => {
           namespaced: true,
           getters: {
             current: () => new Referee(referees[0]),
+            all: () => referees,
+            search: () => jest.fn(),
           },
           actions: {
-            load: mockAction
+            load: jest.fn()
           }
         },
       },
@@ -63,5 +68,20 @@ describe("Tournaments-view", () => {
       }
     });
     expect(wrapper).toMatchSnapshot();
-  })
+  });
+
+  it("renders complete view when mounted", () => {
+    const wrapper = mount(Tournaments, {
+      store,
+      router,
+      localVue,
+      stubs,
+      mocks: {
+        $route: route,
+        $buefy: jest.fn(),
+      }
+    });
+    expect(wrapper).toMatchSnapshot();
+
+  });
 });

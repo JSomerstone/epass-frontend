@@ -1,0 +1,17 @@
+export default [
+  "router-link",
+  "b-autocomplete",
+  "b-button",
+  "b-collapse",
+  "b-datepicker",
+  "b-field",
+  "b-icon",
+  "b-input",
+  "b-loading",
+  "b-navbar",
+  "b-navbar-item",
+  "b-table",
+  "b-tooltip",
+  "b-radio-button",
+  "referee-table",
+];

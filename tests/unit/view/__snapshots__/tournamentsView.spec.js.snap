@@ -1,11 +1,177 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`Tournaments-view renders complete view when mounted 1`] = `
+<div>
+  <section class="header">
+    <b-navbar-stub><template></template> <template></template> <template></template></b-navbar-stub>
+  </section>
+  <section class="hero">
+    <div class="hero-body">
+      <div class="container">
+        <h1 class="title">Tournaments</h1>
+        <h2 class="subtitle">2020</h2>
+      </div>
+    </div>
+  </section>
+  <section class="content">
+    <b-loading-stub></b-loading-stub>
+    <div class="container">
+      <h1></h1>
+      <b-collapse-stub aria-id="newEntryForm" animation="slide" class="card tournament-form">
+        <div role="button" class="card-header"><span class="card-header-title"><span>Add new tournament</span></span> <a class="card-header-icon">
+            <b-icon-stub icon="menu-up"></b-icon-stub>
+          </a></div>
+        <div class="card-content">
+          <div class="columns">
+            <div class="column is-half">
+              <div class="field">
+                <div class="columns">
+                  <div class="column is-half">
+                    <b-field-stub label="Name of tournament" label-position="on-border">
+                      <b-input-stub required="true" expanded="true" value=""></b-input-stub>
+                    </b-field-stub>
+                  </div>
+                  <div class="column is-half">
+                    <b-field-stub>
+                      <b-radio-button-stub native-value="true" expanded="" value="true">
+                        International
+                      </b-radio-button-stub>
+                      <b-radio-button-stub expanded="" value="true">
+                        National
+                      </b-radio-button-stub>
+                    </b-field-stub>
+                  </div>
+                </div>
+              </div>
+              <div class="field">
+                <b-field-stub label="Place of the tournament" label-position="on-border">
+                  <b-input-stub required="true" placeholder="City" expanded="true" icon="city" value=""></b-input-stub>
+                  <b-autocomplete-stub placeholder="Country" icon="earth" keep-first="" expanded="true" value=""></b-autocomplete-stub>
+                </b-field-stub>
+              </div>
+              <div class="field">
+                <b-field-stub label="Dates" label-position="on-border">
+                  <b-datepicker-stub icon="calendar-today" trap-focus="" range="" inline="" placeholder="Pick tournament dates" required="true" min-date="Tue Jan 01 2019 02:00:00 GMT+0200 (Eastern European Standard Time)" max-date="Fri Dec 31 2021 02:00:00 GMT+0200 (Eastern European Standard Time)" first-day-of-week="1" value=""></b-datepicker-stub>
+                </b-field-stub>
+              </div>
+              <div class="field"><label class="label">
+                  <b-button-stub icon-right="menu-up" type="is-text">Notes (0)
+                  </b-button-stub>
+                </label>
+                <!---->
+                <b-field-stub label="Add a note" label-position="on-border">
+                  <b-input-stub type="textarea" placeholder="Type a message" rows="1" maxlength="256" has-counter="" expanded="" value=""></b-input-stub>
+                  <b-button-stub icon-left="comment-text-outline" type="is-info">Add note
+                  </b-button-stub>
+                </b-field-stub>
+                <!---->
+              </div>
+            </div>
+            <div class="column is-half">
+              <div id="td-field" class="field">
+                <b-field-stub label="Tournament Director / TD">
+                  <div class="columns">
+                    <div class="column is-full">
+                      <b-field-stub>
+                        <b-autocomplete-stub placeholder="Search by name or email" keep-first="true" icon="magnify" expanded="" value="">
+                          &gt;
+                          <template></template></b-autocomplete-stub>
+                        <b-tooltip-stub label="Set yourself as the TD" type="is-info">
+                          <b-button-stub type="is-info" icon-left="account-circle-outline" title="Set yourself as TD"></b-button-stub>
+                        </b-tooltip-stub>
+                      </b-field-stub>
+                    </div>
+                    <!---->
+                  </div>
+                </b-field-stub>
+              </div>
+              <div id="referees-field" class="field">
+                <b-field-stub label="Referees"></b-field-stub>
+                <referee-table-stub editableitem="all" editable="true" value=""></referee-table-stub>
+                <b-field-stub label="Add referee" label-position="on-border">
+                  <b-autocomplete-stub placeholder="Search by name, email or nationality" keep-first="true" icon="magnify" clear-on-select="true" expanded="true" value=""> <template></template></b-autocomplete-stub>
+                  <b-tooltip-stub label="Add new referee to system" type="is-info">
+                    <b-button-stub icon-left="account-plus" type="is-info" outlined="">
+                      New referee
+                    </b-button-stub>
+                  </b-tooltip-stub>
+                  <b-tooltip-stub label="Add yourself as a referee" type="is-info">
+                    <b-button-stub icon-left="account-circle-outline" type="is-info"></b-button-stub>
+                  </b-tooltip-stub>
+                </b-field-stub>
+              </div>
+              <div class="field">
+                <b-field-stub label="Teams competing">
+                  <div>
+                    <b-field-stub>
+                      <b-autocomplete-stub placeholder="Team name / Country" keep-first="" clear-on-select="" expanded="" data="" value=""></b-autocomplete-stub>
+                      <b-button-stub icon-left="plus" type="is-info" disabled="true">
+                        Add
+                      </b-button-stub>
+                    </b-field-stub>
+                    <div class="team-list"></div>
+                  </div>
+                </b-field-stub>
+              </div>
+            </div>
+          </div>
+          <!---->
+          <!---->
+          <!---->
+        </div>
+        <div class="card-footer">
+          <b-button-stub disabled="true" icon-left="check-circle-outline" type="is-primary" outlined="" class="card-footer-item">
+            Save
+          </b-button-stub>
+          <b-button-stub type="is-light" icon-left="cancel" class="card-footer-item">
+            Cancel
+          </b-button-stub>
+          <!---->
+        </div>
+        <!---->
+      </b-collapse-stub>
+      <b-field-stub>
+        <b-radio-button-stub native-value="own" type="is-info" value="own">
+          <b-icon-stub icon="account-circle-outline"></b-icon-stub> <span>Your tournaments</span>
+        </b-radio-button-stub>
+        <b-radio-button-stub native-value="all" type="is-info" value="own">
+          <b-icon-stub icon="earth"></b-icon-stub> <span>All tournaments</span>
+        </b-radio-button-stub>
+      </b-field-stub>
+      <div class="tournament-list">
+        <b-table-stub data="" striped="true" hoverable="true" default-sort="name" default-sort-direction="asc" detailed="" detail-key="id"> <template></template></b-table-stub>
+      </div>
+      <router-link-stub to="[object Object]" tag="a" ariacurrentvalue="page" event="click" target="_blank" class="spaced">
+        <b-button-stub icon-right="printer">Print E-passport</b-button-stub>
+      </router-link-stub>
+      <!---->
+    </div>
+  </section>
+  <section class="footer">
+    <footer class="footer">
+      <div class="content has-text-centered">
+        <p>
+          <router-link-stub to="[object Object]" tag="a" ariacurrentvalue="page" event="click">About</router-link-stub>
+          |
+          <router-link-stub to="[object Object]" tag="a" ariacurrentvalue="page" event="click">Privacy Policy</router-link-stub>
+        </p>
+        <p><strong>ePass</strong> by <a href="https://github.com/JSomerstone">JSomerstone</a>
+          |
+          The source code is licensed under <a href="http://www.apache.org/licenses/">Apache Licence v. 2</a>.
+          |
+          <a href="/versions.txt">Version history</a></p>
+      </div>
+    </footer>
+  </section>
+</div>
+`;
+
 exports[`Tournaments-view renders correctly with empty list 1`] = `
 <layout-stub>
   <tournament-form-stub editable="true" tournament="[object Object]" year="2020" class="tournament-form"></tournament-form-stub>
   <tournament-filter-stub></tournament-filter-stub>
   <tournament-list-stub items="" year="2020"></tournament-list-stub>
-  <router-link-stub to="[object Object]" target="_blank" class="spaced">
+  <router-link-stub to="[object Object]" tag="a" ariacurrentvalue="page" event="click" target="_blank" class="spaced">
     <b-button-stub icon-right="printer">Print E-passport</b-button-stub>
   </router-link-stub>
   <!---->
