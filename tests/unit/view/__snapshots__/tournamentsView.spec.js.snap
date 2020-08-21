@@ -139,9 +139,9 @@ exports[`Tournaments-view renders complete view when mounted 1`] = `
         </b-radio-button-stub>
       </b-field-stub>
       <div class="tournament-list">
-        <b-table-stub data="" striped="true" hoverable="true" default-sort="name" default-sort-direction="asc" detailed="" detail-key="id"> <template></template></b-table-stub>
+        <b-table-stub data="[object Object]" striped="true" hoverable="true" default-sort="name" default-sort-direction="asc" detailed="" detail-key="id"> <template></template></b-table-stub>
       </div>
-      <router-link-stub to="[object Object]" tag="a" ariacurrentvalue="page" event="click" target="_blank" class="spaced">
+      <router-link-stub to="[object Object]" target="_blank" class="spaced">
         <b-button-stub icon-right="printer">Print E-passport</b-button-stub>
       </router-link-stub>
       <!---->
@@ -151,9 +151,9 @@ exports[`Tournaments-view renders complete view when mounted 1`] = `
     <footer class="footer">
       <div class="content has-text-centered">
         <p>
-          <router-link-stub to="[object Object]" tag="a" ariacurrentvalue="page" event="click">About</router-link-stub>
+          <router-link-stub to="[object Object]">About</router-link-stub>
           |
-          <router-link-stub to="[object Object]" tag="a" ariacurrentvalue="page" event="click">Privacy Policy</router-link-stub>
+          <router-link-stub to="[object Object]">Privacy Policy</router-link-stub>
         </p>
         <p><strong>ePass</strong> by <a href="https://github.com/JSomerstone">JSomerstone</a>
           |
@@ -170,8 +170,8 @@ exports[`Tournaments-view renders correctly with empty list 1`] = `
 <layout-stub>
   <tournament-form-stub editable="true" tournament="[object Object]" year="2020" class="tournament-form"></tournament-form-stub>
   <tournament-filter-stub></tournament-filter-stub>
-  <tournament-list-stub items="" year="2020"></tournament-list-stub>
-  <router-link-stub to="[object Object]" tag="a" ariacurrentvalue="page" event="click" target="_blank" class="spaced">
+  <tournament-list-stub items="[object Object]" year="2020"></tournament-list-stub>
+  <router-link-stub to="[object Object]" target="_blank" class="spaced">
     <b-button-stub icon-right="printer">Print E-passport</b-button-stub>
   </router-link-stub>
   <!---->
