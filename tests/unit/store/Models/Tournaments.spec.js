@@ -29,7 +29,7 @@ describe("TournamentClass", () => {
     });
     const result = tounament.validate();
     expect(result).toEqual([
-      "international", "year", "td", "referees", "teams"
+      "international", "year"
     ]);
   });
 });

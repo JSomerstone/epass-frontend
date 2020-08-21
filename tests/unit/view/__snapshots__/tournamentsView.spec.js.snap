@@ -1,0 +1,13 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Tournaments-view renders correctly with empty list 1`] = `
+<layout-stub>
+  <tournament-form-stub editable="true" tournament="[object Object]" year="2020" class="tournament-form"></tournament-form-stub>
+  <tournament-filter-stub></tournament-filter-stub>
+  <tournament-list-stub items="" year="2020"></tournament-list-stub>
+  <router-link-stub to="[object Object]" target="_blank" class="spaced">
+    <b-button-stub icon-right="printer">Print E-passport</b-button-stub>
+  </router-link-stub>
+  <!---->
+</layout-stub>
+`;
