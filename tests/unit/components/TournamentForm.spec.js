@@ -136,4 +136,41 @@ describe("TournamentDetailRow", () => {
     expect(store.modules.tournaments.actions.update).toHaveBeenCalled();
     expect(store.modules.tournaments.actions.create).not.toHaveBeenCalled();
   });
+  
+  it("Redirects to tournament list when cancelling on open tournament", async () => {
+    const $router = { push: jest.fn() };
+    const wrapper = mount(TournamentForm, {
+      store: new Vuex.Store(store),
+      localVue,
+      propsData: { tournament, open: true },
+      mocks: { $router },
+      stubs
+    });
+    
+    await wrapper.vm.loadTournamentForm(tournament);
+    await wrapper.findComponent({ ref: "cancelBtn" }).trigger("click");
+    expect($router.push).toHaveBeenCalledWith({
+      name: 'tournaments',
+      params: { year: 2020 }
+    });
+  });
+
+  it("Resets the form when cancelling a new tournament", async () => {
+    const $router = { push: jest.fn() };
+    tournament.id = null;
+    tournament.name = "to-be-reset"
+    const wrapper = mount(TournamentForm, {
+      store: new Vuex.Store(store),
+      localVue,
+      propsData: { tournament, open: true },
+      mocks: { $router },
+      stubs
+    });
+
+    await wrapper.vm.loadTournamentForm(tournament);
+    expect(wrapper.vm.t.name).toBe(tournament.name);
+    await wrapper.findComponent({ ref: "cancelBtn" }).trigger("click");
+    expect($router.push).not.toHaveBeenCalled();
+    expect(wrapper.vm.t.name).toBe("");
+  });
 });
