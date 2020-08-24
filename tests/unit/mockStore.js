@@ -51,6 +51,7 @@ export default {
         current: () => new Referee(referees[0]),
         all: () => referees,
         search: () => jest.fn(),
+        byId: () => ( id ) => referees.find(r => r.id == id)
       },
       actions: {
         load: jest.fn()

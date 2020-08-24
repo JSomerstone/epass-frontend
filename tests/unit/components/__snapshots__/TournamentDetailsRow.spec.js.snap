@@ -1,0 +1,51 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`TournamentDetailRow Renders correctly 1`] = `
+<div class="columns">
+  <div class="column is-one-third"><a><button type="button" outline="" class="button is-info"><span class="icon is-small"><i class="mdi mdi-folder-open-outline"></i></span> <span>
+        Open
+      </span>
+        <!----></button></a>
+    <div><strong>Your statistics:</strong>
+      <ul>
+        <li>
+          6
+          Games as referee
+        </li>
+        <li>
+          7
+          Games
+          as table official / 10 sec timer
+        </li>
+      </ul>
+    </div>
+  </div>
+  <div class="column is-one-third">
+    <div><strong>TD:</strong> John Doe [USA]
+    </div>
+    <div><strong>Referees:</strong>
+      <ul>
+        <li>
+          John Doe [USA]
+        </li>
+        <li>
+          Jane Doe [CAN]
+        </li>
+        <li>
+          Noob Nederson [SWE]
+        </li>
+      </ul>
+    </div>
+  </div>
+  <div class="column is-one-third"><strong>Teams</strong>
+    <ul>
+      <li>
+        Team A
+      </li>
+      <li>
+        Team B
+      </li>
+    </ul>
+  </div>
+</div>
+`;

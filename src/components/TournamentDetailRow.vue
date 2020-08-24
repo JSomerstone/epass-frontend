@@ -51,10 +51,6 @@ export default {
     tournament: {
       type: Object,
       default: () => new Tournament()
-    },
-    year: {
-      type: [Number, String],
-      required: true
     }
   },
   computed: {

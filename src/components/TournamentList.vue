@@ -35,8 +35,7 @@
         </b-table-column>
       </template>
       <template slot="detail" slot-scope="props">
-        <tournament-detail-row :tournament="props.row" :year="year">
-        </tournament-detail-row>
+        <tournament-detail-row :tournament="props.row" />
       </template>
       <template slot="empty" v-if="!loading">
         <p>

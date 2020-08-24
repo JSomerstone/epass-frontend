@@ -1,5 +1,18 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`TeamsField Input fields and remove-links are not rendered when editable:false 1`] = `
+<div>
+  <!---->
+  <div class="team-list"><span class="tag is-medium"><span class="">
+        Team A
+    </span>
+    <!----></span><span class="tag is-medium"><span class="">
+        Team B
+    </span>
+    <!----></span></div>
+</div>
+`;
+
 exports[`TeamsField Teams are removable when field is editable 1`] = `
 <div>
   <div class="field has-addons">

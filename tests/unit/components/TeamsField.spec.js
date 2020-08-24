@@ -1,4 +1,4 @@
-import { mount, RouterLinkStub } from "@vue/test-utils";
+import { mount } from "@vue/test-utils";
 import Vuex from "vuex";
 import localVue from "../localVue";
 import store from "../mockStore";
@@ -18,10 +18,7 @@ describe("TeamsField", () => {
     const wrapper = mount(TeamsField, {
       localVue,
       store: new Vuex.Store(store),
-      propsData: { value, editable: true },
-      stubs: {
-        RouterLink: RouterLinkStub
-      }
+      propsData: { value, editable: true }
     });
 
     expect(wrapper).toMatchSnapshot();
@@ -35,14 +32,10 @@ describe("TeamsField", () => {
   });
 
   it("New team can be added when field is editable", async () => {
-    const vuexStore = new Vuex.Store(store);
     const wrapper = mount(TeamsField, {
       localVue,
       store: new Vuex.Store(store),
-      propsData: { value, editable: true },
-      stubs: {
-        RouterLink: RouterLinkStub
-      }
+      propsData: { value, editable: true }
     });
 
     await wrapper.find('input').setValue("Team C");
@@ -54,10 +47,7 @@ describe("TeamsField", () => {
     const wrapper = mount(TeamsField, {
       localVue,
       store: new Vuex.Store(store),
-      propsData: { value, editable: true },
-      stubs: {
-        RouterLink: RouterLinkStub
-      }
+      propsData: { value, editable: true }
     });
 
     const inputField = wrapper.find('input')
@@ -65,5 +55,17 @@ describe("TeamsField", () => {
     await wrapper.vm.onInput({ code: "Enter" });
     expect(wrapper.find("div.team-list").text()).toContain("Team X");
     expect(tournaments.actions.addTeam).toHaveBeenCalled();
+  });
+
+  it("Input fields and remove-links are not rendered when editable:false", async () => {
+    const wrapper = mount(TeamsField, {
+      localVue,
+      store: new Vuex.Store(store),
+      propsData: { value, editable: false }
+    });
+
+    expect(wrapper.find('input').exists()).toBe(false);
+    expect(wrapper.find('a.delete').exists()).toBe(false);
+    expect(wrapper).toMatchSnapshot();
   });
 });
