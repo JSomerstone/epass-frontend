@@ -35,8 +35,8 @@ export default {
         all: () => tournaments["2020"],
         loading: () => false,
         debug: () => false,
-        filter: () => tournamentModule.state.filter,
-        teams: () => [],
+        filter: state => state.filter,
+        teams: state => state.teams,
       },
       actions: {
         load: jest.fn(),

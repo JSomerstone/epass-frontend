@@ -1,0 +1,42 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`TeamsField Teams are removable when field is editable 1`] = `
+<div>
+  <div class="field has-addons">
+    <!---->
+    <div class="autocomplete control is-expanded">
+      <div class="control is-clearfix"><input type="text" autocomplete="off" placeholder="Team name / Country" class="input">
+        <!---->
+        <!---->
+        <!---->
+      </div>
+      <transition-stub name="fade">
+        <div class="dropdown-menu" style="display: none;">
+          <div class="dropdown-content" style="display: none;">
+            <!----> <a class="dropdown-item"><span>
+                            Team A
+                        </span></a><a class="dropdown-item"><span>
+                            Team B
+                        </span></a><a class="dropdown-item"><span>
+                            Team C
+                        </span></a><a class="dropdown-item"><span>
+                            Team D
+                        </span></a>
+            <!---->
+            <!---->
+          </div>
+        </div>
+      </transition-stub>
+    </div> <button type="button" disabled="disabled" class="button is-info"><span class="icon is-small"><i class="mdi mdi-plus"></i></span> <span>
+      Add
+    </span>
+      <!----></button>
+    <!---->
+  </div>
+  <div class="team-list"><span class="tag is-medium"><span class="">
+        Team A
+    </span> <a role="button" aria-label="Remove team" tabindex="0" class="delete is-small"></a></span><span class="tag is-medium"><span class="">
+        Team B
+    </span> <a role="button" aria-label="Remove team" tabindex="0" class="delete is-small"></a></span></div>
+</div>
+`;

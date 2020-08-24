@@ -69,7 +69,7 @@ export default {
       if (selected) {
         this.name = selected;
       }
-      if (this.name.length <= 2 || this.isDuplicate) {
+      if (this.name.length < 2 || this.isDuplicate) {
         return;
       }
       this.teams.push(this.name);
