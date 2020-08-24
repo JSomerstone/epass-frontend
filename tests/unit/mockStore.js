@@ -45,6 +45,7 @@ export default {
         create: jest.fn(),
         update: jest.fn(),
         delete: jest.fn(),
+        addComment: jest.fn(),
       }
     },
     referees: {

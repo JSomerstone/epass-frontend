@@ -425,9 +425,6 @@ export default {
       this.t = new Tournament(tournament, this.$store.getters['referees/all']);
       this.countryQuery = tournament.country;
     },
-    getRefereeById(id) {
-      return this.$store.getters['referees/byId'](id);
-    },
     onDateChange(value) {
       this.t.year = value[0].getFullYear();
     },

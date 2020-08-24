@@ -7,6 +7,7 @@ import testReferees from "../../data/referee.json";
 import TournamentForm from "@/components/TournamentForm";
 import Tournament from "@/store/models/Tournament";
 
+const actionWithCallback = (store, { onSuccess }) => onSuccess();
 
 describe("TournamentDetailRow", () => {
   let tournament, referees = [], stubs = { transition: false };
@@ -103,6 +104,24 @@ describe("TournamentDetailRow", () => {
     expect(wrapper.find('.notes').text()).toContain("Test note");
   });
 
+  it("Can add notes to existing tournament", async () => {
+    const wrapper = mount(TournamentForm, {
+      store: new Vuex.Store(store),
+      localVue,
+      propsData: { tournament, open: true },
+      stubs
+    });
+    const { addComment } = store.modules.tournaments.actions;
+    addComment.mockImplementation(
+      (state, { comment, onSuccess }) => onSuccess(comment)
+    );
+    await wrapper.vm.loadTournamentForm(tournament);
+    await wrapper.find("textarea").setValue("Test note 2");
+    await wrapper.find(".add-note-btn").trigger("click");
+    expect(addComment).toHaveBeenCalled();
+    expect(wrapper.find('.notes').text()).toContain("Test note 2");
+  });
+
   it("Handles saving new tournament", async () => {
     tournament.id = null;
     tournament.name = "New tournament";
@@ -172,5 +191,33 @@ describe("TournamentDetailRow", () => {
     await wrapper.findComponent({ ref: "cancelBtn" }).trigger("click");
     expect($router.push).not.toHaveBeenCalled();
     expect(wrapper.vm.t.name).toBe("");
+  });
+
+  it("Confirms delete command with dialog", async () => {
+    const $buefy = { dialog: { prompt: jest.fn() } };
+    const $router = { push: jest.fn() };
+    const wrapper = mount(TournamentForm, {
+      store: new Vuex.Store(store),
+      localVue,
+      propsData: { tournament, open: true },
+      mocks: { $buefy, $router },
+      stubs
+    });
+    store.modules.tournaments.actions.delete.mockImplementation(
+      (store, { onSuccess }) => onSuccess()
+    );
+
+    await wrapper.vm.loadTournamentForm(tournament);
+    await wrapper.findComponent({ ref: "deleteBtn" }).trigger("click");
+    expect($buefy.dialog.prompt).toHaveBeenCalled();
+
+    await wrapper.vm.handleConfirmDelete("DON'T!");
+    expect(store.modules.tournaments.actions.delete).not.toHaveBeenCalled();
+    await wrapper.vm.handleConfirmDelete("delete");
+    expect(store.modules.tournaments.actions.delete).toHaveBeenCalled();
+    expect($router.push).toHaveBeenCalledWith({
+      name: 'tournaments',
+      params: { year: 2020 }
+    });
   });
 });
