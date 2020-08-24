@@ -1,5 +1,40 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`TournamentDetailRow Doesn't render users statistics when user is not a referee 1`] = `
+<div class="columns">
+  <div class="column is-one-third"><a><button type="button" outline="" class="button is-info"><span class="icon is-small"><i class="mdi mdi-folder-open-outline"></i></span> <span>
+        Open
+      </span>
+        <!----></button></a>
+    <!---->
+  </div>
+  <div class="column is-one-third">
+    <div><strong>TD:</strong> John Doe [USA]
+    </div>
+    <div><strong>Referees:</strong>
+      <ul>
+        <li>
+          Jane Doe [CAN]
+        </li>
+        <li>
+          Noob Nederson [SWE]
+        </li>
+      </ul>
+    </div>
+  </div>
+  <div class="column is-one-third"><strong>Teams</strong>
+    <ul>
+      <li>
+        Team A
+      </li>
+      <li>
+        Team B
+      </li>
+    </ul>
+  </div>
+</div>
+`;
+
 exports[`TournamentDetailRow Renders correctly 1`] = `
 <div class="columns">
   <div class="column is-one-third"><a><button type="button" outline="" class="button is-info"><span class="icon is-small"><i class="mdi mdi-folder-open-outline"></i></span> <span>

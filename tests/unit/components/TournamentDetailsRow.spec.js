@@ -43,5 +43,18 @@ describe("TournamentDetailRow", () => {
     });
 
     expect(wrapper).toMatchSnapshot();
-  })
+  });
+
+  it("Doesn't render users statistics when user is not a referee", () => {
+    tournament.referees.splice(0, 1);
+    const wrapper = mount(TournamentDetailRow, {
+      store: new Vuex.Store(store),
+      localVue,
+      propsData: { tournament },
+      stubs: {
+        RouterLink: RouterLinkStub
+      }
+    });
+    expect(wrapper).toMatchSnapshot();
+  });
 });

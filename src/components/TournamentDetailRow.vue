@@ -45,12 +45,11 @@
   </div>
 </template>
 <script>
-import Tournament from "../store/models/Tournament"
 export default {
   props: {
     tournament: {
       type: Object,
-      default: () => new Tournament()
+      required: true
     }
   },
   computed: {
@@ -76,11 +75,8 @@ export default {
         : id
     },
     getCurrentRef: function() {
-      const current = this.$store.getters['referees/current'];
-      if (! current) {
-        return;
-      }
-      return this.tournament.referees.find( r => r.id == current.id );
+      const { id = null } = this.$store.getters['referees/current'];
+      return this.tournament.referees.find( r => r.id == id );
     }
   },
   filters: {
