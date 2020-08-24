@@ -573,7 +573,6 @@ export default {
         },
         hasModalCard: true,
         canCancel: ['x', 'escape'],
-        onCancel: () => { console.log('cancelled') },
       });
     },
     openAddTdForm() {
@@ -586,7 +585,6 @@ export default {
         },
         hasModalCard: true,
         canCancel: ['x', 'escape'],
-        onCancel: () => { console.log('cancelled') },
       });
     },
     addTd: function(referee) {

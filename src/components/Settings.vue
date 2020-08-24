@@ -410,7 +410,6 @@ export default {
   },
   watch: {
     original: function() {
-      console.log("State changed, updating form");
       this.loadData();
     },
     isOpen: function(category){

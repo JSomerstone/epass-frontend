@@ -60,9 +60,6 @@ const mutations = {
     state.teams.sort();
     localStorage.setItem("teams", JSON.stringify(state.teams));
   },
-  [mutationTypes.ADD_COMMENT](state, comment) {
-    console.log({ wip: state.wip, comment });
-  },
   [mutationTypes.DELETE_COMMENT](state, comment) {
     const index = state.wip.comments.findIndex(
       c => c.id == comment.id
@@ -91,7 +88,6 @@ const actions = {
     })
       .then(result => {
         commit(mutationTypes.ADD_COMMENT, result.data.createComment);
-        console.log({ action: 'AddComment', ...result.data.createComment });
         onSuccess(result.data.createComment);
       })
       .catch(notifyException);
@@ -103,7 +99,6 @@ const actions = {
       variables: { input: { id } },
     })
       .then(result => {
-        console.log({ action: 'RemoveComment', ...result.data });
         onSuccess(result);
       })
       .catch(notifyException)
