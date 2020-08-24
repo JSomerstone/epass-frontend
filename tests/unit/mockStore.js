@@ -44,6 +44,7 @@ export default {
         addTeam: jest.fn(),
         create: jest.fn(),
         update: jest.fn(),
+        lockTournament: jest.fn(),
         delete: jest.fn(),
         addComment: jest.fn(),
         deleteComment: jest.fn(),
@@ -59,7 +60,8 @@ export default {
         byId: () => ( id ) => referees.find(r => r.id == id)
       },
       actions: {
-        load: jest.fn()
+        load: jest.fn(),
+        create: jest.fn(),
       }
     },
     countries: {

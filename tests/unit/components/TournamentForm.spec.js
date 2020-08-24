@@ -34,9 +34,11 @@ describe("TournamentDetailRow", () => {
       },
       testReferees
     );
-    let { actions } = store.modules.tournaments;
-    Object.keys(actions).map(
-      key => actions[key].mockReset()
+    Object.keys(store.modules.tournaments.actions).map(
+      key => store.modules.tournaments.actions[key].mockReset()
+    );
+    Object.keys(store.modules.referees.actions).map(
+      key => store.modules.referees.actions[key].mockReset()
     );
   });
 
@@ -139,18 +141,27 @@ describe("TournamentDetailRow", () => {
   it("Handles saving new tournament", async () => {
     tournament.id = null;
     tournament.name = "New tournament";
+    const $router = { push: jest.fn() };
     const wrapper = mount(TournamentForm, {
       store: new Vuex.Store(store),
       localVue,
       propsData: { tournament, open: true },
+      mocks: { $router },
       stubs
     });
-
+    const { create, update } = store.modules.tournaments.actions;
+    create.mockImplementation(
+      (state, { tournament, onSuccess }) => {
+        tournament.id = "test-tournament";
+        onSuccess(tournament);
+      }
+    )
     await wrapper.vm.loadTournamentForm(tournament);
     const saveBtn = wrapper.findComponent({ ref: "saveBtn" });
     await saveBtn.trigger("click");
-    expect(store.modules.tournaments.actions.create).toHaveBeenCalled();
-    expect(store.modules.tournaments.actions.update).not.toHaveBeenCalled();
+    expect(create).toHaveBeenCalled();
+    expect($router.push).toHaveBeenCalled();
+    expect(update).not.toHaveBeenCalled();
   });
 
 
@@ -162,12 +173,12 @@ describe("TournamentDetailRow", () => {
       propsData: { tournament, open: true },
       stubs
     });
-
+    const { create, update } = store.modules.tournaments.actions;
     await wrapper.vm.loadTournamentForm(tournament);
     const saveBtn = wrapper.findComponent({ ref: "saveBtn" });
     await saveBtn.trigger("click");
-    expect(store.modules.tournaments.actions.update).toHaveBeenCalled();
-    expect(store.modules.tournaments.actions.create).not.toHaveBeenCalled();
+    expect(update).toHaveBeenCalled();
+    expect(create).not.toHaveBeenCalled();
   });
   
   it("Redirects to tournament list when cancelling on open tournament", async () => {
@@ -281,5 +292,96 @@ describe("TournamentDetailRow", () => {
     expect(refTable.text()).toContain("John");
     await refTable.find("button.is-danger").trigger("click");
     expect(refTable.text()).not.toContain("John");
+  });
+
+  it("Adding new referee opens a dialog", async () => {
+    const $buefy = { modal: { open: jest.fn() } };
+    $buefy.modal.open.mockImplementation(
+      ({ props: { onSave } }) => onSave()
+    );
+    store.modules.referees.actions.create.mockImplementation(
+      (state, { onSuccess }) => onSuccess(testReferees[2])
+    );
+    tournament.referees = [];
+    const wrapper = mount(TournamentForm, {
+      store: new Vuex.Store(store),
+      localVue,
+      propsData: { tournament, open: true },
+      mocks: { $buefy },
+      stubs
+    });
+    await wrapper.vm.loadTournamentForm(tournament);
+
+    await wrapper.findComponent({ ref: "addRefereeBtn" }).trigger("click");
+    expect($buefy.modal.open).toHaveBeenCalled();
+    expect(store.modules.referees.actions.create).toHaveBeenCalled();
+    const refTable = wrapper.find("div.referee-table");
+    expect(refTable.text()).toContain("Noob");
+  });
+
+  it("Adding new referee opens a dialog", async () => {
+    const $buefy = { modal: { open: jest.fn() } };
+    $buefy.modal.open.mockImplementation(
+      ({ props: { onSave } }) => onSave()
+    );
+    store.modules.referees.actions.create.mockImplementation(
+      (state, { onSuccess }) => onSuccess(testReferees[2])
+    );
+    tournament.td = null;
+    const wrapper = mount(TournamentForm, {
+      store: new Vuex.Store(store),
+      localVue,
+      propsData: { tournament, open: true },
+      mocks: { $buefy },
+      stubs
+    });
+    await wrapper.vm.loadTournamentForm(tournament);
+
+    await wrapper.find(".td-autocomplete input").setValue("Waldo");
+    await wrapper.findComponent({ ref: "addTdLink" }).trigger("click");
+    expect($buefy.modal.open).toHaveBeenCalled();
+    expect(store.modules.referees.actions.create).toHaveBeenCalled();
+    const tdTag = wrapper.find("span.td-tag");
+    expect(tdTag.text()).toContain(testReferees[2].firstName);
+  });
+
+
+  it("Tournament can be locked", async () => {
+    const { lockTournament } = store.modules.tournaments.actions;
+    lockTournament.mockImplementation(
+      (state, { lock, onSuccess }) => onSuccess({ locked: lock })
+    );
+    const wrapper = mount(TournamentForm, {
+      store: new Vuex.Store(store),
+      localVue,
+      propsData: { tournament, open: true },
+      stubs
+    });
+    await wrapper.vm.loadTournamentForm(tournament);
+
+    await wrapper.findComponent({ ref: "lockBtn" }).trigger("click");
+    expect(lockTournament).toHaveBeenCalled();
+    expect(wrapper.text()).toContain("Tournament is locked");
+  });
+
+
+  it("Tournament can be unlocked", async () => {
+    const { lockTournament } = store.modules.tournaments.actions;
+    lockTournament.mockImplementation(
+      (state, { lock, onSuccess }) => onSuccess({ locked: lock })
+    );
+    tournament.locked = true;
+    const wrapper = mount(TournamentForm, {
+      store: new Vuex.Store(store),
+      localVue,
+      propsData: { tournament, open: true },
+      stubs
+    });
+    await wrapper.vm.loadTournamentForm(tournament);
+    expect(wrapper.text()).toContain("Tournament is locked");
+    
+    await wrapper.findComponent({ ref: "unlockBtn" }).trigger("click");
+    expect(lockTournament).toHaveBeenCalled();
+    expect(wrapper.text()).not.toContain("Tournament is locked");
   });
 });

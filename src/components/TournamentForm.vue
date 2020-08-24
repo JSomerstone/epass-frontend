@@ -139,6 +139,7 @@
                             <b-field>
                               <b-autocomplete
                                   v-model="tdQuery"
+                                  ref="tdField"
                                   class="td-autocomplete"
                                   placeholder="Search by name or email"
                                   :keep-first="true"
@@ -152,7 +153,7 @@
                                       {{ props.option.firstName }} {{ props.option.lastName }} [{{ props.option.country }}]
                                   </template>
                                   <template slot="empty">
-                                      <a @click="openAddTdForm">
+                                      <a @click="openAddTdForm" ref="addTdLink">
                                           <b-icon icon="account-plus"></b-icon>
                                           Add TD...
                                       </a>
@@ -218,7 +219,7 @@
                             </template>
                         </b-autocomplete>
                         <b-tooltip label="Add new referee to system" type="is-info">
-                          <b-button @click="openAddRefereeForm" icon-left="account-plus" type="is-info" outlined>
+                          <b-button @click="openAddRefereeForm" icon-left="account-plus" type="is-info" outlined ref="addRefereeBtn">
                             New referee
                           </b-button>
                         </b-tooltip>
@@ -237,7 +238,7 @@
             <div v-if="t.locked">
               <strong><b-icon icon="lock" /> Tournament is locked</strong>
               <b-tooltip label="Unlock to allow modifications" type="is-warning">
-                <b-button type="is-text" @click="toggleLock" v-if="locked && isAdmin" icon-right="lock-open-variant">
+                <b-button type="is-text" @click="toggleLock" v-if="locked && isAdmin" icon-right="lock-open-variant" ref="unlockBtn">
                   Unlock
                 </b-button>
               </b-tooltip>
@@ -597,32 +598,6 @@ export default {
         lock: !this.t.locked,
         onSuccess: ({locked}) => { this.t.locked = locked }
       });
-    },
-    handleFill() {
-      this.t = new Tournament({
-        name: "Test tournament",
-        year: 2020,
-        city: "Helsinki",
-        country: "Finland",
-        dates: ["2020-07-16","2020-07-16"],
-        td: this.referee,
-        referees: [
-          {
-            "id": "e901993c-6021-4533-bae3-6a171726517d",
-            "games": 0,
-            "tenSeconds": 0
-          },
-          {
-            "id": "024a1a55-16cc-4b86-8fbf-0441daa30b22",
-            "games": 0,
-            "tenSeconds": 0
-          }
-        ],
-        teams: this.$store.getters['tournaments/teams']
-      }, this.allReferees);
-      this.countryQuery = this.t.country;
-      this.noOfTenSeconds = 10;
-      this.noOfGames = 6;
     },
   },
   filters: {
