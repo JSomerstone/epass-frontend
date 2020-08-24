@@ -13,12 +13,8 @@ describe("TournamentDetailRow", () => {
   
   beforeEach(() => {
     referees = testReferees.map(
-      r => {
-        return {
-          id: r.id,
-          games: 6,
-          tenSeconds: 7
-        };
+      ({ id }, n) => {
+        return { id: id, games: n, tenSeconds: n };
       }
     )
     tournament = new Tournament(

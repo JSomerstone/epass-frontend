@@ -41,19 +41,7 @@ exports[`TournamentDetailRow Renders correctly 1`] = `
         Open
       </span>
         <!----></button></a>
-    <div><strong>Your statistics:</strong>
-      <ul>
-        <li>
-          6
-          Games as referee
-        </li>
-        <li>
-          7
-          Games
-          as table official / 10 sec timer
-        </li>
-      </ul>
-    </div>
+    <!---->
   </div>
   <div class="column is-one-third">
     <div><strong>TD:</strong> John Doe [USA]
