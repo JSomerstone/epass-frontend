@@ -123,6 +123,7 @@
                         type="is-info"
                         :disabled="isLoading"
                         @click="handleAddComment"
+                        class="add-note-btn"
                       >Add note
                       </b-button>
                     </b-field>
@@ -251,10 +252,11 @@
               type="is-primary" 
               class="card-footer-item"
               outlined
+              ref="saveBtn"
             >
                 {{ t.id ? "Update" : "Save" }}
             </b-button>
-            <b-button @click="handleCancel" type="is-light" icon-left="cancel" class="card-footer-item" >
+            <b-button @click="handleCancel" type="is-light" icon-left="cancel" class="card-footer-item" ref="cancelBtn">
                 Cancel
             </b-button>
             <b-dropdown aria-role="list" v-if="t.id && isAdmin">
@@ -268,6 +270,7 @@
                   @click="toggleLock"
                   type="is-warning" 
                   icon-left="lock"
+                  ref="lockBtn"
                 >Lock tournament
                 </b-button>
               </b-dropdown-item>
@@ -276,6 +279,7 @@
                     @click="handleDelete" 
                     type="is-danger" 
                     icon-left="delete" 
+                    ref="deleteBtn"
                     outlined
                   >Delete tournamet</b-button>
               </b-dropdown-item>

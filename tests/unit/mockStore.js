@@ -42,6 +42,9 @@ export default {
         load: jest.fn(),
         loadTeams: jest.fn(),
         addTeam: jest.fn(),
+        create: jest.fn(),
+        update: jest.fn(),
+        delete: jest.fn(),
       }
     },
     referees: {
@@ -57,5 +60,12 @@ export default {
         load: jest.fn()
       }
     },
+    countries: {
+      state: { countries: ["Bogus", "Foo", "Bar"] },
+      namespaced: true,
+      getters: {
+        byName: state => () => state.countries
+      }
+    }
   },
 };

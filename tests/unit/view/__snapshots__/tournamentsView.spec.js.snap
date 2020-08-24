@@ -79,7 +79,7 @@ exports[`Tournaments-view renders complete view when mounted 1`] = `
                 <!---->
                 <b-field-stub label="Add a note" addons="true" labelposition="on-border">
                   <b-input-stub expanded="true" maxlength="256" usehtml5validation="true" value="" type="textarea" hascounter="true" customclass="" placeholder="Type a message" rows="1"></b-input-stub>
-                  <b-button-stub type="is-info" iconleft="comment-text-outline" nativetype="button" tag="button">Add note
+                  <b-button-stub type="is-info" iconleft="comment-text-outline" nativetype="button" tag="button" class="add-note-btn">Add note
                   </b-button-stub>
                 </b-field-stub>
                 <!---->
