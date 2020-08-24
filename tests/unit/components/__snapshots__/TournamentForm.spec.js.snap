@@ -223,7 +223,7 @@ exports[`TournamentDetailRow Renders correctly 1`] = `
             <div class="field"><label class="label">Tournament Director / TD</label>
               <div class="columns">
                 <!---->
-                <div class="column is-half"><span class="tag is-medium is-rounded"><span class="">
+                <div class="column is-half"><span class="tag td-tag is-medium is-rounded"><span class="">
                             John Doe
                             &lt;john.doe@example.org&gt;
                         </span> <a role="button" tabindex="0" class="delete is-small"></a></span></div>
@@ -684,7 +684,7 @@ exports[`TournamentDetailRow Renders new locked tournament correctly 1`] = `
             <div class="field"><label class="label">Tournament Director / TD</label>
               <div class="columns">
                 <!---->
-                <div class="column is-half"><span class="tag is-medium is-rounded"><span class="">
+                <div class="column is-half"><span class="tag td-tag is-medium is-rounded"><span class="">
                             John Doe
                             &lt;john.doe@example.org&gt;
                         </span> <a role="button" tabindex="0" class="delete is-small"></a></span></div>
@@ -1024,7 +1024,7 @@ exports[`TournamentDetailRow Renders new tournament correctly 1`] = `
                 <div class="column is-full">
                   <div class="field has-addons">
                     <!---->
-                    <div class="autocomplete control is-expanded">
+                    <div class="autocomplete control td-autocomplete is-expanded">
                       <div class="control has-icons-left is-clearfix"><input type="text" autocomplete="off" placeholder="Search by name or email" class="input"> <span class="icon is-left"><i class="mdi mdi-magnify mdi-24px"></i></span>
                         <!---->
                         <!---->

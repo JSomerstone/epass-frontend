@@ -91,7 +91,7 @@ exports[`Tournaments-view renders complete view when mounted 1`] = `
                   <div class="columns">
                     <div class="column is-full">
                       <b-field-stub addons="true">
-                        <b-autocomplete-stub expanded="true" icon="magnify" usehtml5validation="true" value="" data="" field="value" keepfirst="true" dropdownposition="auto" placeholder="Search by name or email">
+                        <b-autocomplete-stub expanded="true" icon="magnify" usehtml5validation="true" value="" data="" field="value" keepfirst="true" dropdownposition="auto" placeholder="Search by name or email" class="td-autocomplete">
                           &gt;
                           <template></template></b-autocomplete-stub>
                         <b-tooltip-stub active="true" type="is-info" label="Set yourself as the TD" position="is-top" size="is-medium">

@@ -139,6 +139,7 @@
                             <b-field>
                               <b-autocomplete
                                   v-model="tdQuery"
+                                  class="td-autocomplete"
                                   placeholder="Search by name or email"
                                   :keep-first="true"
                                   :data="filteredTd"
@@ -160,6 +161,7 @@
                               <b-tooltip label="Set yourself as the TD" type="is-info" v-if="isAdmin">
                                 <b-button 
                                   @click="t.td = referee" 
+                                  ref="setTdButton"
                                   type="is-info" 
                                   icon-left="account-circle-outline" 
                                   title="Set yourself as TD">
@@ -174,6 +176,7 @@
                                 rounded
                                 :key="t.td.id"
                                 @close="confirmRemoveTd"
+                                class="td-tag"
                             >
                                 {{ t.td.firstName }} {{ t.td.lastName }}
                                 &lt;{{t.td.email || "email-missing" }}&gt;
@@ -220,7 +223,7 @@
                           </b-button>
                         </b-tooltip>
                         <b-tooltip label="Add yourself as a referee"  type="is-info" v-if="!isReferee && !locked">
-                          <b-button @click="addCurrent" icon-left="account-circle-outline" type="is-info"/>
+                          <b-button @click="addCurrent" icon-left="account-circle-outline" type="is-info" ref="setRefereeBtn"/>
                         </b-tooltip>
                       </b-field>
                   </div><!-- /referees-field -->
@@ -537,18 +540,8 @@ export default {
         }
         this.$refs.refereeField.focus();
       },
-      removeReferee: function (referee) {
-          let index = this.t.referees.findIndex( ref => ref.id === referee.id );
-          if (index >= 0) {
-              this.t.referees.splice(index, 1);
-          }
-      },
     addCurrent() {
       this.referee.id && this.selectReferee(this.referee);
-    },
-    userIsTd() {
-      const { id = null } = this.referee;
-      return this.t.td && id == this.t.td.id;
     },
     getEditableReferee() {
       const { id = null } = this.referee;

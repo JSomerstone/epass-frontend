@@ -234,4 +234,52 @@ describe("TournamentDetailRow", () => {
       params: { year: 2020 }
     });
   });
+
+  it("TD can be set/removed", async () => {
+    const $buefy = { dialog: { confirm: jest.fn() } };
+    $buefy.dialog.confirm.mockImplementation(
+      ({ onConfirm }) => onConfirm()
+    );
+    tournament.td = null;
+    const wrapper = mount(TournamentForm, {
+      store: new Vuex.Store(store),
+      localVue,
+      propsData: { tournament, open: true },
+      mocks: { $buefy },
+      stubs
+    });
+    await wrapper.vm.loadTournamentForm(tournament);
+    await wrapper.findComponent({ ref: "setTdButton"}).trigger("click");
+    const tdTag = wrapper.find("span.td-tag");
+    expect(tdTag.text()).toContain("John Doe");
+    await tdTag.find("a.delete").trigger("click");
+    expect($buefy.dialog.confirm).toHaveBeenCalled();
+  });
+
+  it("Referee can be set", async () => {
+    tournament.referees = [];
+    const wrapper = mount(TournamentForm, {
+      store: new Vuex.Store(store),
+      localVue,
+      propsData: { tournament, open: true },
+      stubs
+    });
+    await wrapper.vm.loadTournamentForm(tournament);
+    await wrapper.findComponent({ ref: "setRefereeBtn" }).trigger("click");
+    expect(wrapper.find("div.referee-table").text()).toContain("John  Doe");
+  });
+
+  it("Referee can be removed", async () => {
+    const wrapper = mount(TournamentForm, {
+      store: new Vuex.Store(store),
+      localVue,
+      propsData: { tournament, open: true },
+      stubs
+    });
+    await wrapper.vm.loadTournamentForm(tournament);
+    const refTable = wrapper.find("div.referee-table");
+    expect(refTable.text()).toContain("John");
+    await refTable.find("button.is-danger").trigger("click");
+    expect(refTable.text()).not.toContain("John");
+  });
 });
