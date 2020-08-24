@@ -1,0 +1,464 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`TournamentDetailRow Renders correctly 1`] = `
+<div class="collapse card">
+  <div class="collapse-trigger">
+    <div role="button" class="card-header"><span class="card-header-title"><span>Edit tournament</span></span> <a class="card-header-icon"><span class="icon"><i class="mdi mdi-menu-down mdi-24px"></i></span></a></div>
+  </div>
+  <div id="newEntryForm" aria-expanded="true" class="collapse-content">
+    <div class="card-content">
+      <div class="columns">
+        <div class="column is-half">
+          <div class="field">
+            <div class="columns">
+              <div class="column is-half">
+                <div class="field is-floating-label"><label class="label">Name of tournament</label>
+                  <div class="control is-expanded is-clearfix"><input type="text" autocomplete="on" required="required" class="input">
+                    <!---->
+                    <!---->
+                    <!---->
+                  </div>
+                  <!---->
+                </div>
+              </div>
+              <div class="column is-half">
+                <div class="field has-addons">
+                  <!---->
+                  <div class="control is-expanded"><label class="b-radio radio button is-primary">
+                      International
+                      <input type="radio" value="true"></label></div>
+                  <div class="control is-expanded"><label class="b-radio radio button">
+                      National
+                      <input type="radio" value="false"></label></div>
+                  <!---->
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="field">
+            <div class="field is-floating-label has-addons"><label class="label">Place of the tournament</label>
+              <div class="control has-icons-left is-expanded is-clearfix"><input type="text" autocomplete="on" required="required" placeholder="City" class="input"> <span class="icon is-left"><i class="mdi mdi-city mdi-24px"></i></span>
+                <!---->
+                <!---->
+              </div>
+              <div class="autocomplete control is-expanded">
+                <div class="control has-icons-left is-clearfix"><input type="text" autocomplete="off" placeholder="Country" class="input"> <span class="icon is-left"><i class="mdi mdi-earth mdi-24px"></i></span>
+                  <!---->
+                  <!---->
+                </div>
+                <div class="dropdown-menu" style="display: none;">
+                  <div class="dropdown-content" style="display: none;">
+                    <!---->
+                    <!---->
+                    <!---->
+                  </div>
+                </div>
+              </div>
+              <!---->
+            </div>
+          </div>
+          <div class="field">
+            <div class="field is-floating-label"><label class="label">Dates</label>
+              <div class="datepicker control">
+                <div class="dropdown dropdown-menu-animation is-inline is-active">
+                  <!---->
+                  <!---->
+                  <div aria-hidden="true" class="dropdown-menu">
+                    <div class="dropdown-content">
+                      <!---->
+                      <div tabindex="0" class="dropdown-item">
+                        <div>
+                          <header class="datepicker-header">
+                            <div class="pagination field is-centered"><a role="button" href="#" class="pagination-previous"><span class="icon has-text-primary is-clickable"><i class="mdi mdi-chevron-left mdi-24px"></i></span></a> <a role="button" href="#" class="pagination-next"><span class="icon has-text-primary is-clickable"><i class="mdi mdi-chevron-right mdi-24px"></i></span></a>
+                              <div class="pagination-list">
+                                <div class="field has-addons">
+                                  <!---->
+                                  <div class="control"><span class="select"><select><!----> <option value="0">
+                                            January
+                                        </option><option value="1">
+                                            February
+                                        </option><option value="2">
+                                            March
+                                        </option><option value="3">
+                                            April
+                                        </option><option value="4">
+                                            May
+                                        </option><option value="5">
+                                            June
+                                        </option><option value="6">
+                                            July
+                                        </option><option value="7">
+                                            August
+                                        </option><option value="8">
+                                            September
+                                        </option><option value="9">
+                                            October
+                                        </option><option value="10">
+                                            November
+                                        </option><option value="11">
+                                            December
+                                        </option></select></span>
+                                    <!---->
+                                  </div>
+                                  <div class="control"><span class="select"><select><!----> <option value="2021">
+                                            2021
+                                        </option><option value="2020">
+                                            2020
+                                        </option><option value="2019">
+                                            2019
+                                        </option></select></span>
+                                    <!---->
+                                  </div>
+                                  <!---->
+                                </div>
+                              </div>
+                            </div>
+                          </header>
+                          <div class="datepicker-content">
+                            <section class="datepicker-table">
+                              <header class="datepicker-header">
+                                <div class="datepicker-cell"><span>M</span></div>
+                                <div class="datepicker-cell"><span>Tu</span></div>
+                                <div class="datepicker-cell"><span>W</span></div>
+                                <div class="datepicker-cell"><span>Th</span></div>
+                                <div class="datepicker-cell"><span>F</span></div>
+                                <div class="datepicker-cell"><span>S</span></div>
+                                <div class="datepicker-cell"><span>Su</span></div>
+                              </header>
+                              <div class="datepicker-body">
+                                <div class="datepicker-row">
+                                  <!---->
+                                  <div class="datepicker-cell is-unselectable"><span>27</span></div>
+                                  <div class="datepicker-cell is-unselectable"><span>28</span></div>
+                                  <div class="datepicker-cell is-unselectable"><span>29</span></div>
+                                  <div class="datepicker-cell is-unselectable"><span>30</span></div>
+                                  <div class="datepicker-cell is-unselectable"><span>31</span></div><a role="button" href="#" tabindex="-1" class="datepicker-cell is-selectable dots"><span>1</span>
+                                    <!----></a><a role="button" href="#" tabindex="-1" class="datepicker-cell is-selectable dots"><span>2</span>
+                                    <!----></a>
+                                </div>
+                                <div class="datepicker-row">
+                                  <!----> <a role="button" href="#" tabindex="-1" class="datepicker-cell is-selectable dots"><span>3</span>
+                                    <!----></a><a role="button" href="#" tabindex="-1" class="datepicker-cell is-selectable dots"><span>4</span>
+                                    <!----></a><a role="button" href="#" tabindex="-1" class="datepicker-cell is-selectable dots"><span>5</span>
+                                    <!----></a><a role="button" href="#" tabindex="-1" class="datepicker-cell is-selectable dots"><span>6</span>
+                                    <!----></a><a role="button" href="#" tabindex="-1" class="datepicker-cell is-selectable dots"><span>7</span>
+                                    <!----></a><a role="button" href="#" tabindex="-1" class="datepicker-cell is-selectable dots"><span>8</span>
+                                    <!----></a><a role="button" href="#" tabindex="-1" class="datepicker-cell is-selectable dots"><span>9</span>
+                                    <!----></a></div>
+                                <div class="datepicker-row">
+                                  <!----> <a role="button" href="#" tabindex="-1" class="datepicker-cell is-selectable dots"><span>10</span>
+                                    <!----></a><a role="button" href="#" tabindex="-1" class="datepicker-cell is-selectable dots"><span>11</span>
+                                    <!----></a><a role="button" href="#" tabindex="-1" class="datepicker-cell is-selectable dots"><span>12</span>
+                                    <!----></a><a role="button" href="#" tabindex="-1" class="datepicker-cell is-selectable dots"><span>13</span>
+                                    <!----></a><a role="button" href="#" tabindex="-1" class="datepicker-cell is-selectable dots"><span>14</span>
+                                    <!----></a><a role="button" href="#" tabindex="-1" class="datepicker-cell is-selectable dots"><span>15</span>
+                                    <!----></a><a role="button" href="#" tabindex="-1" class="datepicker-cell is-selectable dots"><span>16</span>
+                                    <!----></a></div>
+                                <div class="datepicker-row">
+                                  <!----> <a role="button" href="#" tabindex="-1" class="datepicker-cell is-selectable dots"><span>17</span>
+                                    <!----></a><a role="button" href="#" tabindex="-1" class="datepicker-cell is-selectable dots"><span>18</span>
+                                    <!----></a><a role="button" href="#" tabindex="-1" class="datepicker-cell is-selectable dots"><span>19</span>
+                                    <!----></a><a role="button" href="#" tabindex="-1" class="datepicker-cell is-selectable dots"><span>20</span>
+                                    <!----></a><a role="button" href="#" tabindex="-1" class="datepicker-cell is-selectable dots"><span>21</span>
+                                    <!----></a><a role="button" href="#" tabindex="-1" class="datepicker-cell is-selectable dots"><span>22</span>
+                                    <!----></a><a role="button" href="#" tabindex="-1" class="datepicker-cell is-selectable dots"><span>23</span>
+                                    <!----></a></div>
+                                <div class="datepicker-row">
+                                  <!----> <a role="button" href="#" class="datepicker-cell is-selected is-first-selected is-last-selected is-today is-selectable dots"><span>24</span>
+                                    <!----></a><a role="button" href="#" tabindex="-1" class="datepicker-cell is-selectable dots"><span>25</span>
+                                    <!----></a><a role="button" href="#" tabindex="-1" class="datepicker-cell is-selectable dots"><span>26</span>
+                                    <!----></a><a role="button" href="#" tabindex="-1" class="datepicker-cell is-selectable dots"><span>27</span>
+                                    <!----></a><a role="button" href="#" tabindex="-1" class="datepicker-cell is-selectable dots"><span>28</span>
+                                    <!----></a><a role="button" href="#" tabindex="-1" class="datepicker-cell is-selectable dots"><span>29</span>
+                                    <!----></a><a role="button" href="#" tabindex="-1" class="datepicker-cell is-selectable dots"><span>30</span>
+                                    <!----></a></div>
+                                <div class="datepicker-row">
+                                  <!----> <a role="button" href="#" tabindex="-1" class="datepicker-cell is-selectable dots"><span>31</span>
+                                    <!----></a>
+                                  <div class="datepicker-cell is-unselectable"><span>1</span></div>
+                                  <div class="datepicker-cell is-unselectable"><span>2</span></div>
+                                  <div class="datepicker-cell is-unselectable"><span>3</span></div>
+                                  <div class="datepicker-cell is-unselectable"><span>4</span></div>
+                                  <div class="datepicker-cell is-unselectable"><span>5</span></div>
+                                  <div class="datepicker-cell is-unselectable"><span>6</span></div>
+                                </div>
+                              </div>
+                            </section>
+                          </div>
+                        </div>
+                        <!---->
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <!---->
+            </div>
+          </div>
+          <div class="field"><label class="label"><button type="button" class="button is-text">
+                <!----> <span>Notes (0)
+                  </span> <span class="icon is-small"><i class="mdi mdi-menu-up"></i></span></button></label>
+            <!---->
+            <div class="field is-floating-label has-addons"><label class="label">Add a note</label>
+              <div class="control is-expanded is-clearfix"><textarea maxlength="256" placeholder="Type a message" rows="1" class="textarea"></textarea>
+                <!---->
+                <!----> <small class="help counter is-invisible">
+                  0 / 256
+                </small></div> <button type="button" class="button is-info"><span class="icon is-small"><i class="mdi mdi-comment-text-outline"></i></span> <span>Add note
+                  </span>
+                <!----></button>
+              <!---->
+            </div>
+            <!---->
+          </div>
+        </div>
+        <div class="column is-half">
+          <div id="td-field" class="field">
+            <div class="field"><label class="label">Tournament Director / TD</label>
+              <div class="columns">
+                <!---->
+                <div class="column is-half"><span class="tag is-medium is-rounded"><span class="">
+                            John Doe
+                            &lt;john.doe@example.org&gt;
+                        </span> <a role="button" tabindex="0" class="delete is-small"></a></span></div>
+              </div>
+              <!---->
+            </div>
+          </div>
+          <div id="referees-field" class="field">
+            <div class="field"><label class="label">Referees</label>
+              <!---->
+            </div>
+            <div class="b-table no-margin-on-control referee-table">
+              <!---->
+              <!---->
+              <div class="table-wrapper has-mobile-cards">
+                <table class="table is-hoverable">
+                  <thead>
+                    <tr>
+                      <!---->
+                      <!---->
+                      <th class="">
+                        <div class="th-wrap">Name
+                          <!---->
+                        </div>
+                      </th>
+                      <th class="" style="width: 140px;">
+                        <div class="th-wrap is-centered">Games as referee
+                          <!---->
+                        </div>
+                      </th>
+                      <th class="" style="width: 140px;">
+                        <div class="th-wrap is-centered">Games as 10s / official
+                          <!---->
+                        </div>
+                      </th>
+                      <th class="">
+                        <div class="th-wrap">
+                          <!---->
+                        </div>
+                      </th>
+                      <!---->
+                    </tr>
+                    <!---->
+                    <!---->
+                  </thead>
+                  <tbody>
+                    <tr draggable="false" class="">
+                      <!---->
+                      <!---->
+                      <td data-label="Name" class="">
+                        John Doe
+                      </td>
+                      <td data-label="Games as referee" class="has-text-centered">
+                        <div class="b-numberinput field has-addons">
+                          <p class="control"><button type="button" class="button is-primary"><span class="icon"><i class="mdi mdi-minus mdi-24px"></i></span></button></p>
+                          <div class="control is-clearfix"><input type="number" autocomplete="on" step="1" class="input">
+                            <!---->
+                            <!---->
+                            <!---->
+                          </div>
+                          <p class="control"><button type="button" class="button is-primary"><span class="icon"><i class="mdi mdi-plus mdi-24px"></i></span></button></p>
+                        </div>
+                      </td>
+                      <td data-label="Games as 10s / official" class="has-text-centered">
+                        <div class="b-numberinput field has-addons">
+                          <p class="control"><button type="button" class="button is-primary"><span class="icon"><i class="mdi mdi-minus mdi-24px"></i></span></button></p>
+                          <div class="control is-clearfix"><input type="number" autocomplete="on" step="1" class="input">
+                            <!---->
+                            <!---->
+                            <!---->
+                          </div>
+                          <p class="control"><button type="button" class="button is-primary"><span class="icon"><i class="mdi mdi-plus mdi-24px"></i></span></button></p>
+                        </div>
+                      </td>
+                      <td class=""><span data-label="Remove referee from tournament" class="is-danger is-bottom is-medium b-tooltip" style="transition-delay: 0ms;"><button type="button" class="button is-danger is-outlined"><span class="icon is-small"><i class="mdi mdi-close"></i></span>
+                        <!---->
+                        <!----></button></span></td>
+                      <!---->
+                    </tr>
+                    <!---->
+                    <!---->
+                    <tr draggable="false" class="">
+                      <!---->
+                      <!---->
+                      <td data-label="Name" class="">
+                        Jane Doe
+                      </td>
+                      <td data-label="Games as referee" class="has-text-centered">
+                        <div class="b-numberinput field has-addons">
+                          <p class="control"><button type="button" class="button is-primary"><span class="icon"><i class="mdi mdi-minus mdi-24px"></i></span></button></p>
+                          <div class="control is-clearfix"><input type="number" autocomplete="on" step="1" class="input">
+                            <!---->
+                            <!---->
+                            <!---->
+                          </div>
+                          <p class="control"><button type="button" class="button is-primary"><span class="icon"><i class="mdi mdi-plus mdi-24px"></i></span></button></p>
+                        </div>
+                      </td>
+                      <td data-label="Games as 10s / official" class="has-text-centered">
+                        <div class="b-numberinput field has-addons">
+                          <p class="control"><button type="button" class="button is-primary"><span class="icon"><i class="mdi mdi-minus mdi-24px"></i></span></button></p>
+                          <div class="control is-clearfix"><input type="number" autocomplete="on" step="1" class="input">
+                            <!---->
+                            <!---->
+                            <!---->
+                          </div>
+                          <p class="control"><button type="button" class="button is-primary"><span class="icon"><i class="mdi mdi-plus mdi-24px"></i></span></button></p>
+                        </div>
+                      </td>
+                      <td class=""><span data-label="Remove referee from tournament" class="is-danger is-bottom is-medium b-tooltip" style="transition-delay: 0ms;"><button type="button" class="button is-danger is-outlined"><span class="icon is-small"><i class="mdi mdi-close"></i></span>
+                        <!---->
+                        <!----></button></span></td>
+                      <!---->
+                    </tr>
+                    <!---->
+                    <!---->
+                    <tr draggable="false" class="">
+                      <!---->
+                      <!---->
+                      <td data-label="Name" class="">
+                        Noob Nederson
+                      </td>
+                      <td data-label="Games as referee" class="has-text-centered">
+                        <div class="b-numberinput field has-addons">
+                          <p class="control"><button type="button" class="button is-primary"><span class="icon"><i class="mdi mdi-minus mdi-24px"></i></span></button></p>
+                          <div class="control is-clearfix"><input type="number" autocomplete="on" step="1" class="input">
+                            <!---->
+                            <!---->
+                            <!---->
+                          </div>
+                          <p class="control"><button type="button" class="button is-primary"><span class="icon"><i class="mdi mdi-plus mdi-24px"></i></span></button></p>
+                        </div>
+                      </td>
+                      <td data-label="Games as 10s / official" class="has-text-centered">
+                        <div class="b-numberinput field has-addons">
+                          <p class="control"><button type="button" class="button is-primary"><span class="icon"><i class="mdi mdi-minus mdi-24px"></i></span></button></p>
+                          <div class="control is-clearfix"><input type="number" autocomplete="on" step="1" class="input">
+                            <!---->
+                            <!---->
+                            <!---->
+                          </div>
+                          <p class="control"><button type="button" class="button is-primary"><span class="icon"><i class="mdi mdi-plus mdi-24px"></i></span></button></p>
+                        </div>
+                      </td>
+                      <td class=""><span data-label="Remove referee from tournament" class="is-danger is-bottom is-medium b-tooltip" style="transition-delay: 0ms;"><button type="button" class="button is-danger is-outlined"><span class="icon is-small"><i class="mdi mdi-close"></i></span>
+                        <!---->
+                        <!----></button></span></td>
+                      <!---->
+                    </tr>
+                    <!---->
+                    <!---->
+                  </tbody>
+                  <!---->
+                </table>
+              </div>
+              <!---->
+            </div>
+            <div class="field is-floating-label has-addons"><label class="label">Add referee</label>
+              <div class="autocomplete control is-expanded">
+                <div class="control has-icons-left is-clearfix"><input type="text" autocomplete="off" placeholder="Search by name, email or nationality" class="input"> <span class="icon is-left"><i class="mdi mdi-magnify mdi-24px"></i></span>
+                  <!---->
+                  <!---->
+                </div>
+                <div class="dropdown-menu" style="display: none;">
+                  <div class="dropdown-content" style="display: none;">
+                    <!---->
+                    <div class="dropdown-item is-disabled">
+                      No results for
+                      <button type="button" class="button is-text"><span class="icon is-small"><i class="mdi mdi-account-plus"></i></span> <span>
+                              New referee
+                            </span>
+                        <!----></button></div>
+                    <!---->
+                  </div>
+                </div>
+              </div> <span data-label="Add new referee to system" class="is-info is-top is-medium b-tooltip" style="transition-delay: 0ms;"><button type="button" class="button is-info is-outlined"><span class="icon is-small"><i class="mdi mdi-account-plus"></i></span> <span>
+                        New referee
+                      </span>
+              <!----></button></span>
+              <!---->
+              <!---->
+            </div>
+          </div>
+          <div class="field">
+            <div class="field"><label class="label">Teams competing</label>
+              <div>
+                <div class="field has-addons">
+                  <!---->
+                  <div class="autocomplete control is-expanded">
+                    <div class="control is-clearfix"><input type="text" autocomplete="off" placeholder="Team name / Country" class="input">
+                      <!---->
+                      <!---->
+                      <!---->
+                    </div>
+                    <div class="dropdown-menu" style="display: none;">
+                      <div class="dropdown-content" style="display: none;">
+                        <!---->
+                        <!---->
+                        <!---->
+                      </div>
+                    </div>
+                  </div> <button type="button" disabled="disabled" class="button is-info"><span class="icon is-small"><i class="mdi mdi-plus"></i></span> <span>
+      Add
+    </span>
+                    <!----></button>
+                  <!---->
+                </div>
+                <div class="team-list"><span class="tag is-medium"><span class="">
+        Team A
+    </span> <a role="button" aria-label="Remove team" tabindex="0" class="delete is-small"></a></span><span class="tag is-medium"><span class="">
+        Team B
+    </span> <a role="button" aria-label="Remove team" tabindex="0" class="delete is-small"></a></span></div>
+              </div>
+              <!---->
+            </div>
+          </div>
+        </div>
+      </div>
+      <!---->
+      <!---->
+      <!---->
+    </div>
+    <div class="card-footer"><button type="button" disabled="disabled" class="button card-footer-item is-primary is-outlined"><span class="icon is-small"><i class="mdi mdi-check-circle-outline"></i></span> <span>
+            Update
+        </span>
+        <!----></button> <button type="button" class="button card-footer-item is-light"><span class="icon is-small"><i class="mdi mdi-cancel"></i></span> <span>
+            Cancel
+        </span>
+        <!----></button>
+      <div class="dropdown dropdown-menu-animation is-mobile-modal">
+        <div role="button" aria-haspopup="true" class="dropdown-trigger"><span data-label="More actions" class="is-primary is-top is-medium b-tooltip" style="transition-delay: 0ms;"><button outlined="" class="button is-primary"><span class="icon"><i class="mdi mdi-menu-down mdi-24px"></i></span></button></span></div>
+        <div aria-hidden="true" class="background" style="display: none;"></div>
+        <div aria-hidden="true" class="dropdown-menu" style="display: none;">
+          <div role="list" class="dropdown-content"> <a role="listitem" tabindex="0" class="dropdown-item"><button type="button" class="button is-warning"><span class="icon is-small"><i class="mdi mdi-lock"></i></span> <span>Lock tournament
+            </span>
+                <!----></button></a> <a role="listitem" tabindex="0" class="dropdown-item"><button type="button" class="button is-danger is-outlined"><span class="icon is-small"><i class="mdi mdi-delete"></i></span> <span>Delete tournamet</span>
+                <!----></button></a></div>
+        </div>
+      </div>
+    </div>
+    <!---->
+  </div>
+</div>
+`;
