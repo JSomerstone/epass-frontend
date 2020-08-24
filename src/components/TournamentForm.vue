@@ -102,6 +102,7 @@
                             icon-left="close"
                             v-if="note.refereeID == referee.id"
                             @click="handleRemoveComment(note, index)"
+                            class="remove-comment-btn"
                           />
                         </b-tooltip>
                         <pre>{{ note.message }}</pre>

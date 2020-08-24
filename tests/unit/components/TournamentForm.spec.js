@@ -84,7 +84,7 @@ describe("TournamentDetailRow", () => {
   });
 
 
-  it("Can add notes", async () => {
+  it("Can add/remove notes", async () => {
     tournament.id = null;
     tournament.comments.items = [{
       created: "2020-08-24 13:04",
@@ -102,24 +102,38 @@ describe("TournamentDetailRow", () => {
     await wrapper.find("textarea").setValue("Test note");
     await wrapper.find(".add-note-btn").trigger("click");
     expect(wrapper.find('.notes').text()).toContain("Test note");
+    await wrapper.find("button.remove-comment-btn").trigger("click");
   });
 
   it("Can add notes to existing tournament", async () => {
+    tournament.comments.items = [{
+      created: "2020-08-24 13:04",
+      message: "Existing note",
+      refereeID: referees[1].id,
+    }];
     const wrapper = mount(TournamentForm, {
       store: new Vuex.Store(store),
       localVue,
       propsData: { tournament, open: true },
       stubs
     });
-    const { addComment } = store.modules.tournaments.actions;
+    const { addComment, deleteComment } = store.modules.tournaments.actions;
     addComment.mockImplementation(
-      (state, { comment, onSuccess }) => onSuccess(comment)
+      (state, { comment, onSuccess }) => {
+        onSuccess({ ...comment, id: "bogus-comment-id" });
+      }
     );
+    deleteComment.mockImplementation((state, { comment, onSuccess }) => onSuccess());
+
     await wrapper.vm.loadTournamentForm(tournament);
     await wrapper.find("textarea").setValue("Test note 2");
     await wrapper.find(".add-note-btn").trigger("click");
     expect(addComment).toHaveBeenCalled();
     expect(wrapper.find('.notes').text()).toContain("Test note 2");
+    expect(wrapper.vm.t.comments.items.length).toBe(2);
+    await wrapper.find("button.remove-comment-btn").trigger("click");
+    //TODO: wait for next tick and check that the note was removed from UI
+    expect(wrapper.vm.t.comments.items.length).toBe(1);
   });
 
   it("Handles saving new tournament", async () => {
