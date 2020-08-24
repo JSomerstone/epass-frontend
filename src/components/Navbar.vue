@@ -38,18 +38,18 @@
         <template slot="end">
             <b-navbar-item tag="div">
                 <div class="buttons" v-if="!isLoggedIn">
-                  <router-link :to="{ path: '/login'}" class="button is-primary">
+                  <router-link :to="{ path: '/login'}" class="button is-primary login-link">
                     <strong>Login</strong>
                   </router-link>
-                  <router-link :to="{ path: '/signup'}" class="button is-light">
+                  <router-link :to="{ path: '/signup'}" class="button is-light sign-up-link">
                     Sign up
                   </router-link>
                 </div>
                 <b-navbar-dropdown  v-else :label="username" :key="username" hoverable>
-                  <b-navbar-item to="/settings" tag="router-link">
+                  <b-navbar-item to="/settings" tag="router-link" class="settings-link">
                       <b-icon icon="account-cog-outline"></b-icon> Settings
                   </b-navbar-item>
-                  <b-navbar-item @click="handleLogout">
+                  <b-navbar-item @click="handleLogout" class="logout-link">
                       <b-icon icon="logout-variant"></b-icon> Logout
                   </b-navbar-item>
               </b-navbar-dropdown>
@@ -76,9 +76,6 @@ export default {
   computed: {
     isLoggedIn() {
       return this.$store.getters['auth/loggedIn'];
-    },
-    currentUser() {
-      return this.$store.getters['auth/user'];
     },
     username: function() {
       const { firstName = "User", lastName = "account"} = this.$store.getters['referees/current'] || {}

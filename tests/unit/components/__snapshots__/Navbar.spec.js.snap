@@ -1,0 +1,53 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Navbar Does not render Login & Signup buttons when logged in 1`] = `
+<nav role="navigation" aria-label="main navigation" class="navbar">
+  <div class="navbar-brand"><a class="navbar-item"><span class="icon is-large"><i class="mdi mdi-passport mdi-48px"></i></span>
+      ePass
+    </a><a role="button" aria-label="menu" class="navbar-burger burger"><span aria-hidden="true"></span> <span aria-hidden="true"></span> <span aria-hidden="true"></span></a></div>
+  <div class="navbar-menu">
+    <div class="navbar-start">
+      <div class="navbar-item has-dropdown"><a role="menuitem" aria-haspopup="true" href="#" class="navbar-link">Tournaments</a>
+        <div class="navbar-dropdown"><a class="navbar-item"><span class="icon"><i class="mdi mdi-plus mdi-24px"></i></span>New
+          </a> <a class="navbar-item">
+            2020
+          </a><a class="navbar-item">
+            2019
+          </a></div>
+      </div> <a class="navbar-item"><a>
+          Statistics
+        </a></a>
+    </div>
+    <div class="navbar-end">
+      <div class="navbar-item">
+        <div class="navbar-item has-dropdown is-hoverable"><a role="menuitem" aria-haspopup="true" href="#" class="navbar-link">John Doe</a>
+          <div class="navbar-dropdown"><a class="navbar-item settings-link"><span class="icon"><i class="mdi mdi-account-cog-outline mdi-24px"></i></span> Settings
+            </a> <a class="navbar-item logout-link"><span class="icon"><i class="mdi mdi-logout-variant mdi-24px"></i></span> Logout
+            </a></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</nav>
+`;
+
+exports[`Navbar Renders Login & Signup buttons when not logged in 1`] = `
+<nav role="navigation" aria-label="main navigation" class="navbar">
+  <div class="navbar-brand"><a class="navbar-item"><span class="icon is-large"><i class="mdi mdi-passport mdi-48px"></i></span>
+      ePass
+    </a><a role="button" aria-label="menu" class="navbar-burger burger"><span aria-hidden="true"></span> <span aria-hidden="true"></span> <span aria-hidden="true"></span></a></div>
+  <div class="navbar-menu">
+    <div class="navbar-start">
+      <!----> <a class="navbar-item"><a>
+          About
+        </a></a></div>
+    <div class="navbar-end">
+      <div class="navbar-item">
+        <div class="buttons"><a class="button is-primary login-link"><strong>Login</strong></a> <a class="button is-light sign-up-link">
+            Sign up
+          </a></div>
+      </div>
+    </div>
+  </div>
+</nav>
+`;

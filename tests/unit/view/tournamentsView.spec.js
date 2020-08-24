@@ -1,6 +1,7 @@
 import { shallowMount, mount } from "@vue/test-utils";
 import localVue from "../localVue";
 import store from "../mockStore";
+import Vuex from "vuex";
 import Tournaments from "../../../src/views/Tournaments.vue";
 import stubs from "../../stubs";
 
@@ -16,7 +17,7 @@ describe("Tournaments-view", () => {
 
   it("renders correctly with empty list", () => {
     const wrapper = shallowMount(Tournaments, {
-      store,
+      store: new Vuex.Store(store),
       localVue,
       stubs: ["router-link", "b-button"],
       mocks: {
@@ -28,7 +29,7 @@ describe("Tournaments-view", () => {
 
   it("renders complete view when mounted", () => {
     const wrapper = mount(Tournaments, {
-      store,
+      store: new Vuex.Store(store),
       localVue,
       stubs,
       mocks: {

@@ -1,6 +1,5 @@
 import { mount } from "@vue/test-utils";
 import localVue from "../localVue";
-import { BTable }from 'buefy'
 import EditableRefereeTable from "@/components/EditableRefereeTable";
 
 describe("EditableRefereeTable", () => {
