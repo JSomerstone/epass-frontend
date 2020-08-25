@@ -1,0 +1,568 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`RefereeForm Renders correctly 1`] = `
+<div class="referee-form">
+  <div class="field">
+    <div class="field is-floating-label has-addons"><label class="label">Name*</label>
+      <div class="control is-expanded is-clearfix"><input type="text" autocomplete="on" required="required" placeholder="Given name" class="input">
+        <!---->
+        <!---->
+        <!---->
+      </div>
+      <div class="control is-expanded is-clearfix"><input type="text" autocomplete="on" required="required" placeholder="Family name" class="input">
+        <!---->
+        <!---->
+        <!---->
+      </div>
+      <!---->
+    </div>
+  </div>
+  <div class="field">
+    <div class="field is-floating-label"><label class="label">Email</label>
+      <div class="control is-clearfix"><input type="email" autocomplete="on" placeholder="@" class="input">
+        <!---->
+        <!---->
+        <!---->
+      </div>
+      <!---->
+    </div>
+  </div>
+  <div class="field">
+    <div class="field is-floating-label"><label class="label">Nationality</label>
+      <div class="autocomplete control is-expanded">
+        <div class="control has-icons-left is-clearfix"><input type="text" autocomplete="off" placeholder="As in passport" class="input"> <span class="icon is-left"><i class="mdi mdi-passport mdi-24px"></i></span>
+          <!---->
+          <!---->
+        </div>
+        <transition-stub name="fade">
+          <div class="dropdown-menu" style="display: none;">
+            <div class="dropdown-content" style="display: none;">
+              <!----> <a class="dropdown-item"><span>
+                            Afghanistan
+                        </span></a><a class="dropdown-item"><span>
+                            Aland Islands
+                        </span></a><a class="dropdown-item"><span>
+                            Albania
+                        </span></a><a class="dropdown-item"><span>
+                            Algeria
+                        </span></a><a class="dropdown-item"><span>
+                            American Samoa
+                        </span></a><a class="dropdown-item"><span>
+                            Andorra
+                        </span></a><a class="dropdown-item"><span>
+                            Angola
+                        </span></a><a class="dropdown-item"><span>
+                            Anguilla
+                        </span></a><a class="dropdown-item"><span>
+                            Antarctica
+                        </span></a><a class="dropdown-item"><span>
+                            Antigua and Barbuda
+                        </span></a><a class="dropdown-item"><span>
+                            Argentina
+                        </span></a><a class="dropdown-item"><span>
+                            Armenia
+                        </span></a><a class="dropdown-item"><span>
+                            Aruba
+                        </span></a><a class="dropdown-item"><span>
+                            Australia
+                        </span></a><a class="dropdown-item"><span>
+                            Austria
+                        </span></a><a class="dropdown-item"><span>
+                            Azerbaijan
+                        </span></a><a class="dropdown-item"><span>
+                            Bahamas
+                        </span></a><a class="dropdown-item"><span>
+                            Bahrain
+                        </span></a><a class="dropdown-item"><span>
+                            Bangladesh
+                        </span></a><a class="dropdown-item"><span>
+                            Barbados
+                        </span></a><a class="dropdown-item"><span>
+                            Belarus
+                        </span></a><a class="dropdown-item"><span>
+                            Belgium
+                        </span></a><a class="dropdown-item"><span>
+                            Belize
+                        </span></a><a class="dropdown-item"><span>
+                            Benin
+                        </span></a><a class="dropdown-item"><span>
+                            Bermuda
+                        </span></a><a class="dropdown-item"><span>
+                            Bhutan
+                        </span></a><a class="dropdown-item"><span>
+                            Bolivia
+                        </span></a><a class="dropdown-item"><span>
+                            Bonaire, Saint Eustatius and Saba 
+                        </span></a><a class="dropdown-item"><span>
+                            Bosnia and Herzegovina
+                        </span></a><a class="dropdown-item"><span>
+                            Botswana
+                        </span></a><a class="dropdown-item"><span>
+                            Bouvet Island
+                        </span></a><a class="dropdown-item"><span>
+                            Brazil
+                        </span></a><a class="dropdown-item"><span>
+                            British Indian Ocean Territory
+                        </span></a><a class="dropdown-item"><span>
+                            British Virgin Islands
+                        </span></a><a class="dropdown-item"><span>
+                            Brunei
+                        </span></a><a class="dropdown-item"><span>
+                            Bulgaria
+                        </span></a><a class="dropdown-item"><span>
+                            Burkina Faso
+                        </span></a><a class="dropdown-item"><span>
+                            Burundi
+                        </span></a><a class="dropdown-item"><span>
+                            Cambodia
+                        </span></a><a class="dropdown-item"><span>
+                            Cameroon
+                        </span></a><a class="dropdown-item"><span>
+                            Canada
+                        </span></a><a class="dropdown-item"><span>
+                            Cape Verde
+                        </span></a><a class="dropdown-item"><span>
+                            Cayman Islands
+                        </span></a><a class="dropdown-item"><span>
+                            Central African Republic
+                        </span></a><a class="dropdown-item"><span>
+                            Chad
+                        </span></a><a class="dropdown-item"><span>
+                            Chile
+                        </span></a><a class="dropdown-item"><span>
+                            China
+                        </span></a><a class="dropdown-item"><span>
+                            Christmas Island
+                        </span></a><a class="dropdown-item"><span>
+                            Cocos Islands
+                        </span></a><a class="dropdown-item"><span>
+                            Colombia
+                        </span></a><a class="dropdown-item"><span>
+                            Comoros
+                        </span></a><a class="dropdown-item"><span>
+                            Cook Islands
+                        </span></a><a class="dropdown-item"><span>
+                            Costa Rica
+                        </span></a><a class="dropdown-item"><span>
+                            Croatia
+                        </span></a><a class="dropdown-item"><span>
+                            Cuba
+                        </span></a><a class="dropdown-item"><span>
+                            Curacao
+                        </span></a><a class="dropdown-item"><span>
+                            Cyprus
+                        </span></a><a class="dropdown-item"><span>
+                            Czech Republic
+                        </span></a><a class="dropdown-item"><span>
+                            Democratic Republic of the Congo
+                        </span></a><a class="dropdown-item"><span>
+                            Denmark
+                        </span></a><a class="dropdown-item"><span>
+                            Djibouti
+                        </span></a><a class="dropdown-item"><span>
+                            Dominica
+                        </span></a><a class="dropdown-item"><span>
+                            Dominican Republic
+                        </span></a><a class="dropdown-item"><span>
+                            East Timor
+                        </span></a><a class="dropdown-item"><span>
+                            Ecuador
+                        </span></a><a class="dropdown-item"><span>
+                            Egypt
+                        </span></a><a class="dropdown-item"><span>
+                            El Salvador
+                        </span></a><a class="dropdown-item"><span>
+                            Equatorial Guinea
+                        </span></a><a class="dropdown-item"><span>
+                            Eritrea
+                        </span></a><a class="dropdown-item"><span>
+                            Estonia
+                        </span></a><a class="dropdown-item"><span>
+                            Ethiopia
+                        </span></a><a class="dropdown-item"><span>
+                            Falkland Islands
+                        </span></a><a class="dropdown-item"><span>
+                            Faroe Islands
+                        </span></a><a class="dropdown-item"><span>
+                            Fiji
+                        </span></a><a class="dropdown-item"><span>
+                            Finland
+                        </span></a><a class="dropdown-item"><span>
+                            France
+                        </span></a><a class="dropdown-item"><span>
+                            French Guiana
+                        </span></a><a class="dropdown-item"><span>
+                            French Polynesia
+                        </span></a><a class="dropdown-item"><span>
+                            French Southern Territories
+                        </span></a><a class="dropdown-item"><span>
+                            Gabon
+                        </span></a><a class="dropdown-item"><span>
+                            Gambia
+                        </span></a><a class="dropdown-item"><span>
+                            Georgia
+                        </span></a><a class="dropdown-item"><span>
+                            Germany
+                        </span></a><a class="dropdown-item"><span>
+                            Ghana
+                        </span></a><a class="dropdown-item"><span>
+                            Gibraltar
+                        </span></a><a class="dropdown-item"><span>
+                            Greece
+                        </span></a><a class="dropdown-item"><span>
+                            Greenland
+                        </span></a><a class="dropdown-item"><span>
+                            Grenada
+                        </span></a><a class="dropdown-item"><span>
+                            Guadeloupe
+                        </span></a><a class="dropdown-item"><span>
+                            Guam
+                        </span></a><a class="dropdown-item"><span>
+                            Guatemala
+                        </span></a><a class="dropdown-item"><span>
+                            Guernsey
+                        </span></a><a class="dropdown-item"><span>
+                            Guinea
+                        </span></a><a class="dropdown-item"><span>
+                            Guinea-Bissau
+                        </span></a><a class="dropdown-item"><span>
+                            Guyana
+                        </span></a><a class="dropdown-item"><span>
+                            Haiti
+                        </span></a><a class="dropdown-item"><span>
+                            Heard Island and McDonald Islands
+                        </span></a><a class="dropdown-item"><span>
+                            Honduras
+                        </span></a><a class="dropdown-item"><span>
+                            Hong Kong
+                        </span></a><a class="dropdown-item"><span>
+                            Hungary
+                        </span></a><a class="dropdown-item"><span>
+                            Iceland
+                        </span></a><a class="dropdown-item"><span>
+                            India
+                        </span></a><a class="dropdown-item"><span>
+                            Indonesia
+                        </span></a><a class="dropdown-item"><span>
+                            Iran
+                        </span></a><a class="dropdown-item"><span>
+                            Iraq
+                        </span></a><a class="dropdown-item"><span>
+                            Ireland
+                        </span></a><a class="dropdown-item"><span>
+                            Isle of Man
+                        </span></a><a class="dropdown-item"><span>
+                            Israel
+                        </span></a><a class="dropdown-item"><span>
+                            Italy
+                        </span></a><a class="dropdown-item"><span>
+                            Ivory Coast
+                        </span></a><a class="dropdown-item"><span>
+                            Jamaica
+                        </span></a><a class="dropdown-item"><span>
+                            Japan
+                        </span></a><a class="dropdown-item"><span>
+                            Jersey
+                        </span></a><a class="dropdown-item"><span>
+                            Jordan
+                        </span></a><a class="dropdown-item"><span>
+                            Kazakhstan
+                        </span></a><a class="dropdown-item"><span>
+                            Kenya
+                        </span></a><a class="dropdown-item"><span>
+                            Kiribati
+                        </span></a><a class="dropdown-item"><span>
+                            Kosovo
+                        </span></a><a class="dropdown-item"><span>
+                            Kuwait
+                        </span></a><a class="dropdown-item"><span>
+                            Kyrgyzstan
+                        </span></a><a class="dropdown-item"><span>
+                            Laos
+                        </span></a><a class="dropdown-item"><span>
+                            Latvia
+                        </span></a><a class="dropdown-item"><span>
+                            Lebanon
+                        </span></a><a class="dropdown-item"><span>
+                            Lesotho
+                        </span></a><a class="dropdown-item"><span>
+                            Liberia
+                        </span></a><a class="dropdown-item"><span>
+                            Libya
+                        </span></a><a class="dropdown-item"><span>
+                            Liechtenstein
+                        </span></a><a class="dropdown-item"><span>
+                            Lithuania
+                        </span></a><a class="dropdown-item"><span>
+                            Luxembourg
+                        </span></a><a class="dropdown-item"><span>
+                            Macao
+                        </span></a><a class="dropdown-item"><span>
+                            Macedonia
+                        </span></a><a class="dropdown-item"><span>
+                            Madagascar
+                        </span></a><a class="dropdown-item"><span>
+                            Malawi
+                        </span></a><a class="dropdown-item"><span>
+                            Malaysia
+                        </span></a><a class="dropdown-item"><span>
+                            Maldives
+                        </span></a><a class="dropdown-item"><span>
+                            Mali
+                        </span></a><a class="dropdown-item"><span>
+                            Malta
+                        </span></a><a class="dropdown-item"><span>
+                            Marshall Islands
+                        </span></a><a class="dropdown-item"><span>
+                            Martinique
+                        </span></a><a class="dropdown-item"><span>
+                            Mauritania
+                        </span></a><a class="dropdown-item"><span>
+                            Mauritius
+                        </span></a><a class="dropdown-item"><span>
+                            Mayotte
+                        </span></a><a class="dropdown-item"><span>
+                            Mexico
+                        </span></a><a class="dropdown-item"><span>
+                            Micronesia
+                        </span></a><a class="dropdown-item"><span>
+                            Moldova
+                        </span></a><a class="dropdown-item"><span>
+                            Monaco
+                        </span></a><a class="dropdown-item"><span>
+                            Mongolia
+                        </span></a><a class="dropdown-item"><span>
+                            Montenegro
+                        </span></a><a class="dropdown-item"><span>
+                            Montserrat
+                        </span></a><a class="dropdown-item"><span>
+                            Morocco
+                        </span></a><a class="dropdown-item"><span>
+                            Mozambique
+                        </span></a><a class="dropdown-item"><span>
+                            Myanmar
+                        </span></a><a class="dropdown-item"><span>
+                            Namibia
+                        </span></a><a class="dropdown-item"><span>
+                            Nauru
+                        </span></a><a class="dropdown-item"><span>
+                            Nepal
+                        </span></a><a class="dropdown-item"><span>
+                            Netherlands
+                        </span></a><a class="dropdown-item"><span>
+                            New Caledonia
+                        </span></a><a class="dropdown-item"><span>
+                            New Zealand
+                        </span></a><a class="dropdown-item"><span>
+                            Nicaragua
+                        </span></a><a class="dropdown-item"><span>
+                            Niger
+                        </span></a><a class="dropdown-item"><span>
+                            Nigeria
+                        </span></a><a class="dropdown-item"><span>
+                            Niue
+                        </span></a><a class="dropdown-item"><span>
+                            Norfolk Island
+                        </span></a><a class="dropdown-item"><span>
+                            North Korea
+                        </span></a><a class="dropdown-item"><span>
+                            Northern Mariana Islands
+                        </span></a><a class="dropdown-item"><span>
+                            Norway
+                        </span></a><a class="dropdown-item"><span>
+                            Oman
+                        </span></a><a class="dropdown-item"><span>
+                            Pakistan
+                        </span></a><a class="dropdown-item"><span>
+                            Palau
+                        </span></a><a class="dropdown-item"><span>
+                            Palestinian Territory
+                        </span></a><a class="dropdown-item"><span>
+                            Panama
+                        </span></a><a class="dropdown-item"><span>
+                            Papua New Guinea
+                        </span></a><a class="dropdown-item"><span>
+                            Paraguay
+                        </span></a><a class="dropdown-item"><span>
+                            Peru
+                        </span></a><a class="dropdown-item"><span>
+                            Philippines
+                        </span></a><a class="dropdown-item"><span>
+                            Pitcairn
+                        </span></a><a class="dropdown-item"><span>
+                            Poland
+                        </span></a><a class="dropdown-item"><span>
+                            Portugal
+                        </span></a><a class="dropdown-item"><span>
+                            Puerto Rico
+                        </span></a><a class="dropdown-item"><span>
+                            Qatar
+                        </span></a><a class="dropdown-item"><span>
+                            Republic of the Congo
+                        </span></a><a class="dropdown-item"><span>
+                            Reunion
+                        </span></a><a class="dropdown-item"><span>
+                            Romania
+                        </span></a><a class="dropdown-item"><span>
+                            Russia
+                        </span></a><a class="dropdown-item"><span>
+                            Rwanda
+                        </span></a><a class="dropdown-item"><span>
+                            Saint Barthelemy
+                        </span></a><a class="dropdown-item"><span>
+                            Saint Helena
+                        </span></a><a class="dropdown-item"><span>
+                            Saint Kitts and Nevis
+                        </span></a><a class="dropdown-item"><span>
+                            Saint Lucia
+                        </span></a><a class="dropdown-item"><span>
+                            Saint Martin
+                        </span></a><a class="dropdown-item"><span>
+                            Saint Pierre and Miquelon
+                        </span></a><a class="dropdown-item"><span>
+                            Saint Vincent and the Grenadines
+                        </span></a><a class="dropdown-item"><span>
+                            Samoa
+                        </span></a><a class="dropdown-item"><span>
+                            San Marino
+                        </span></a><a class="dropdown-item"><span>
+                            Sao Tome and Principe
+                        </span></a><a class="dropdown-item"><span>
+                            Saudi Arabia
+                        </span></a><a class="dropdown-item"><span>
+                            Senegal
+                        </span></a><a class="dropdown-item"><span>
+                            Serbia
+                        </span></a><a class="dropdown-item"><span>
+                            Seychelles
+                        </span></a><a class="dropdown-item"><span>
+                            Sierra Leone
+                        </span></a><a class="dropdown-item"><span>
+                            Singapore
+                        </span></a><a class="dropdown-item"><span>
+                            Sint Maarten
+                        </span></a><a class="dropdown-item"><span>
+                            Slovakia
+                        </span></a><a class="dropdown-item"><span>
+                            Slovenia
+                        </span></a><a class="dropdown-item"><span>
+                            Solomon Islands
+                        </span></a><a class="dropdown-item"><span>
+                            Somalia
+                        </span></a><a class="dropdown-item"><span>
+                            South Africa
+                        </span></a><a class="dropdown-item"><span>
+                            South Georgia and the South Sandwich Islands
+                        </span></a><a class="dropdown-item"><span>
+                            South Korea
+                        </span></a><a class="dropdown-item"><span>
+                            South Sudan
+                        </span></a><a class="dropdown-item"><span>
+                            Spain
+                        </span></a><a class="dropdown-item"><span>
+                            Sri Lanka
+                        </span></a><a class="dropdown-item"><span>
+                            Sudan
+                        </span></a><a class="dropdown-item"><span>
+                            Suriname
+                        </span></a><a class="dropdown-item"><span>
+                            Svalbard and Jan Mayen
+                        </span></a><a class="dropdown-item"><span>
+                            Swaziland
+                        </span></a><a class="dropdown-item"><span>
+                            Sweden
+                        </span></a><a class="dropdown-item"><span>
+                            Switzerland
+                        </span></a><a class="dropdown-item"><span>
+                            Syria
+                        </span></a><a class="dropdown-item"><span>
+                            Taiwan
+                        </span></a><a class="dropdown-item"><span>
+                            Tajikistan
+                        </span></a><a class="dropdown-item"><span>
+                            Tanzania
+                        </span></a><a class="dropdown-item"><span>
+                            Thailand
+                        </span></a><a class="dropdown-item"><span>
+                            Togo
+                        </span></a><a class="dropdown-item"><span>
+                            Tokelau
+                        </span></a><a class="dropdown-item"><span>
+                            Tonga
+                        </span></a><a class="dropdown-item"><span>
+                            Trinidad and Tobago
+                        </span></a><a class="dropdown-item"><span>
+                            Tunisia
+                        </span></a><a class="dropdown-item"><span>
+                            Turkey
+                        </span></a><a class="dropdown-item"><span>
+                            Turkmenistan
+                        </span></a><a class="dropdown-item"><span>
+                            Turks and Caicos Islands
+                        </span></a><a class="dropdown-item"><span>
+                            Tuvalu
+                        </span></a><a class="dropdown-item"><span>
+                            U.S. Virgin Islands
+                        </span></a><a class="dropdown-item"><span>
+                            Uganda
+                        </span></a><a class="dropdown-item"><span>
+                            Ukraine
+                        </span></a><a class="dropdown-item"><span>
+                            United Arab Emirates
+                        </span></a><a class="dropdown-item"><span>
+                            United Kingdom
+                        </span></a><a class="dropdown-item"><span>
+                            United States
+                        </span></a><a class="dropdown-item"><span>
+                            United States Minor Outlying Islands
+                        </span></a><a class="dropdown-item"><span>
+                            Uruguay
+                        </span></a><a class="dropdown-item"><span>
+                            Uzbekistan
+                        </span></a><a class="dropdown-item"><span>
+                            Vanuatu
+                        </span></a><a class="dropdown-item"><span>
+                            Vatican
+                        </span></a><a class="dropdown-item"><span>
+                            Venezuela
+                        </span></a><a class="dropdown-item"><span>
+                            Vietnam
+                        </span></a><a class="dropdown-item"><span>
+                            Wallis and Futuna
+                        </span></a><a class="dropdown-item"><span>
+                            Western Sahara
+                        </span></a><a class="dropdown-item"><span>
+                            Yemen
+                        </span></a><a class="dropdown-item"><span>
+                            Zambia
+                        </span></a><a class="dropdown-item"><span>
+                            Zimbabwe
+                        </span></a>
+              <!---->
+              <!---->
+            </div>
+          </div>
+        </transition-stub>
+      </div>
+      <!---->
+    </div>
+  </div>
+  <div class="field">
+    <div class="field is-floating-label has-addons"><label class="label">Level</label>
+      <div class="control"><label class="b-radio radio button">
+          National
+          <input type="radio" value="0"></label></div>
+      <div class="control"><label class="b-radio radio button is-primary">
+          1
+          <input type="radio" value="1"></label></div>
+      <div class="control"><label class="b-radio radio button">
+          2
+          <input type="radio" value="2"></label></div>
+      <div class="control"><label class="b-radio radio button">
+          3
+          <input type="radio" value="3"></label></div>
+      <!---->
+    </div>
+  </div>
+</div>
+`;

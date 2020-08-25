@@ -7,8 +7,6 @@ import testReferees from "../../data/referee.json";
 import TournamentForm from "@/components/TournamentForm";
 import Tournament from "@/store/models/Tournament";
 
-const actionWithCallback = (store, { onSuccess }) => onSuccess();
-
 describe("TournamentDetailRow", () => {
   let tournament, referees = [], stubs = { transition: false };
   

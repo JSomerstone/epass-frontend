@@ -1,5 +1,6 @@
 import tournamentModule from "@/store/modules/tournaments";
 import refereeModule from "@/store/modules/referees";
+import countries from "@/store/modules/countries";
 import Referee from "@/store/models/RefereeClass";
 
 import referees from "../data/referee.json";
@@ -64,12 +65,6 @@ export default {
         create: jest.fn(),
       }
     },
-    countries: {
-      state: { countries: ["Bogus", "Foo", "Bar"] },
-      namespaced: true,
-      getters: {
-        byName: state => () => state.countries
-      }
-    }
+    countries,
   },
 };
