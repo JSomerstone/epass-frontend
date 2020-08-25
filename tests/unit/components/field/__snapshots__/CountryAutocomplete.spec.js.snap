@@ -1,25 +1,5 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`CountryAutocomplete Emits the change and calls onSelect 1`] = `
-<div class="autocomplete control">
-  <div class="control has-icons-left is-clearfix"><input type="text" autocomplete="off" placeholder="Country" class="input"> <span class="icon is-left"><i class="mdi mdi-earth mdi-24px"></i></span>
-    <!---->
-    <!---->
-  </div>
-  <transition-stub name="fade">
-    <div class="dropdown-menu" style="">
-      <div class="dropdown-content" style="">
-        <!----> <a class="dropdown-item is-hovered"><span>
-                            Finland
-                        </span></a>
-        <!---->
-        <!---->
-      </div>
-    </div>
-  </transition-stub>
-</div>
-`;
-
 exports[`CountryAutocomplete Renders correctly 1`] = `
 <div class="autocomplete control">
   <div class="control has-icons-left is-clearfix"><input type="text" autocomplete="off" placeholder="Country" class="input"> <span class="icon is-left"><i class="mdi mdi-earth mdi-24px"></i></span>
@@ -529,6 +509,26 @@ exports[`CountryAutocomplete Renders correctly 1`] = `
                             Zambia
                         </span></a><a class="dropdown-item"><span>
                             Zimbabwe
+                        </span></a>
+        <!---->
+        <!---->
+      </div>
+    </div>
+  </transition-stub>
+</div>
+`;
+
+exports[`CountryAutocomplete Typing filters country list and selecting calls onSelect 1`] = `
+<div class="autocomplete control">
+  <div class="control has-icons-left is-clearfix"><input type="text" autocomplete="off" placeholder="Country" class="input"> <span class="icon is-left"><i class="mdi mdi-earth mdi-24px"></i></span>
+    <!---->
+    <!---->
+  </div>
+  <transition-stub name="fade">
+    <div class="dropdown-menu" style="">
+      <div class="dropdown-content" style="">
+        <!----> <a class="dropdown-item is-hovered"><span>
+                            Finland
                         </span></a>
         <!---->
         <!---->

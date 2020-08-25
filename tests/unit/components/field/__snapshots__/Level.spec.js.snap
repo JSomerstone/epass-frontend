@@ -1,0 +1,19 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Level Renders correctly 1`] = `
+<div class="field is-floating-label has-addons"><label class="label">Level</label>
+  <div class="control"><label class="b-radio radio button">
+      National
+      <input type="radio" value="0"></label></div>
+  <div class="control"><label class="b-radio radio button is-primary">
+      1
+      <input type="radio" value="1"></label></div>
+  <div class="control"><label class="b-radio radio button">
+      2
+      <input type="radio" value="2"></label></div>
+  <div class="control"><label class="b-radio radio button">
+      3
+      <input type="radio" value="3"></label></div>
+  <!---->
+</div>
+`;
