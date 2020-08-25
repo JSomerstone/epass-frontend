@@ -13,7 +13,7 @@
       ref="table"
     >
       <template slot-scope="props">
-        <b-table-column field="name" label="Name" sortable>
+        <b-table-column field="name" label="Name" sortable class="name-column">
           <a @click="toggle(props.row)">
             {{ props.row.name }}
           </a>
@@ -21,7 +21,7 @@
             <b-icon icon="lock" size="is-small"/>
           </b-tooltip>
         </b-table-column>
-        <b-table-column field="dates" label="Date" sortable :custom-sort="sortDates">
+        <b-table-column field="dates" label="Date" sortable :custom-sort="sortDates" class="date-column">
           {{ props.row.dates | dateRange }} 
         </b-table-column>
         <b-table-column field="international" label="Type" sortable>
@@ -40,7 +40,7 @@
       <template slot="empty" v-if="!loading">
         <p>
           No tournaments to show, use the form above to add new or
-          <b-button @click="handleReload">Reload</b-button>
+          <b-button @click="handleReload" ref="reloadBtn">Reload</b-button>
         </p>
       </template>
     </b-table>

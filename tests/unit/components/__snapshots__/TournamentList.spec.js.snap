@@ -1,0 +1,251 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`TournamentList Clicking tournament name opens details 1`] = `
+<div class="tournament-list">
+  <div class="b-table">
+    <div class="field table-mobile-sort">
+      <div class="field has-addons">
+        <div class="control is-expanded"><span class="select is-fullwidth"><select><!----> <!----> <option value="[object Object]">
+                    Name
+                </option><option value="[object Object]">
+                    Date
+                </option><option value="[object Object]">
+                    Type
+                </option><option value="[object Object]">
+                    Location
+                </option><!----></select></span>
+          <!---->
+        </div>
+        <div class="control"><button class="button is-primary"><span class="icon is-small"><i class="mdi mdi-arrow-up"></i></span></button></div>
+      </div>
+    </div>
+    <!---->
+    <div class="table-wrapper has-mobile-cards">
+      <table class="table is-striped is-hoverable">
+        <thead>
+          <tr>
+            <th width="40px"></th>
+            <!---->
+            <th class="is-current-sort is-sortable">
+              <div class="th-wrap">Name <span class="icon is-small"><i class="mdi mdi-arrow-up"></i></span></div>
+            </th>
+            <th class="is-sortable">
+              <div class="th-wrap">Date <span class="icon is-small is-invisible"><i class="mdi mdi-arrow-up"></i></span></div>
+            </th>
+            <th class="is-sortable">
+              <div class="th-wrap">Type <span class="icon is-small is-invisible"><i class="mdi mdi-arrow-up"></i></span></div>
+            </th>
+            <th class="is-sortable">
+              <div class="th-wrap">Location <span class="icon is-small is-invisible"><i class="mdi mdi-arrow-up"></i></span></div>
+            </th>
+            <th class="">
+              <div class="th-wrap">Statistics
+                <!---->
+              </div>
+            </th>
+            <!---->
+          </tr>
+          <!---->
+          <!---->
+        </thead>
+        <tbody>
+          <tr draggable="false" class="">
+            <td class="chevron-cell"><a role="button"><span class="icon"><i class="mdi mdi-chevron-right mdi-24px"></i></span></a></td>
+            <!---->
+            <td data-label="Name" class="name-column"><a>
+                Bogus
+              </a> <span data-label="Tournament is locked" class="is-info is-top is-medium b-tooltip" style="transition-delay: 0ms;"><span class="icon is-small"><i class="mdi mdi-lock"></i></span></span></td>
+            <td data-label="Date" class="date-column">
+              3/20/2020
+            </td>
+            <td data-label="Type" class="">
+              National
+            </td>
+            <td data-label="Location" class="">
+              Helsinki, Finland
+            </td>
+            <td data-label="Statistics" class="" title="Games / official duties">
+              5 / 6
+            </td>
+            <!---->
+          </tr>
+          <!---->
+          <!---->
+          <tr draggable="false" class="">
+            <td class="chevron-cell"><a role="button"><span class="icon is-expanded"><i class="mdi mdi-chevron-right mdi-24px"></i></span></a></td>
+            <!---->
+            <td data-label="Name" class="name-column"><a>
+                Example Tournament 2020
+              </a>
+              <!---->
+            </td>
+            <td data-label="Date" class="date-column">
+              2/20/2020 - 2/22/2020
+            </td>
+            <td data-label="Type" class="">
+              International
+            </td>
+            <td data-label="Location" class="">
+              Malmö, Sweden
+            </td>
+            <td data-label="Statistics" class="" title="Games / official duties">
+              6 / 5
+            </td>
+            <!---->
+          </tr>
+          <tr class="detail">
+            <td colspan="6">
+              <div class="detail-container">
+                <div class="columns">
+                  <div class="column is-one-third"><a><button type="button" outline="" class="button is-info"><span class="icon is-small"><i class="mdi mdi-folder-open-outline"></i></span> <span>
+        Open
+      </span>
+                        <!----></button></a>
+                    <div><strong>Your statistics:</strong>
+                      <ul>
+                        <li>
+                          6
+                          Games as referee
+                        </li>
+                        <li>
+                          5
+                          Games
+                          as table official / 10 sec timer
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
+                  <div class="column is-one-third">
+                    <div><strong>TD:</strong> John Doe [USA]
+                    </div>
+                    <div><strong>Referees:</strong>
+                      <ul>
+                        <li>
+                          Jane Doe [CAN]
+                        </li>
+                        <li>
+                          John Doe [USA]
+                        </li>
+                        <li>
+                          Noob Nederson [SWE]
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
+                  <div class="column is-one-third"><strong>Teams</strong>
+                    <ul>
+                      <li>
+                        Sweden
+                      </li>
+                      <li>
+                        Finland
+                      </li>
+                      <li>
+                        Denmark
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </td>
+          </tr>
+          <!---->
+        </tbody>
+        <!---->
+      </table>
+    </div>
+    <!---->
+  </div>
+</div>
+`;
+
+exports[`TournamentList Renders correctly 1`] = `
+<div class="tournament-list">
+  <div class="b-table">
+    <!---->
+    <!---->
+    <div class="table-wrapper has-mobile-cards">
+      <table class="table is-striped is-hoverable">
+        <!---->
+        <tbody>
+          <tr draggable="false" class="">
+            <td class="chevron-cell"><a role="button"><span class="icon"><i class="mdi mdi-chevron-right mdi-24px"></i></span></a></td>
+            <!---->
+            <td data-label="Name" class="name-column"><a>
+                Example Tournament 2020
+              </a>
+              <!---->
+            </td>
+            <td data-label="Date" class="date-column">
+              2/20/2020 - 2/22/2020
+            </td>
+            <td data-label="Type" class="">
+              International
+            </td>
+            <td data-label="Location" class="">
+              Malmö, Sweden
+            </td>
+            <td data-label="Statistics" class="" title="Games / official duties">
+              6 / 5
+            </td>
+            <!---->
+          </tr>
+          <!---->
+          <!---->
+          <tr draggable="false" class="">
+            <td class="chevron-cell"><a role="button"><span class="icon"><i class="mdi mdi-chevron-right mdi-24px"></i></span></a></td>
+            <!---->
+            <td data-label="Name" class="name-column"><a>
+                Bogus
+              </a> <span data-label="Tournament is locked" class="is-info is-top is-medium b-tooltip" style="transition-delay: 0ms;"><span class="icon is-small"><i class="mdi mdi-lock"></i></span></span></td>
+            <td data-label="Date" class="date-column">
+              3/20/2020
+            </td>
+            <td data-label="Type" class="">
+              National
+            </td>
+            <td data-label="Location" class="">
+              Helsinki, Finland
+            </td>
+            <td data-label="Statistics" class="" title="Games / official duties">
+              5 / 6
+            </td>
+            <!---->
+          </tr>
+          <!---->
+          <!---->
+        </tbody>
+        <!---->
+      </table>
+    </div>
+    <!---->
+  </div>
+</div>
+`;
+
+exports[`TournamentList Renders correctly with empty list 1`] = `
+<div class="tournament-list">
+  <div class="b-table">
+    <!---->
+    <!---->
+    <div class="table-wrapper has-mobile-cards">
+      <table class="table is-striped">
+        <!---->
+        <tbody>
+          <tr class="is-empty">
+            <td colspan="1">
+              <p>
+                No tournaments to show, use the form above to add new or
+                <button type="button" class="button">
+                  <!----> <span>Reload</span>
+                  <!----></button></p>
+            </td>
+          </tr>
+        </tbody>
+        <!---->
+      </table>
+    </div>
+    <!---->
+  </div>
+</div>
+`;

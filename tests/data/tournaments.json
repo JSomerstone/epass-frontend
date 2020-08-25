@@ -12,15 +12,15 @@
         {
           "id": "F56DCB59-3357-44C0-939A-FA0288BBE098",
           "games": 6,
-          "official": 5
+          "tenSeconds": 5
         },{
           "id": "8227835D-F2E4-43BF-83BE-CB62580DB06D",
           "games": 6,
-          "official": 5
+          "tenSeconds": 5
         },{
           "id": "AD6255A4-3AB5-435E-B391-2E3FF0CA1563",
           "games": 6,
-          "official": 5
+          "tenSeconds": 5
         }
       ],
       "teams": [
@@ -44,24 +44,54 @@
         {
           "id": "F56DCB59-3357-44C0-939A-FA0288BBE098",
           "games": 6,
-          "official": 5
+          "tenSeconds": 5
         },
         {
           "id": "8227835D-F2E4-43BF-83BE-CB62580DB06D",
           "games": 6,
-          "official": 5
+          "tenSeconds": 5
         },
         {
           "id": "AD6255A4-3AB5-435E-B391-2E3FF0CA1563",
           "games": 6,
-          "official": 5
+          "tenSeconds": 5
         }
       ],
       "teams": [
         "Sweden",
         "Finland",
         "Denmark"
-      ]
+      ],
+      "locked": false,
+      "createdBy": "F56DCB59-3357-44C0-939A-FA0288BBE098",
+      "createdAt": "2020-08-25",
+      "updatedAt": "2020-08-25"
+    },
+    {
+      "id": "8AFAD4F8-5A8F-A340-47FF-0C2C3A97612E",
+      "name": "Bogus",
+      "international": false,
+      "city": "Helsinki",
+      "country": "Finland",
+      "dates": ["2020-03-20"],
+      "td": "AD6255A4-3AB5-435E-B391-2E3FF0CA1563",
+      "referees": [
+        {
+          "id": "AD6255A4-3AB5-435E-B391-2E3FF0CA1563",
+          "games": 3,
+          "tenSeconds": 4
+        },
+        {
+          "id": "8227835D-F2E4-43BF-83BE-CB62580DB06D",
+          "games": 5,
+          "tenSeconds": 6
+        }
+      ],
+      "teams": ["Team A", "Team B", "Team C"],
+      "locked": true,
+      "createdBy": "F56DCB59-3357-44C0-939A-FA0288BBE098",
+      "createdAt": "2020-03-20",
+      "updatedAt": "2020-03-22"
     }
   ]
 }

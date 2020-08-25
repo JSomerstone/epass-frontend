@@ -157,7 +157,7 @@ exports[`Tournaments-view renders complete view when mounted 1`] = `
         </b-radio-button-stub>
       </b-field-stub>
       <div class="tournament-list">
-        <b-table-stub data="[object Object]" columns="" striped="true" hoverable="true" detailed="true" headercheckable="true" checkboxposition="left" isrowselectable="function _default() {
+        <b-table-stub data="[object Object],[object Object]" columns="" striped="true" hoverable="true" detailed="true" headercheckable="true" checkboxposition="left" isrowselectable="function _default() {
         return true;
       }" isrowcheckable="function _default() {
         return true;
@@ -196,7 +196,7 @@ exports[`Tournaments-view renders correctly with empty list 1`] = `
 <layout-stub>
   <tournament-form-stub editable="true" tournament="[object Object]" year="2020" class="tournament-form"></tournament-form-stub>
   <tournament-filter-stub></tournament-filter-stub>
-  <tournament-list-stub items="[object Object]" year="2020"></tournament-list-stub>
+  <tournament-list-stub items="[object Object],[object Object]" year="2020"></tournament-list-stub>
   <router-link-stub to="[object Object]" target="_blank" class="spaced">
     <b-button-stub iconright="printer" nativetype="button" tag="button">Print E-passport</b-button-stub>
   </router-link-stub>
