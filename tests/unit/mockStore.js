@@ -49,6 +49,7 @@ export default {
         delete: jest.fn(),
         addComment: jest.fn(),
         deleteComment: jest.fn(),
+        setFilter: jest.fn(),
       }
     },
     referees: {

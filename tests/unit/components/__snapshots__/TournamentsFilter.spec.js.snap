@@ -1,0 +1,10 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`TournamentsFilter Renders correctly 1`] = `
+<div class="field has-addons">
+  <!---->
+  <div class="control"><label class="b-radio radio button is-info"><span class="icon"><i class="mdi mdi-account-circle-outline mdi-24px"></i></span> <span>Your tournaments</span> <input type="radio" value="own"></label></div>
+  <div class="control"><label class="b-radio radio button"><span class="icon"><i class="mdi mdi-earth mdi-24px"></i></span> <span>All tournaments</span> <input type="radio" value="all"></label></div>
+  <!---->
+</div>
+`;
