@@ -87,7 +87,6 @@ const actions = {
       variables: { input: comment },
     })
       .then(result => {
-        commit(mutationTypes.ADD_COMMENT, result.data.createComment);
         onSuccess(result.data.createComment);
       })
       .catch(notifyException);
